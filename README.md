@@ -1,7 +1,7 @@
 # UnicodeDB
 
 [![Build Status](https://img.shields.io/travis/nitely/nim-unicodedb.svg?style=flat-square)](https://travis-ci.org/nitely/nim-unicodedb)
-[![licence](https://img.shields.io/pypi/l/nim-unicodedb.svg?style=flat-square)](https://raw.githubusercontent.com/nitely/nim-unicodedb/master/LICENSE)
+[![licence](https://img.shields.io/github/license/nitely/nim-unicodedb.svg?style=flat-square)](https://raw.githubusercontent.com/nitely/nim-unicodedb/master/LICENSE)
 
 This library aims to bring the unicode database to Nim. Main goal is
 having O(1) access for every API and be lightweight in size.
