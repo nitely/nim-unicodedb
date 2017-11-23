@@ -22,7 +22,7 @@ echo combining(Rune(0x860))
 echo((quickCheck(Rune(0x0374)) and NfMasks.NfcQcNo.ord) != 0)
 # true
 ```
-[docs](https://nitely.github.io/nim-unicodedb/properties.html)
+[docs](https://nitely.github.io/nim-unicodedb/unicodedb/properties.html)
 
 Names:
 ```nim
@@ -35,7 +35,7 @@ echo lookupStrict("LEFT CURLY BRACKET")  # '{'
 echo name("/".runeAt(0))
 # "SOLIDUS"
 ```
-[docs](https://nitely.github.io/nim-unicodedb/names.html)
+[docs](https://nitely.github.io/nim-unicodedb/unicodedb/names.html)
 
 Compositions:
 ```nim
@@ -45,7 +45,7 @@ import unicodedb
 echo composition(Rune(108), Rune(803))
 # Rune(7735)
 ```
-[docs](https://nitely.github.io/nim-unicodedb/compositions.html)
+[docs](https://nitely.github.io/nim-unicodedb/unicodedb/compositions.html)
 
 Decompositions:
 ```nim
@@ -55,7 +55,7 @@ import unicodedb
 echo decomposition(Rune(0x0F9D))
 # @[Rune(0x0F9C), Rune(0x0FB7)]
 ```
-[docs](https://nitely.github.io/nim-unicodedb/decompositions.html)
+[docs](https://nitely.github.io/nim-unicodedb/unicodedb/decompositions.html)
 
 ## Related libraries
 
