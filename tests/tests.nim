@@ -152,37 +152,37 @@ test "Test some canonical combining class for runes":
   check combining(Rune(0x1ABC)) == 230
 
 test "Test some quick check":
-  check (quickCheck(0x0374) and NfMasks.NfcQcNo.ord) != 0
-  check (quickCheck(0x0374) and NfMasks.NfcQcMaybe.ord) == 0
-  check (quickCheck(0x115AF) and NfMasks.NfcQcMaybe.ord) != 0
-  check (quickCheck(0x115AF) and NfMasks.NfcQcNo.ord) == 0
-  check (quickCheck(0x1161) and NfMasks.NfcQcMaybe.ord) != 0
-  check (quickCheck(0x1161) and NfMasks.NfcQcNo.ord) == 0
-  check (quickCheck(0x1175) and NfMasks.NfcQcMaybe.ord) != 0
-  check (quickCheck(0x1175) and NfMasks.NfcQcNo.ord) == 0
-  check (quickCheck(0) and NfMasks.NfcQcMaybe.ord) == 0
-  check (quickCheck(0) and NfMasks.NfcQcNo.ord) == 0
+  check((quickCheck(0x0374) and NfMasks.NfcQcNo.ord) != 0)
+  check((quickCheck(0x0374) and NfMasks.NfcQcMaybe.ord) == 0)
+  check((quickCheck(0x115AF) and NfMasks.NfcQcMaybe.ord) != 0)
+  check((quickCheck(0x115AF) and NfMasks.NfcQcNo.ord) == 0)
+  check((quickCheck(0x1161) and NfMasks.NfcQcMaybe.ord) != 0)
+  check((quickCheck(0x1161) and NfMasks.NfcQcNo.ord) == 0)
+  check((quickCheck(0x1175) and NfMasks.NfcQcMaybe.ord) != 0)
+  check((quickCheck(0x1175) and NfMasks.NfcQcNo.ord) == 0)
+  check((quickCheck(0) and NfMasks.NfcQcMaybe.ord) == 0)
+  check((quickCheck(0) and NfMasks.NfcQcNo.ord) == 0)
 
-  check (quickCheck(0x00A0) and NfMasks.NfkcQcNo.ord) != 0
-  check (quickCheck(0x00A0) and NfMasks.NfkcQcMaybe.ord) == 0
-  check (quickCheck(0x0CD6) and NfMasks.NfkcQcMaybe.ord) != 0
-  check (quickCheck(0x0CD6) and NfMasks.NfkcQcNo.ord) == 0
-  check (quickCheck(0x115AF) and NfMasks.NfkcQcMaybe.ord) != 0
-  check (quickCheck(0x115AF) and NfMasks.NfkcQcNo.ord) == 0
-  check (quickCheck(0) and NfMasks.NfkcQcNo.ord) == 0
-  check (quickCheck(0) and NfMasks.NfkcQcMaybe.ord) == 0
+  check((quickCheck(0x00A0) and NfMasks.NfkcQcNo.ord) != 0)
+  check((quickCheck(0x00A0) and NfMasks.NfkcQcMaybe.ord) == 0)
+  check((quickCheck(0x0CD6) and NfMasks.NfkcQcMaybe.ord) != 0)
+  check((quickCheck(0x0CD6) and NfMasks.NfkcQcNo.ord) == 0)
+  check((quickCheck(0x115AF) and NfMasks.NfkcQcMaybe.ord) != 0)
+  check((quickCheck(0x115AF) and NfMasks.NfkcQcNo.ord) == 0)
+  check((quickCheck(0) and NfMasks.NfkcQcNo.ord) == 0)
+  check((quickCheck(0) and NfMasks.NfkcQcMaybe.ord) == 0)
 
-  check (quickCheck(0x00D6) and NfMasks.NfdQcNo.ord) != 0
-  check (quickCheck(0x2FA1D) and NfMasks.NfdQcNo.ord) != 0
-  check (quickCheck(0) and NfMasks.NfdQcNo.ord) == 0
+  check((quickCheck(0x00D6) and NfMasks.NfdQcNo.ord) != 0)
+  check((quickCheck(0x2FA1D) and NfMasks.NfdQcNo.ord) != 0)
+  check((quickCheck(0) and NfMasks.NfdQcNo.ord) == 0)
 
-  check (quickCheck(0x00D6) and NfMasks.NfkdQcNo.ord) != 0
-  check (quickCheck(0x2FA1D) and NfMasks.NfkdQcNo.ord) != 0
-  check (quickCheck(0) and NfMasks.NfkdQcNo.ord) == 0
+  check((quickCheck(0x00D6) and NfMasks.NfkdQcNo.ord) != 0)
+  check((quickCheck(0x2FA1D) and NfMasks.NfkdQcNo.ord) != 0)
+  check((quickCheck(0) and NfMasks.NfkdQcNo.ord) == 0)
 
 test "Test some quick check for runes":
-  check (quickCheck(Rune(0x0374)) and NfMasks.NfcQcNo.ord) != 0
-  check (quickCheck(Rune(0x0374)) and NfMasks.NfcQcMaybe.ord) == 0
+  check((quickCheck(Rune(0x0374)) and NfMasks.NfcQcNo.ord) != 0)
+  check((quickCheck(Rune(0x0374)) and NfMasks.NfcQcMaybe.ord) == 0)
 
 # There used to be a full test for names,
 # but it was ~6MBs of data
