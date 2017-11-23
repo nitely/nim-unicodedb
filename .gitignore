@@ -1,0 +1,6 @@
+nimcache/
+tests/tests
+gen/compositions
+gen/decompositions
+gen/names
+gen/properties
