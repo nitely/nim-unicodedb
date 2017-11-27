@@ -63,6 +63,7 @@ echo decomposition(Rune(0x0F9D))
 ## Related libraries
 
 * [nim-graphemes](https://github.com/nitely/nim-graphemes)
+* [nim-normalize](https://github.com/nitely/nim-normalize)
 
 ## Storage
 
@@ -77,7 +78,7 @@ These are the current collections sizes:
   `bidirectional(1)`, `combining(1)` and `quickCheck(1)`
 * compositions is 24KB. Used by: `composition(1)`
 * decompositions is 149KB. Used by `decomposition(1)`
-  and `canonicalDecomposition`
+  and `canonicalDecomposition(1)`
 * names is 795KB. Used by `name(1)` and `lookupStrict(1)`
 * names (lookup) is 301KB. Used by `lookupStrict(1)`
 
