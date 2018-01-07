@@ -6,7 +6,7 @@ import unicode
 
 import properties_data
 
-export NfMasks
+export NfMask
 
 type
   EProps* {.pure.} = enum
@@ -67,6 +67,9 @@ proc combining*(cp: int | Rune): int {.inline.} =
   ## Return canonical combining class property
   ## for a given code point
   result = combining(properties(cp))
+
+proc contains*(qc: int, m: NfMask): bool =
+  result = (qc and m.ord) != 0
 
 proc quickCheck*(props: Props): int {.inline.} =
   ## Return quick check property for a given `Props`

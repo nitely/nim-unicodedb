@@ -137,6 +137,8 @@ proc buildNamesTable(names: seq[string], words: seq[string]): NamesTable =
   ## -> [lenA, wordAIdx, wordBIdx, lenB...]
   var maxNamesSize = 0
   for name in names:
+    if name.isNil:
+      continue
     for word in name.split(' '):
       inc maxNamesSize
     inc maxNamesSize
@@ -147,7 +149,7 @@ proc buildNamesTable(names: seq[string], words: seq[string]): NamesTable =
   for i in 0 ..< result.offsets.len:
     result.offsets[i] = -1
 
-  # Could've used table but that's too slow ATM
+  # todo: use table
   var wordsLookup = newStringTable(modeCaseSensitive)
   for i, word in words:
     wordsLookup[word] = intToStr(i)

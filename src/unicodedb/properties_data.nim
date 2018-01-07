@@ -1,17 +1,17 @@
 ## This is auto-generated. Do not modify it
 
 type
-  NfMasks* {.pure.} = enum
+  NfMask* = enum
     ## A type for extracting the QC
     ## (either No or Maybe value)
     ## value out of a raw QC property.
     ## This is used for normalization form algorithms
-    NfcQcNo = 1
-    NfcQcMaybe = 2
-    NfkcQcNo = 4
-    NfkcQcMaybe = 8
-    NfdQcNo = 16
-    NfkdQcNo = 32
+    nfcQcNo = 1
+    nfcQcMaybe = 2
+    nfkcQcNo = 4
+    nfkcQcMaybe = 8
+    nfdQcNo = 16
+    nfkdQcNo = 32
 
 const
   categoryNames* = [

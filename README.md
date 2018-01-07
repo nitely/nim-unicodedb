@@ -22,7 +22,7 @@ echo bidirectional(Rune(0x0660)) # 'A'rabic, 'N'umber
 echo combining(Rune(0x860))
 # 0
 
-echo((quickCheck(Rune(0x0374)) and NfMasks.NfcQcNo.ord) != 0)
+echo nfcQcNo in quickCheck(Rune(0x0374)
 # true
 ```
 [docs](https://nitely.github.io/nim-unicodedb/unicodedb/properties.html)

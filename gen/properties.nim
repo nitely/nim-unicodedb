@@ -134,17 +134,17 @@ proc build(props: seq[seq[int]]): MultiStageTable =
 const propsTemplate = """## This is auto-generated. Do not modify it
 
 type
-  NfMasks* {.pure.} = enum
+  NfMask* = enum
     ## A type for extracting the QC
     ## (either No or Maybe value)
     ## value out of a raw QC property.
     ## This is used for normalization form algorithms
-    NfcQcNo = $#
-    NfcQcMaybe = $#
-    NfkcQcNo = $#
-    NfkcQcMaybe = $#
-    NfdQcNo = $#
-    NfkdQcNo = $#
+    nfcQcNo = $#
+    nfcQcMaybe = $#
+    nfkcQcNo = $#
+    nfkcQcMaybe = $#
+    nfdQcNo = $#
+    nfkdQcNo = $#
 
 const
   categoryNames* = [

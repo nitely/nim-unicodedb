@@ -167,7 +167,7 @@ proc lookupStrict*(cpName: string): Rune {.raises: [KeyError].} =
     if ei == EPrefixNames.Hangul:
       continue
     if cpName.startsWith(pn):
-      let rawCp = cpName[pn.len .. cpName.len]
+      let rawCp = cpName[pn.len ..< cpName.len]
       try:
         cp = parseHexInt("0x$#" % rawCp)
       except ValueError:
