@@ -21,13 +21,14 @@ import unicodedb/properties
 import unicodedb/names
 import unicodedb/types
 
+export contains
 export composition
 export decomposition, canonicalDecomposition
 export NfMask, UnicodeProp, UnicodeProps, properties,
        category, bidirectional,
        combining, quickCheck
 export name, lookupStrict
-export UnicodeTypeMask
+export UnicodeTypeMask, unicodeTypes
 
 const
   unicodeVersion* = "10.0.0"

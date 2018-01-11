@@ -7,6 +7,7 @@ from decompositions_test_data import allDecomps
 from category_test_data import allCats
 from bidi_test_data import allBidis
 from combining_test_data import allCombining
+from types_test_data import allTypes
 
 const maxCP = 0x10FFFF
 
@@ -251,3 +252,52 @@ test "Test some invalid lookup names":
       "CJK UNIFIED IDEOGRAPH-FFFFFFFFFFFFFFFFFFFFFFFFFFFFF" &
       "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF" &
       "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")
+
+test "Test types":
+  var i = 0
+  for cpData in allTypes:
+    for cp in cpData.first .. cpData.last:
+      # Skip unassigned since Python's DB is 9.0
+      if category(cp) != "Cn" and not cpData.asig:
+        inc i
+        continue
+      if utmDecimal in unicodeTypes(cp) != cpData.de:
+        echo cp
+      check(utmDecimal in unicodeTypes(cp) == cpData.de)
+      check(utmDigit in unicodeTypes(cp) == cpData.di)
+      check(utmNumeric in unicodeTypes(cp) == cpData.nu)
+      check(utmLowercase in unicodeTypes(cp) == cpData.lo)
+      check(utmUppercase in unicodeTypes(cp) == cpData.up)
+  check i == 8518  # New code points in 10.0
+
+test "Test some types":
+  check utmDecimal in unicodeTypes(Rune(0x0030))
+  check utmDecimal in unicodeTypes(Rune(0x0039))
+  check utmDecimal in unicodeTypes(Rune(0x1E959))
+  check utmDecimal notin unicodeTypes(Rune(0x2CFD))
+
+  check utmDigit in unicodeTypes(Rune(0x00B2))
+  check utmDigit in unicodeTypes(Rune(0x1F10A))
+  check utmDigit notin unicodeTypes(Rune(0x0030))
+  check utmDigit notin unicodeTypes(Rune(0x3007))
+
+  check utmNumeric in unicodeTypes(Rune(0x2CFD))
+  check utmNumeric in unicodeTypes(Rune(0x3007))
+  check utmNumeric notin unicodeTypes(Rune(0x0030))
+
+  check utmLowercase in unicodeTypes(Rune(0x1E69))
+  check utmLowercase in unicodeTypes(Rune(0x2C74))
+  check utmLowercase notin unicodeTypes(Rune('$'.ord))
+  check utmLowercase notin unicodeTypes(0x0041)
+
+  check utmUppercase in unicodeTypes(Rune(0x0041))
+  check utmUppercase in unicodeTypes(Rune(0x005A))
+  check utmUppercase in unicodeTypes(Rune(0x1F189))
+  check utmUppercase notin unicodeTypes(Rune('$'.ord))
+  check utmUppercase notin unicodeTypes(Rune(0x1E69))
+
+  check utmCased in unicodeTypes(Rune(0x0041))
+  check utmCased in unicodeTypes(Rune(0x005A))
+  check utmCased in unicodeTypes(Rune(0x1F189))
+  check utmCased in unicodeTypes(Rune(0x1E69))
+  check utmCased notin unicodeTypes(Rune('$'.ord))
