@@ -76,37 +76,10 @@ proc parseQC(qcsRaw: seq[seq[string]]): seq[int] =
     for qcTV in qcTVs:
       result[cp] = result[cp] or qcTV.nfMap()
 
-type
-  PropFlag = enum
-    pfDecimal = 0x01
-    pfDigit = 0x02
-    pfNumeric = 0x04
-
-proc numTypeMap(numType: string): int =
-  case numType
-  of "Decimal":
-    pfDecimal.ord
-  of "Digit":
-    pfDigit.ord
-  of "Numeric":
-    pfNumeric.ord
-  else:
-    assert false
-    -1
-
-proc parseNumericType(numsRaw: seq[seq[string]]): seq[int] =
-  result = newSeq[int](numsRaw.len)
-  result.fill(0)
-  for cp, props in numsRaw:
-    if props.isNil:
-      continue
-    result[cp] = result[cp] or props[0].numTypeMap()
-
 proc parse(
       udPath: string,
       dbcPath: string,
-      dnpPath: string,
-      dntPath: string
+      dnpPath: string
     ): seq[seq[int]] =
   echo "unicode data"
   result = udPath.parseUDProps().parseProps()
@@ -118,10 +91,6 @@ proc parse(
   let qcs = dnpPath.parseDNPQC().parseQC()
   for cp, qc in qcs:
     result[cp].add(qc)
-  echo "derived numType"
-  let nums = dntPath.parseUDDNoDups().parseNumericType()
-  for cp, nt in nums:
-    result[cp].add(nt)
 
 type
   PropsTable = tuple
@@ -206,10 +175,9 @@ when isMainModule:
   var stages = build(parse(
     "./gen/UCD/UnicodeData.txt",
     "./gen/UCD/extracted/DerivedBidiClass.txt",
-    "./gen/UCD/DerivedNormalizationProps.txt",
-    "./gen/UCD/extracted/DerivedNumericType.txt"))
+    "./gen/UCD/DerivedNormalizationProps.txt"))
 
-  let propsLen = 5
+  let propsLen = 4
   let maxCP = 0x10FFFF
 
   var propsGen = newSeq[string](len(stages.props))
@@ -234,7 +202,7 @@ when isMainModule:
       intToStr(NfkdQcNoMask),
       join(categoryNamesGen, ",\n    "),
       join(bidirectionalNamesGen, ",\n    "),
-      join(stages.stage1, "'i16,\n    "),
+      join(stages.stage1, "'u8,\n    "),
       join(stages.stage2, "'u8,\n    "),
       join(propsGen, ",\n    "),
       intToStr(stages.blockSize)])

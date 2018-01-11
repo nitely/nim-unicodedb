@@ -9,6 +9,7 @@ gen/properties
 gen/UCD/*
 !gen/UCD/UnicodeData.txt
 !gen/UCD/DerivedNormalizationProps.txt
+!gen/UCD/DerivedCoreProperties.txt
 
 !gen/UCD/extracted
 gen/UCD/extracted/*

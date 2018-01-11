@@ -7,8 +7,10 @@ v0.2.0
   It's no longer `{.pure.}` and initial
   letter of all properties are lowercase
 * Fix `lookupStrict` for nim 0.17.3
-* `EProps` was renamed to `Prop` and
-  it's no longer `{.pure.}`
+* `EProps` was renamed to `UnicodeProp` and
+  it's no longer `{.pure.}`. It's members
+  have a `uprop` suffix (i.e: `upropCat`)
+* `Props` was renamed to `UnicodeProps`
 
 v0.1.0
 ==================

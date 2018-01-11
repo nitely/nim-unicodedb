@@ -9,22 +9,21 @@ import properties_data
 export NfMask
 
 type
-  Prop* = enum
+  UnicodeProp* = enum
     ## A type for getting a single
     ## property from the `Props` type
-    propCat  # Category
-    propCcc  # Combining class
-    propBi  # Bidirectional
-    propQc  # QuikCheck
-    propFl  # Flags (NumericType, ...)
+    upropCat  # Category
+    upropCcc  # Combining class
+    upropBi  # Bidirectional
+    upropQc  # QuikCheck
 
-  Props* = array[Prop, int]
+  UnicodeProps* = array[UnicodeProp, int]
     ## A type holding all common
     ## properties for a character.
-    ## Use `EProps` to get one of them.
+    ## Use `UnicodeProp` to get one of them.
     ## It contains raw data for some of them.
 
-proc properties*(cp: int): Props {.inline.} =
+proc properties*(cp: int): UnicodeProps =
   ## Return properties for a given code point.
   ## Includes: Category, Canonical Combining Class,
   ## Bidi Class and QC. This may be used as an optimization
@@ -37,7 +36,7 @@ proc properties*(cp: int): Props {.inline.} =
     idx = propsIndices[blockOffset + cp mod blockSize]
   result = propsData[idx]
 
-proc properties*(cp: Rune): Props {.inline.} =
+proc properties*(cp: Rune): UnicodeProps {.inline.} =
   ## Return properties for a given code point.
   ## Includes: Category, Canonical Combining Class,
   ## Bidi Class and QC. This may be used as an optimization
@@ -46,26 +45,26 @@ proc properties*(cp: Rune): Props {.inline.} =
   ## the auxiliary procedures must be used in conjuntion.
   result = properties(int(cp))
 
-proc category*(props: Props): string {.inline.} =
-  ## Return category property name for a given `Props`
-  result = categoryNames[props[propCat]]
+proc category*(props: UnicodeProps): string {.inline.} =
+  ## Return category property name for a given `UnicodeProps`
+  result = categoryNames[props[upropCat]]
 
 proc category*(cp: int | Rune): string {.inline.} =
   ## Return category property name for a given code point
   result = category(properties(cp))
 
-proc bidirectional*(props: Props): string {.inline.} =
-  ## Return bidirectional class name for a given `Props`
-  result = bidirectionalNames[props[propBi]]
+proc bidirectional*(props: UnicodeProps): string {.inline.} =
+  ## Return bidirectional class name for a given `UnicodeProps`
+  result = bidirectionalNames[props[upropBi]]
 
 proc bidirectional*(cp: int | Rune): string {.inline.} =
   ## Return bidirectional class name for a given code point
   result = bidirectional(properties(cp))
 
-proc combining*(props: Props): int {.inline.} =
+proc combining*(props: UnicodeProps): int {.inline.} =
   ## Return canonical combining class property
   ## for a given `Props`
-  result = props[propCcc]
+  result = props[upropCcc]
 
 proc combining*(cp: int | Rune): int {.inline.} =
   ## Return canonical combining class property
@@ -75,9 +74,9 @@ proc combining*(cp: int | Rune): int {.inline.} =
 proc contains*(qc: int, m: NfMask): bool =
   result = (qc and m.ord) != 0
 
-proc quickCheck*(props: Props): int {.inline.} =
-  ## Return quick check property for a given `Props`
-  result = props[propQc]
+proc quickCheck*(props: UnicodeProps): int {.inline.} =
+  ## Return quick check property for a given `UnicodeProps`
+  result = props[upropQc]
 
 proc quickCheck*(cp: int | Rune): int {.inline.} =
   ## Return quick check property
