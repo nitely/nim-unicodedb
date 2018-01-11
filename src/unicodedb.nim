@@ -19,6 +19,7 @@ import unicodedb/compositions
 import unicodedb/decompositions
 import unicodedb/properties
 import unicodedb/names
+import unicodedb/types
 
 export composition
 export decomposition, canonicalDecomposition
@@ -26,6 +27,7 @@ export NfMask, UnicodeProp, UnicodeProps, properties,
        category, bidirectional,
        combining, quickCheck
 export name, lookupStrict
+export UnicodeTypeMask
 
 const
   unicodeVersion* = "10.0.0"

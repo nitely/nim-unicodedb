@@ -5,6 +5,7 @@ gen/compositions
 gen/decompositions
 gen/names
 gen/properties
+gen/types
 
 gen/UCD/*
 !gen/UCD/UnicodeData.txt

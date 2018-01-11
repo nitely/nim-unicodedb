@@ -15,6 +15,7 @@ type
     utmCased = 0x20
 
 proc numTypeMap(numType: string): int =
+  ## for derived numericType
   case numType
   of "Decimal":
     utmDecimal.ord
@@ -34,11 +35,38 @@ proc parseNumericType(numsRaw: seq[seq[string]]): seq[int] =
       continue
     result[cp] = result[cp] or props[0].numTypeMap()
 
-proc parse(dntPath: string): seq[int] =
+proc coreTypeMap(coreType: string): int =
+  ## for derived coreProps
+  case coreType
+  of "Lowercase":
+    utmLowercase.ord
+  of "Uppercase":
+    utmUppercase.ord
+  of "Cased":
+    utmCased.ord
+  else:
+    0
+
+proc parseCoreProps(propsRaw: seq[seq[seq[string]]]): seq[int] =
+  result = newSeq[int](propsRaw.len)
+  result.fill(0)
+  for cp, props in propsRaw:
+    if props.isNil:
+      continue
+    for p in props:
+      result[cp] = result[cp] or p[0].coreTypeMap()
+
+proc parse(dntPath: string, dctPath: string): seq[int] =
   echo "derived numType"
   let nums = dntPath.parseUDDNoDups().parseNumericType()
+  result = newSeq[int](nums.len)
+  result.fill(0)
   for cp, nt in nums:
     result[cp] = result[cp] or nt
+  echo "derived coreProps"
+  let props = dctPath.parseUDD().parseCoreProps()
+  for cp, ct in props:
+    result[cp] = result[cp] or ct
 
 type
   PropsTable = tuple
@@ -85,7 +113,7 @@ proc build(props: seq[int]): MultiStageTable =
 const propsTemplate = """## This is auto-generated. Do not modify it
 
 type
-  UnicodeTypeMask = enum
+  UnicodeTypeMask* = enum
     utmDecimal = $#
     utmDigit = $#
     utmNumeric = $#
@@ -94,13 +122,13 @@ type
     utmCased = $#
 
 const
-  propsOffsets* = [
+  typesOffsets* = [
     $#
   ]
-  propsIndices* = [
+  typesIndices* = [
     $#
   ]
-  propsData* = [
+  typesData* = [
     $#
   ]
 
@@ -110,34 +138,21 @@ const
 
 when isMainModule:
   var stages = build(parse(
-    "./gen/UCD/extracted/DerivedNumericType.txt"))
-
-  let propsLen = 4
-  let maxCP = 0x10FFFF
-
-  var propsGen = newSeq[string](len(stages.props))
-  for i, p in stages.props:
-    assert len(p) == propsLen
-    propsGen[i] = "[$#]" % join(p, ", ")
-  var categoryNamesGen = newSeq[string](len(categoryNames))
-  for i, cat in categoryNames:
-    categoryNamesGen[i] = "\"$#\"" % cat
-  var bidirectionalNamesGen = newSeq[string](len(bidirectionalNames))
-  for i, bi in bidirectionalNames:
-    bidirectionalNamesGen[i] = "\"$#\"" % bi
+    "./gen/UCD/extracted/DerivedNumericType.txt",
+    "./gen/UCD/DerivedCoreProperties.txt"))
 
   var f = open("./src/unicodedb/types_data.nim", fmWrite)
   try:
     f.write(propsTemplate % [
-      $utmDecimal.ord
-      $utmDigit.ord
-      $utmNumeric.ord
-      $utmLowercase.ord
-      $utmUppercase.ord
-      $utmCased.ord
+      $utmDecimal.ord,
+      $utmDigit.ord,
+      $utmNumeric.ord,
+      $utmLowercase.ord,
+      $utmUppercase.ord,
+      $utmCased.ord,
       join(stages.stage1, "'u8,\n    "),
       join(stages.stage2, "'u8,\n    "),
-      join(propsGen, ",\n    "),
-      intToStr(stages.blockSize)])
+      join(stages.props, ",\n    "),
+      $stages.blockSize])
   finally:
     close(f)
