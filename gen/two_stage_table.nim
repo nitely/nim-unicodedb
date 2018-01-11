@@ -40,13 +40,17 @@ proc makeTable*[T: Stage2Type](data: seq[T], blockSize: int): Stages[T] =
 
 proc findBestTable*[T: Stage2Type](data: seq[T]): Stages[T] =
   ## Generate the most compact two-stage table
+  # todo: this won't always find the best table, since some times
+  #       both tables may have int16.high as max size while a
+  #       better table would have int8.high for one table and
+  #       int16.high for the other (and yet more items when put togheter)
   result = (stage1: nil, stage2: nil, blockSize: 0)
   var best = -1
   var i = 1
 
   while true:
     let stagesTmp = makeTable(data, 2 ^ i)
-    let total = len(stagesTmp.stage1) + len(stagesTmp.stage2)
+    let total = stagesTmp.stage1.len + stagesTmp.stage2.len
 
     if total > best and best != -1:
       break

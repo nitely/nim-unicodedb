@@ -22,7 +22,7 @@ import unicodedb/names
 
 export composition
 export decomposition, canonicalDecomposition
-export NfMask, EProps, Props, properties,
+export NfMask, Prop, Props, properties,
        category, bidirectional,
        combining, quickCheck
 export name, lookupStrict

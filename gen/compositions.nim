@@ -1,7 +1,7 @@
 import strutils
 
 import unicode_data
-import derived_n_props
+import derived_data
 import min_perfect_hash
 
 proc parseComps(

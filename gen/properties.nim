@@ -1,8 +1,8 @@
 import strutils
+import algorithm
 
 import unicode_data
-import derived_n_props
-import derived_bidi_class
+import derived_data
 import two_stage_table
 
 type
@@ -22,31 +22,6 @@ const
     "ON", "LRI", "RLI", "FSI", "PDI"
   ]
 
-  # Default is YES when no NO and no MAYBE
-  NfcQcNoMask = 0x01
-  NfcQcMaybeMask = 0x02
-  NfkcQcNoMask = 0x04
-  NfkcQcMaybeMask = 0x08
-  NfdQcNoMask = 0x10
-  NfkdQcNoMask = 0x20
-
-proc nfMap(qcTV: string): int =
-  result = case qcTV:
-    of "NFC_QC_N":
-      NfcQcNoMask
-    of "NFC_QC_M":
-      NfcQcMaybeMask
-    of "NFKC_QC_N":
-      NfkcQcNoMask
-    of "NFKC_QC_M":
-      NfkcQcMaybeMask
-    of "NFD_QC_N":
-      NfdQcNoMask
-    of "NFKD_QC_N":
-      NfkdQcNoMask
-    else:
-      -1
-
 proc parseProps(propsRaw: seq[seq[string]]): seq[seq[int]] =
   result = newSeq[seq[int]](len(propsRaw))
   for i in 0 ..< len(propsRaw):
@@ -65,17 +40,88 @@ proc parseBi(biRaw: seq[string]): seq[int] =
     result[cp] = bidirectionalNames.find(bi)
     assert result[cp] >= 0
 
+const
+  # Default is YES when no NO and no MAYBE
+  NfcQcNoMask = 0x01
+  NfcQcMaybeMask = 0x02
+  NfkcQcNoMask = 0x04
+  NfkcQcMaybeMask = 0x08
+  NfdQcNoMask = 0x10
+  NfkdQcNoMask = 0x20
+
+proc nfMap(qcTV: string): int =
+  case qcTV
+  of "NFC_QC_N":
+    NfcQcNoMask
+  of "NFC_QC_M":
+    NfcQcMaybeMask
+  of "NFKC_QC_N":
+    NfkcQcNoMask
+  of "NFKC_QC_M":
+    NfkcQcMaybeMask
+  of "NFD_QC_N":
+    NfdQcNoMask
+  of "NFKD_QC_N":
+    NfkdQcNoMask
+  else:
+    assert false
+    -1
+
 proc parseQC(qcsRaw: seq[seq[string]]): seq[int] =
   result = newSeq[int](qcsRaw.len)
-  for i in 0 ..< result.len:
-    result[i] = 0
+  result.fill(0)
   for cp, qcTVs in qcsRaw:
     if isNil(qcTVs):
       continue
     for qcTV in qcTVs:
-      assert nfMap(qcTV) != -1
-      assert((result[cp] and nfMap(qcTV)) == 0)
-      result[cp] = result[cp] or nfMap(qcTV)
+      result[cp] = result[cp] or qcTV.nfMap()
+
+type
+  PropFlag = enum
+    pfDecimal = 0x01
+    pfDigit = 0x02
+    pfNumeric = 0x04
+
+proc numTypeMap(numType: string): int =
+  case numType
+  of "Decimal":
+    pfDecimal.ord
+  of "Digit":
+    pfDigit.ord
+  of "Numeric":
+    pfNumeric.ord
+  else:
+    assert false
+    -1
+
+proc parseNumericType(numsRaw: seq[seq[string]]): seq[int] =
+  result = newSeq[int](numsRaw.len)
+  result.fill(0)
+  for cp, props in numsRaw:
+    if props.isNil:
+      continue
+    result[cp] = result[cp] or props[0].numTypeMap()
+
+proc parse(
+      udPath: string,
+      dbcPath: string,
+      dnpPath: string,
+      dntPath: string
+    ): seq[seq[int]] =
+  echo "unicode data"
+  result = udPath.parseUDProps().parseProps()
+  echo "derived bidi"
+  let bis = dbcPath.parseDBC().parseBi()
+  for cp, bi in bis:
+    result[cp].add(bi)
+  echo "derived qc"
+  let qcs = dnpPath.parseDNPQC().parseQC()
+  for cp, qc in qcs:
+    result[cp].add(qc)
+  echo "derived numType"
+  let nums = dntPath.parseUDDNoDups().parseNumericType()
+  for cp, nt in nums:
+    result[cp].add(nt)
 
 type
   PropsTable = tuple
@@ -96,18 +142,6 @@ proc buildPropsTable(props: seq[seq[int]]): PropsTable =
       continue
     result.offsets[cp] = len(result.props)
     result.props.add(p)
-
-proc parse(udPath: string, dbcPath: string, dnpPath: string): seq[seq[int]] =
-  echo "unicode data"
-  result = parseProps(parseUDProps(udPath))
-  echo "derived bidi"
-  var bis = parseBi(parseDBC(dbcPath))
-  for cp, bi in bis:
-    result[cp].add(bi)
-  echo "derived qc"
-  var qcs = parseQC(parseDNPQC(dnpPath))
-  for cp, qc in qcs:
-    result[cp].add(qc)
 
 type
   MultiStageTable = tuple
@@ -172,9 +206,10 @@ when isMainModule:
   var stages = build(parse(
     "./gen/UCD/UnicodeData.txt",
     "./gen/UCD/extracted/DerivedBidiClass.txt",
-    "./gen/UCD/DerivedNormalizationProps.txt"))
+    "./gen/UCD/DerivedNormalizationProps.txt",
+    "./gen/UCD/extracted/DerivedNumericType.txt"))
 
-  let propsLen = 4
+  let propsLen = 5
   let maxCP = 0x10FFFF
 
   var propsGen = newSeq[string](len(stages.props))
@@ -199,7 +234,7 @@ when isMainModule:
       intToStr(NfkdQcNoMask),
       join(categoryNamesGen, ",\n    "),
       join(bidirectionalNamesGen, ",\n    "),
-      join(stages.stage1, "'u8,\n    "),
+      join(stages.stage1, "'i16,\n    "),
       join(stages.stage2, "'u8,\n    "),
       join(propsGen, ",\n    "),
       intToStr(stages.blockSize)])

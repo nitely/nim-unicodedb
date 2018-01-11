@@ -9,12 +9,16 @@ import properties_data
 export NfMask
 
 type
-  EProps* {.pure.} = enum
+  Prop* = enum
     ## A type for getting a single
     ## property from the `Props` type
-    CAT, CCC, BI, QC
+    propCat  # Category
+    propCcc  # Combining class
+    propBi  # Bidirectional
+    propQc  # QuikCheck
+    propFl  # Flags (NumericType, ...)
 
-  Props* = array[EProps, int]
+  Props* = array[Prop, int]
     ## A type holding all common
     ## properties for a character.
     ## Use `EProps` to get one of them.
@@ -44,7 +48,7 @@ proc properties*(cp: Rune): Props {.inline.} =
 
 proc category*(props: Props): string {.inline.} =
   ## Return category property name for a given `Props`
-  result = categoryNames[props[EProps.CAT]]
+  result = categoryNames[props[propCat]]
 
 proc category*(cp: int | Rune): string {.inline.} =
   ## Return category property name for a given code point
@@ -52,7 +56,7 @@ proc category*(cp: int | Rune): string {.inline.} =
 
 proc bidirectional*(props: Props): string {.inline.} =
   ## Return bidirectional class name for a given `Props`
-  result = bidirectionalNames[props[EProps.BI]]
+  result = bidirectionalNames[props[propBi]]
 
 proc bidirectional*(cp: int | Rune): string {.inline.} =
   ## Return bidirectional class name for a given code point
@@ -61,7 +65,7 @@ proc bidirectional*(cp: int | Rune): string {.inline.} =
 proc combining*(props: Props): int {.inline.} =
   ## Return canonical combining class property
   ## for a given `Props`
-  result = props[EProps.CCC]
+  result = props[propCcc]
 
 proc combining*(cp: int | Rune): int {.inline.} =
   ## Return canonical combining class property
@@ -73,7 +77,7 @@ proc contains*(qc: int, m: NfMask): bool =
 
 proc quickCheck*(props: Props): int {.inline.} =
   ## Return quick check property for a given `Props`
-  result = props[EProps.QC]
+  result = props[propQc]
 
 proc quickCheck*(cp: int | Rune): int {.inline.} =
   ## Return quick check property
