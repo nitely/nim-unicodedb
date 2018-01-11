@@ -20,7 +20,7 @@ proc fnv32a(key: array[2, int], seed: int): int {.inline, raises: [].} =
     result = result xor s
     result = (result * fnv32Prime) mod int32Max
 
-proc mphLookup(key: array[2, int]): array[3, int] {.inline, raises: [].} =
+proc mphLookup(key: array[2, int]): array[3, int32] {.inline, raises: [].} =
   ## Hash map lookup for compositions. Return a
   ## decomposition and its composition
   let d = compsHashes[fnv32a(key, 0) mod compsHashes.len]
@@ -38,7 +38,8 @@ proc composition*(cpA: int, cpB: int): int {.raises: [].} =
   result = cps[2]
 
 proc composition*(
-      cpA: Rune, cpB: Rune
+      cpA: Rune,
+      cpB: Rune
     ): Rune {.inline, raises: [ValueError].} =
   ## Return the primary composition for
   ## a given decomposition. This is not a full composition.

@@ -17,7 +17,7 @@ test "Test all compositions":
 test "Test decompose-compose inception":
   var i = 0
   for cps in compsValues:
-    let dcp = canonicalDecomposition(cps[2])
+    let dcp = canonicalDecomposition(cps[2].int)
     check dcp.len == 2
     check composition(dcp[0], dcp[1]) == cps[2]
     inc i

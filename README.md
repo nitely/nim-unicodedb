@@ -76,7 +76,7 @@ These are the current collections sizes:
 
 * properties is 45KB. Used by `properties(1)`, `category(1)`,
   `bidirectional(1)`, `combining(1)` and `quickCheck(1)`
-* compositions is 24KB. Used by: `composition(1)`
+* compositions is 13KB. Used by: `composition(1)`
 * decompositions is 149KB. Used by `decomposition(1)`
   and `canonicalDecomposition(1)`
 * names is 795KB. Used by `name(1)` and `lookupStrict(1)`

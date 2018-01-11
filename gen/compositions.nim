@@ -52,7 +52,7 @@ when isMainModule:
   var compValues = newSeq[string](len(mphTables.v))
   for i, v in mphTables.v:
     assert len(v) == 3
-    compValues[i] = "[$#]" % join(v, ", ")
+    compValues[i] = "[$#]" % join(v, "'i32, ")
 
   var f = open("./src/unicodedb/compositions_data.nim", fmWrite)
   try:
