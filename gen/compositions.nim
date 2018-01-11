@@ -44,8 +44,8 @@ const
 
 when isMainModule:
   var decomps = parseComps(
-    parseUDDecomps("./gen/UnicodeData.txt"),
-    parseDNPExclusion("./gen/DerivedNormalizationProps.txt"))
+    parseUDDecomps("./gen/UCD/UnicodeData.txt"),
+    parseDNPExclusion("./gen/UCD/DerivedNormalizationProps.txt"))
   var mphTables = mph(decomps)
   echo mphLookup(mphTables.h, mphTables.v, [65, 768])
 

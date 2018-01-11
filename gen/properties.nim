@@ -170,9 +170,9 @@ const
 
 when isMainModule:
   var stages = build(parse(
-    "./gen/UnicodeData.txt",
-    "./gen/DerivedBidiClass.txt",
-    "./gen/DerivedNormalizationProps.txt"))
+    "./gen/UCD/UnicodeData.txt",
+    "./gen/UCD/extracted/DerivedBidiClass.txt",
+    "./gen/UCD/DerivedNormalizationProps.txt"))
 
   let propsLen = 4
   let maxCP = 0x10FFFF

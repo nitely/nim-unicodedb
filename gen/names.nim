@@ -229,7 +229,7 @@ const
 
 when isMainModule:
   echo "unicode data"
-  let names = parseNames(parseUDNames("./gen/UnicodeData.txt"))
+  let names = parseNames(parseUDNames("./gen/UCD/UnicodeData.txt"))
   echo "words"
   let words = buildWords(names)
   echo "words Table"

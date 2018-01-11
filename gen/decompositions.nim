@@ -105,7 +105,7 @@ const
 
 when isMainModule:
   let stages = build(
-    parseDecomps(parseUDDecomps("./gen/UnicodeData.txt")))
+    parseDecomps(parseUDDecomps("./gen/UCD/UnicodeData.txt")))
   var f = open("./src/unicodedb/decompositions_data.nim", fmWrite)
   try:
     f.write(decompsTemplate % [

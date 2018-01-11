@@ -4,3 +4,9 @@ gen/compositions
 gen/decompositions
 gen/names
 gen/properties
+gen/UCD/*
+!gen/UCD/UnicodeData.txt
+!gen/UCD/DerivedNormalizationProps.txt
+!gen/UCD/extracted
+gen/UCD/extracted/*
+!gen/UCD/extracted/DerivedBidiClass.txt
