@@ -2,6 +2,8 @@
 
 type
   UnicodeTypeMask* = enum
+    ## For extracting a single type
+    ## value out of types
     utmDecimal = 1
     utmDigit = 2
     utmNumeric = 4

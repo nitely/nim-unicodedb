@@ -1,6 +1,7 @@
 v0.2.0
 ==================
 
+* Add types (derived core properties) API
 * Add `contains` for `NfMask` usage,
   so `nfcQcNo in quickCheck(x)` is supported
 * `NfMasks` was renamed to `NfMask`.

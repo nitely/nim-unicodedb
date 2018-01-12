@@ -3,7 +3,7 @@ services:
 before_install:
   - docker pull nimlang/nim:0.17.0
 script:
-  - docker run --rm -v `pwd`:/usr/src/app -w /usr/src/app nimlang/nim nimble tests
+  - docker run --rm -v `pwd`:/usr/src/app -w /usr/src/app nimlang/nim nimble test
 notifications:
   email:
     on_failure: never

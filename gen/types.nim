@@ -114,6 +114,8 @@ const propsTemplate = """## This is auto-generated. Do not modify it
 
 type
   UnicodeTypeMask* = enum
+    ## For extracting a single type
+    ## value out of types
     utmDecimal = $#
     utmDigit = $#
     utmNumeric = $#

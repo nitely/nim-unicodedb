@@ -13,16 +13,16 @@ Properties:
 import unicode
 import unicodedb
 
-echo category("A".runeAt(0))  # 'L'etter, 'u'ppercase
+echo "A".runeAt(0).category()  # 'L'etter, 'u'ppercase
 # "Lu"
 
-echo bidirectional(Rune(0x0660)) # 'A'rabic, 'N'umber
+echo Rune(0x0660).bidirectional() # 'A'rabic, 'N'umber
 # "AN"
 
-echo combining(Rune(0x860))
+echo Rune(0x860).combining()
 # 0
 
-echo nfcQcNo in quickCheck(Rune(0x0374)
+echo nfcQcNo in Rune(0x0374).quickCheck()
 # true
 ```
 [docs](https://nitely.github.io/nim-unicodedb/unicodedb/properties.html)
@@ -35,7 +35,7 @@ import unicodedb
 echo lookupStrict("LEFT CURLY BRACKET")  # '{'
 # Rune(0x007B)
 
-echo name("/".runeAt(0))
+echo "/".runeAt(0).name()
 # "SOLIDUS"
 ```
 [docs](https://nitely.github.io/nim-unicodedb/unicodedb/names.html)
@@ -55,13 +55,28 @@ Decompositions:
 import unicode
 import unicodedb
 
-echo decomposition(Rune(0x0F9D))
+echo Rune(0x0F9D).decomposition()
 # @[Rune(0x0F9C), Rune(0x0FB7)]
 ```
 [docs](https://nitely.github.io/nim-unicodedb/unicodedb/decompositions.html)
 
+Types:
+```nim
+import unicode
+import unicodedb
+
+assert utmDecimal in Rune(0x0030).unicodeTypes()
+assert utmDigit in Rune(0x00B2).unicodeTypes()
+assert utmNumeric in Rune(0x2CFD).unicodeTypes()
+assert utmLowercase in Rune(0x1E69).unicodeTypes()
+assert utmUppercase in Rune(0x0041).unicodeTypes()
+assert utmCased in Rune(0x0041).unicodeTypes()
+```
+[docs](https://nitely.github.io/nim-unicodedb/unicodedb/types.html)
+
 ## Related libraries
 
+* [nim-unicodeplus](https://github.com/nitely/nim-unicodeplus)
 * [nim-graphemes](https://github.com/nitely/nim-graphemes)
 * [nim-normalize](https://github.com/nitely/nim-normalize)
 
@@ -94,6 +109,10 @@ Initial tests are ran against [a dump of] Python's
 `unicodedata` module to ensure correctness.
 Also, the related libraries have their own custom tests
 (some of the test data is provided by the unicode consortium).
+
+```
+nimble test
+```
 
 ## Contributing
 

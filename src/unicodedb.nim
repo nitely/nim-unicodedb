@@ -11,6 +11,8 @@
 ##   assert combining(Rune(0x860)) == 0
 ##   assert name(Rune(32)) == "SPACE"
 ##   assert lookupStrict("SPACE") == Rune(32)
+##   assert utmUppercase in Rune(0x0041).unicodeTypes()
+##   assert nfcQcNo in Rune(0x0374).quickCheck()
 ##
 ## There are more examples inluded
 ## within the tests module

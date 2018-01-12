@@ -71,9 +71,6 @@ proc combining*(cp: int | Rune): int {.inline.} =
   ## for a given code point
   result = combining(properties(cp))
 
-proc contains*(qc: int, m: NfMask): bool =
-  result = (qc and m.ord) != 0
-
 proc quickCheck*(props: UnicodeProps): int {.inline.} =
   ## Return quick check property for a given `UnicodeProps`
   result = props[upropQc]
@@ -81,3 +78,12 @@ proc quickCheck*(props: UnicodeProps): int {.inline.} =
 proc quickCheck*(cp: int | Rune): int {.inline.} =
   ## Return quick check property
   result = quickCheck(properties(cp))
+
+proc contains*(qc: int, m: NfMask): bool =
+  ## Check if the given NF mask is
+  ## within the quick-check values.
+  ##
+  ## .. code-block:: nim
+  ##   assert nfcQcNo in Rune(0x0374).quickCheck()
+  ##
+  result = (qc and m.ord) != 0
