@@ -5,26 +5,22 @@ import unicode
 
 import compositions_data
 
-proc fnv32a(key: array[2, int], seed: int): int {.inline, raises: [].} =
+proc fnv32a(key: array[2, int], seed: uint32): uint32 {.inline, raises: [].} =
   ## Calculates a distinct hash function for a given sequence
   ## FNV algorithm from http://isthe.com/chongo/tech/comp/fnv/
-  const
-    fnv32Prime = 16777619
-    int32Max = int32.high
-
-  result = 18652614  # -> 2166136261 mod int32Max
-  if seed > 0:
+  result = 18652614'u32  # -> 2166136261 mod int32.high
+  if seed > 0'u32:
     result = seed
-
-  for s in key:
-    result = result xor s
-    result = (result * fnv32Prime) mod int32Max
+  result = result xor uint32(key[0])
+  result = result * 16777619'u32
+  result = result xor uint32(key[1])
+  result = result * 16777619'u32
 
 proc mphLookup(key: array[2, int]): array[3, int32] {.inline, raises: [].} =
   ## Hash map lookup for compositions. Return a
   ## decomposition and its composition
-  let d = compsHashes[fnv32a(key, 0) mod compsHashes.len]
-  result = compsValues[fnv32a(key, d) mod compsValues.len]
+  let d = compsHashes[fnv32a(key, 0'u32) mod compsHashes.len]
+  result = compsValues[fnv32a(key, d.uint32) mod compsValues.len]
 
 proc composition*(cpA: int, cpB: int): int {.raises: [].} =
   ## Return the primary composition for

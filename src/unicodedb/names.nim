@@ -133,25 +133,20 @@ proc name*(cp: Rune): string {.inline, raises: [].} =
   ## rune does not has a name
   name(int(cp))
 
-proc fnv32a(key: string, seed: int): int {.inline, raises: [].} =
+proc fnv32a(key: string, seed: uint32): uint32 {.inline, raises: [].} =
   ## Calculates a distinct hash function for a given sequence
   ## FNV algorithm from http://isthe.com/chongo/tech/comp/fnv/
-  const
-    fnv32Prime = 16777619
-    int32Max = int32.high
-
-  result = 18652614  # -> 2166136261 mod int32Max
-  if seed > 0:
+  result = 18652614'u32  # -> 2166136261 mod int32.high
+  if seed > 0'u32:
     result = seed
-
   for s in key:
-    result = result xor ord(s)
-    result = (result * fnv32Prime) mod int32Max
+    result = result xor uint32(s)
+    result = result * 16777619'u32
 
 proc mphLookup(key: string): int {.inline, raises: [].} =
   ## Based on minimal perfect hashing algorithm
-  let d = int(namesHashes[fnv32a(key, 0) mod namesHashes.len])
-  result = namesValues[fnv32a(key, d) mod namesValues.len]
+  let d = namesHashes[fnv32a(key, 0'u32) mod namesHashes.len]
+  result = namesValues[fnv32a(key, d.uint32) mod namesValues.len]
 
 # todo: proc lookup*(cpName: string, loose = true): Rune =
 
