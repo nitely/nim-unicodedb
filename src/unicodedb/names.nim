@@ -145,8 +145,10 @@ proc fnv32a(key: string, seed: uint32): uint32 {.inline, raises: [].} =
 
 proc mphLookup(key: string): int {.inline, raises: [].} =
   ## Based on minimal perfect hashing algorithm
-  let d = namesHashes[fnv32a(key, 0'u32) mod namesHashes.len]
-  result = namesValues[fnv32a(key, d.uint32) mod namesValues.len]
+  assert namesHashes.len <= int32.high
+  assert namesValues.len <= int32.high
+  let d = namesHashes[int(fnv32a(key, 0'u32) mod namesHashes.len)]
+  result = namesValues[int(fnv32a(key, d.uint32) mod namesValues.len)]
 
 # todo: proc lookup*(cpName: string, loose = true): Rune =
 

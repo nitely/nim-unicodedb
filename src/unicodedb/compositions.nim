@@ -19,8 +19,10 @@ proc fnv32a(key: array[2, int], seed: uint32): uint32 {.inline, raises: [].} =
 proc mphLookup(key: array[2, int]): array[3, int32] {.inline, raises: [].} =
   ## Hash map lookup for compositions. Return a
   ## decomposition and its composition
-  let d = compsHashes[fnv32a(key, 0'u32) mod compsHashes.len]
-  result = compsValues[fnv32a(key, d.uint32) mod compsValues.len]
+  assert compsHashes.len <= int32.high
+  assert compsValues.len <= int32.high
+  let d = compsHashes[int(fnv32a(key, 0'u32) mod compsHashes.len)]
+  result = compsValues[int(fnv32a(key, d.uint32) mod compsValues.len)]
 
 proc composition*(cpA: int, cpB: int): int {.raises: [].} =
   ## Return the primary composition for
