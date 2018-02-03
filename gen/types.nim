@@ -153,8 +153,8 @@ when isMainModule:
       $utmUppercase.ord,
       $utmCased.ord,
       join(stages.stage1, "'u8,\n    "),
-      join(stages.stage2, "'u8,\n    "),
-      join(stages.props, ",\n    "),
+      join(stages.stage2, "'i8,\n    "),
+      join(stages.props, "'i8,\n    "),
       $stages.blockSize])
   finally:
     close(f)

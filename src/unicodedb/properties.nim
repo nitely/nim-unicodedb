@@ -17,7 +17,7 @@ type
     upropBi  # Bidirectional
     upropQc  # QuikCheck
 
-  UnicodeProps* = array[UnicodeProp, int]
+  UnicodeProps* = array[UnicodeProp, int16]
     ## A type holding all common
     ## properties for a character.
     ## Use `UnicodeProp` to get one of them.

@@ -183,7 +183,7 @@ when isMainModule:
   var propsGen = newSeq[string](len(stages.props))
   for i, p in stages.props:
     assert len(p) == propsLen
-    propsGen[i] = "[$#]" % join(p, ", ")
+    propsGen[i] = "[$#]" % join(p, "'i16, ")
   var categoryNamesGen = newSeq[string](len(categoryNames))
   for i, cat in categoryNames:
     categoryNamesGen[i] = "\"$#\"" % cat
