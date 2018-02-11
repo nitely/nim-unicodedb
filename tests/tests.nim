@@ -315,7 +315,7 @@ test "Test WhiteSpace":
   for cp in 0 .. 0x10FFFF:
     if utmWhiteSpace in unicodeTypes(cp):
       check cp in expected
-    if cp in expected:
+    if cp <= int16.high and cp in expected:
       check utmWhiteSpace in unicodeTypes(cp)
 
 test "Test Word":
@@ -323,7 +323,7 @@ test "Test Word":
     if utmWord in unicodeTypes(cp):
       check(
         category(cp) in ["Pc", "Mn", "Mc", "Me"] or
-        utmDigit in unicodeTypes(cp) or
+        utmDecimal in unicodeTypes(cp) or
         # alphanumeric
         utmLowercase in unicodeTypes(cp) or
         utmUppercase in unicodeTypes(cp) or
@@ -334,7 +334,7 @@ test "Test Word":
     # No idea how to derive Other_Alphanumeric,
     # but this is good enough
     if (category(cp) in ["Pc", "Mn", "Mc", "Me"] or
-        utmDigit in unicodeTypes(cp) or
+        utmDecimal in unicodeTypes(cp) or
         # alphanumeric
         utmLowercase in unicodeTypes(cp) or
         utmUppercase in unicodeTypes(cp) or

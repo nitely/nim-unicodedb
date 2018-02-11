@@ -20,9 +20,9 @@ proc numTypeMap(numType: string): int =
   ## for derived numericType
   case numType
   of "Decimal":
-    utmDecimal.ord
+    utmDecimal.ord or utmWord.ord
   of "Digit":
-    utmDigit.ord or utmWord.ord
+    utmDigit.ord
   of "Numeric":
     utmNumeric.ord
   else:
