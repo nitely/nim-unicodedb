@@ -301,3 +301,16 @@ test "Test some types":
   check utmCased in unicodeTypes(Rune(0x1F189))
   check utmCased in unicodeTypes(Rune(0x1E69))
   check utmCased notin unicodeTypes(Rune('$'.ord))
+
+  check utmWhiteSpace in unicodeTypes(Rune(0x0009))
+  check utmWhiteSpace in unicodeTypes(Rune(0x000D))
+  check utmWhiteSpace in unicodeTypes(Rune(0x3000))
+  check utmWhiteSpace notin unicodeTypes(Rune('$'.ord))
+
+test "Test WhiteSpace":
+  for cp in 0 .. 0x10FFFF:
+    if utmWhiteSpace in unicodeTypes(cp):
+      check cp in {
+        0x0009 .. 0x000D, 0x0020, 0x0085, 0x00A0,
+        0x1680, 0x2000 .. 0x200A, 0x2028, 0x2029,
+        0x202F, 0x205F, 0x3000}

@@ -13,6 +13,7 @@ type
     utmLowercase = 0x08
     utmUppercase = 0x10
     utmCased = 0x20
+    utmWhiteSpace = 0x40
 
 proc numTypeMap(numType: string): int =
   ## for derived numericType
@@ -56,7 +57,27 @@ proc parseCoreProps(propsRaw: seq[seq[seq[string]]]): seq[int] =
     for p in props:
       result[cp] = result[cp] or p[0].coreTypeMap()
 
-proc parse(dntPath: string, dctPath: string): seq[int] =
+proc propListTypeMap(propType: string): int =
+  ## for propList
+  case propType
+  of "White_Space":
+    utmWhiteSpace.ord
+  else:
+    0
+
+proc parsePropList(propsRaw: seq[seq[seq[string]]]): seq[int] =
+  result = newSeq[int](propsRaw.len)
+  result.fill(0)
+  for cp, props in propsRaw:
+    if props.isNil:
+      continue
+    for p in props:
+      result[cp] = result[cp] or p[0].propListTypeMap()
+
+proc parse(
+    dntPath: string,
+    dctPath: string,
+    plPath: string): seq[int] =
   echo "derived numType"
   let nums = dntPath.parseUDDNoDups().parseNumericType()
   result = newSeq[int](nums.len)
@@ -67,6 +88,10 @@ proc parse(dntPath: string, dctPath: string): seq[int] =
   let props = dctPath.parseUDD().parseCoreProps()
   for cp, ct in props:
     result[cp] = result[cp] or ct
+  echo "propList"
+  let pl = plPath.parseUDD().parsePropList()
+  for cp, pp in pl:
+    result[cp] = result[cp] or pp
 
 type
   PropsTable = tuple
@@ -122,6 +147,7 @@ type
     utmLowercase = $#
     utmUppercase = $#
     utmCased = $#
+    utmWhiteSpace = $#
 
 const
   typesOffsets* = [
@@ -141,7 +167,8 @@ const
 when isMainModule:
   var stages = build(parse(
     "./gen/UCD/extracted/DerivedNumericType.txt",
-    "./gen/UCD/DerivedCoreProperties.txt"))
+    "./gen/UCD/DerivedCoreProperties.txt",
+    "./gen/UCD/PropList.txt"))
 
   var f = open("./src/unicodedb/types_data.nim", fmWrite)
   try:
@@ -152,6 +179,7 @@ when isMainModule:
       $utmLowercase.ord,
       $utmUppercase.ord,
       $utmCased.ord,
+      $utmWhiteSpace.ord,
       join(stages.stage1, "'u8,\n    "),
       join(stages.stage2, "'i8,\n    "),
       join(stages.props, "'i8,\n    "),
