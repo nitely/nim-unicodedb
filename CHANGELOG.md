@@ -1,3 +1,15 @@
+v0.2.3
+==================
+
+* Add `utmWhiteSpace` type
+* Add `utmWord` type
+
+v0.2.2
+==================
+
+* Add missing data (int) types
+* fix for Nim 0.17.2
+
 v0.2.1
 ==================
 
