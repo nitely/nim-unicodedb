@@ -14,6 +14,7 @@ type
     utmUppercase = 0x10
     utmCased = 0x20
     utmWhiteSpace = 0x40
+    utmWord = 0x80
 
 proc numTypeMap(numType: string): int =
   ## for derived numericType
@@ -21,7 +22,7 @@ proc numTypeMap(numType: string): int =
   of "Decimal":
     utmDecimal.ord
   of "Digit":
-    utmDigit.ord
+    utmDigit.ord or utmWord.ord
   of "Numeric":
     utmNumeric.ord
   else:
@@ -45,6 +46,8 @@ proc coreTypeMap(coreType: string): int =
     utmUppercase.ord
   of "Cased":
     utmCased.ord
+  of "Alphabetic":
+    utmWord.ord
   else:
     0
 
@@ -62,6 +65,8 @@ proc propListTypeMap(propType: string): int =
   case propType
   of "White_Space":
     utmWhiteSpace.ord
+  of "Join_Control":
+    utmWord.ord
   else:
     0
 
@@ -74,10 +79,33 @@ proc parsePropList(propsRaw: seq[seq[seq[string]]]): seq[int] =
     for p in props:
       result[cp] = result[cp] or p[0].propListTypeMap()
 
+proc udCatTypeMap(catType: string): int =
+  ## for unicode_data categories
+  case catType
+  of "Pc":
+    utmWord.ord
+  of "Mn":
+    utmWord.ord
+  of "Mc":
+    utmWord.ord
+  of "Me":
+    utmWord.ord
+  else:
+    0
+
+proc parseUnicodeDataProps(propsRaw: seq[seq[string]]): seq[int] =
+  result = newSeq[int](propsRaw.len)
+  result.fill(0)
+  for cp, props in propsRaw:
+    if props.isNil:
+      continue
+    result[cp] = result[cp] or props[0].udCatTypeMap()
+
 proc parse(
     dntPath: string,
     dctPath: string,
-    plPath: string): seq[int] =
+    plPath: string,
+    udPath: string): seq[int] =
   echo "derived numType"
   let nums = dntPath.parseUDDNoDups().parseNumericType()
   result = newSeq[int](nums.len)
@@ -91,6 +119,10 @@ proc parse(
   echo "propList"
   let pl = plPath.parseUDD().parsePropList()
   for cp, pp in pl:
+    result[cp] = result[cp] or pp
+  echo "unicodeData"
+  let ud = udPath.parseUDProps().parseUnicodeDataProps()
+  for cp, pp in ud:
     result[cp] = result[cp] or pp
 
 type
@@ -148,6 +180,7 @@ type
     utmUppercase = $#
     utmCased = $#
     utmWhiteSpace = $#
+    utmWord = $#
 
 const
   typesOffsets* = [
@@ -168,7 +201,8 @@ when isMainModule:
   var stages = build(parse(
     "./gen/UCD/extracted/DerivedNumericType.txt",
     "./gen/UCD/DerivedCoreProperties.txt",
-    "./gen/UCD/PropList.txt"))
+    "./gen/UCD/PropList.txt",
+    "./gen/UCD/UnicodeData.txt"))
 
   var f = open("./src/unicodedb/types_data.nim", fmWrite)
   try:
@@ -180,9 +214,10 @@ when isMainModule:
       $utmUppercase.ord,
       $utmCased.ord,
       $utmWhiteSpace.ord,
+      $utmWord.ord,
       join(stages.stage1, "'u8,\n    "),
       join(stages.stage2, "'i8,\n    "),
-      join(stages.props, "'i8,\n    "),
+      join(stages.props, "'i16,\n    "),
       $stages.blockSize])
   finally:
     close(f)

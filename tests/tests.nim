@@ -308,9 +308,38 @@ test "Test some types":
   check utmWhiteSpace notin unicodeTypes(Rune('$'.ord))
 
 test "Test WhiteSpace":
+  let expected = {
+    0x0009 .. 0x000D, 0x0020, 0x0085, 0x00A0,
+    0x1680, 0x2000 .. 0x200A, 0x2028, 0x2029,
+    0x202F, 0x205F, 0x3000}
   for cp in 0 .. 0x10FFFF:
     if utmWhiteSpace in unicodeTypes(cp):
-      check cp in {
-        0x0009 .. 0x000D, 0x0020, 0x0085, 0x00A0,
-        0x1680, 0x2000 .. 0x200A, 0x2028, 0x2029,
-        0x202F, 0x205F, 0x3000}
+      check cp in expected
+    if cp in expected:
+      check utmWhiteSpace in unicodeTypes(cp)
+
+test "Test Word":
+  for cp in 0 .. 0x10FFFF:
+    if utmWord in unicodeTypes(cp):
+      check(
+        category(cp) in ["Pc", "Mn", "Mc", "Me"] or
+        utmDigit in unicodeTypes(cp) or
+        # alphanumeric
+        utmLowercase in unicodeTypes(cp) or
+        utmUppercase in unicodeTypes(cp) or
+        category(cp) in ["Lt", "Lm", "Lo", "Nl"] or
+        category(cp) in ["Mn", "Mc", "So"] or
+        # Join_Control
+        cp in {0x200C .. 0x200D})
+    # No idea how to derive Other_Alphanumeric,
+    # but this is good enough
+    if (category(cp) in ["Pc", "Mn", "Mc", "Me"] or
+        utmDigit in unicodeTypes(cp) or
+        # alphanumeric
+        utmLowercase in unicodeTypes(cp) or
+        utmUppercase in unicodeTypes(cp) or
+        category(cp) in ["Lt", "Lm", "Lo", "Nl"] or
+        #category(cp) in ["Mn", "Mc", "So"] or
+        # Join_Control
+        cp in {0x200C .. 0x200D}):
+      check utmWord in unicodeTypes(cp)
