@@ -87,3 +87,9 @@ proc contains*(qc: int, m: NfMask): bool =
   ##   assert nfcQcNo in Rune(0x0374).quickCheck()
   ##
   result = (qc and m.ord) != 0
+
+when isMainModule:
+  echo(
+    (sizeof(propsOffsets) +
+     sizeof(propsIndices) +
+     sizeof(propsData)) div 1024)

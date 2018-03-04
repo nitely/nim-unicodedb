@@ -179,3 +179,14 @@ proc lookupStrict*(cpName: string): Rune {.raises: [KeyError].} =
   if cpName != name(cp):
     raise newException(KeyError, "Name not found")
   result = Rune(cp)
+
+when isMainModule:
+  echo(
+    (sizeof(namesOffsets) +
+     sizeof(namesIndices) +
+     sizeof(namesTable) +
+     sizeof(wordsOffsets) +
+     sizeof(wordsData)) div 1024)
+  echo(
+    (sizeof(namesHashes) +
+     sizeof(namesValues)) div 1024)

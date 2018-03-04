@@ -46,3 +46,8 @@ proc composition*(
   if cp == -1:
     raise newException(ValueError, "Composition not found")
   result = Rune(cp)
+
+when isMainModule:
+  echo(
+    (sizeof(compsHashes) +
+     sizeof(compsValues)) div 1024)

@@ -91,13 +91,13 @@ Storage is based on *multi-stage tables* and
 
 These are the current collections sizes:
 
-* properties is 45KB. Used by `properties(1)`, `category(1)`,
+* properties is 40KB. Used by `properties(1)`, `category(1)`,
   `bidirectional(1)`, `combining(1)` and `quickCheck(1)`
-* compositions is 13KB. Used by: `composition(1)`
-* decompositions is 149KB. Used by `decomposition(1)`
+* compositions is 12KB. Used by: `composition(1)`
+* decompositions is 89KB. Used by `decomposition(1)`
   and `canonicalDecomposition(1)`
-* names is 795KB. Used by `name(1)` and `lookupStrict(1)`
-* names (lookup) is 301KB. Used by `lookupStrict(1)`
+* names is 578KB. Used by `name(1)` and `lookupStrict(1)`
+* names (lookup) is 241KB. Used by `lookupStrict(1)`
 
 ## Missing APIs
 

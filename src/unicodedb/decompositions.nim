@@ -71,3 +71,9 @@ proc canonicalDecomposition*[T: int | Rune](cp: T): seq[T] {.raises: [].} =
   result = newSeqOfCap[T](2)
   for dcp in canonicalDecomposition(cp):
     result.add(dcp)
+
+when isMainModule:
+  echo(
+    (sizeof(decompsOffsets) +
+     sizeof(decompsIndices) +
+     sizeof(decompsData)) div 1024)
