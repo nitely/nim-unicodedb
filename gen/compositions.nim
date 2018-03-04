@@ -3,6 +3,7 @@ import strutils
 import unicode_data
 import derived_data
 import min_perfect_hash
+import utils
 
 proc parseComps(
       decompsRaw: seq[string],
@@ -39,7 +40,6 @@ const
   compsValues* = [
     $#
   ]
-
 """
 
 when isMainModule:
@@ -57,7 +57,7 @@ when isMainModule:
   var f = open("./src/unicodedb/compositions_data.nim", fmWrite)
   try:
     f.write(compsTemplate % [
-      join(mphTables.h, "'i16,\n    "),
-      join(compValues, ",\n    ")])
+      prettyTable(mphTables.h, 15, "'i16"),
+      join(compValues, ",\L    ")])
   finally:
     close(f)

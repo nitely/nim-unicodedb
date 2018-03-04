@@ -4,6 +4,7 @@ import algorithm
 import unicode_data
 import derived_data
 import two_stage_table
+import utils
 
 type
   UnicodeTypeMask = enum
@@ -194,7 +195,6 @@ const
   ]
 
   blockSize* = $#
-
 """
 
 when isMainModule:
@@ -215,9 +215,9 @@ when isMainModule:
       $utmCased.ord,
       $utmWhiteSpace.ord,
       $utmWord.ord,
-      join(stages.stage1, "'u8,\n    "),
-      join(stages.stage2, "'i8,\n    "),
-      join(stages.props, "'i16,\n    "),
+      prettyTable(stages.stage1, 15, "'u8"),
+      prettyTable(stages.stage2, 15, "'i8"),
+      prettyTable(stages.props, 15, "'i16"),
       $stages.blockSize])
   finally:
     close(f)

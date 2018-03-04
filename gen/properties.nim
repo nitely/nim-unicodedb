@@ -4,6 +4,7 @@ import algorithm
 import unicode_data
 import derived_data
 import two_stage_table
+import utils
 
 type
   Props* {.pure.} = enum
@@ -168,7 +169,6 @@ const
   ]
 
   blockSize* = $#
-
 """
 
 when isMainModule:
@@ -202,8 +202,8 @@ when isMainModule:
       intToStr(NfkdQcNoMask),
       join(categoryNamesGen, ",\n    "),
       join(bidirectionalNamesGen, ",\n    "),
-      join(stages.stage1, "'u8,\n    "),
-      join(stages.stage2, "'u8,\n    "),
+      prettyTable(stages.stage1, 15, "'u8"),
+      prettyTable(stages.stage2, 15, "'u8"),
       join(propsGen, ",\n    "),
       intToStr(stages.blockSize)])
   finally:

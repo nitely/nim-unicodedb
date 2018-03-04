@@ -2,6 +2,7 @@ import strutils
 
 import unicode_data
 import two_stage_table
+import utils
 
 type
   Decomposition = tuple
@@ -100,7 +101,6 @@ const
     $#
   ]
   blockSize* = $#
-
 """
 
 when isMainModule:
@@ -109,9 +109,9 @@ when isMainModule:
   var f = open("./src/unicodedb/decompositions_data.nim", fmWrite)
   try:
     f.write(decompsTemplate % [
-      join(stages.stage1, "'i8,\n    "),
-      join(stages.stage2, "'i16,\n    "),
-      join(stages.decomps, "'i32,\n    "),
+      prettyTable(stages.stage1, 15, "'i8"),
+      prettyTable(stages.stage2, 10, "'i16"),
+      prettyTable(stages.decomps, 10, "'i32"),
       intToStr(stages.blockSize)])
   finally:
     close(f)

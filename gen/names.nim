@@ -4,6 +4,7 @@ import strutils
 import unicode_data
 import two_stage_table
 import min_perfect_hash
+import utils
 
 # See http://www.unicode.org/versions/Unicode10.0.0/ch04.pdf
 # Chapter 4.8
@@ -224,7 +225,6 @@ const
   namesValues* = [
     $#
   ]
-
 """
 
 when isMainModule:
@@ -258,13 +258,14 @@ when isMainModule:
   var f = open("./src/unicodedb/names_data.nim", fmWrite)
   try:
     f.write(namesTemplate % [
-      join(stageTable.stage1, "'u8,\n    "),
-      join(stageTable.stage2, "'i32,\n    "),
-      join(ntObj.names, "'i16,\n    "),
-      join(wtObj.offsets, "'i32,\n    "),
-      join(wtObj.words, "'i8,\n    "),
+      prettyTable(stageTable.stage1, 15, "'u8"),
+      prettyTable(stageTable.stage2, 5, "'i32"),
+      prettyTable(ntObj.names, 10, "'i16"),
+      prettyTable(wtObj.offsets, 10, "'i32"),
+      prettyTable(wtObj.words, 15, "'i8"),
       intToStr(stageTable.blockSize),
-      join(mphTables.h, "'u16,\n    "),
-      join(mphTables.v, "'i32,\n    ")])
+      prettyTable(mphTables.h, 15, "'u16"),
+      prettyTable(mphTables.v, 10, "'i32")
+    ])
   finally:
     close(f)
