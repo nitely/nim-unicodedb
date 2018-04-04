@@ -7,6 +7,12 @@ gen/names
 gen/properties
 gen/types
 
+src/unicodedb/compositions
+src/unicodedb/decompositions
+src/unicodedb/names
+src/unicodedb/properties
+src/unicodedb/types
+
 gen/UCD/*
 !gen/UCD/UnicodeData.txt
 !gen/UCD/DerivedNormalizationProps.txt
