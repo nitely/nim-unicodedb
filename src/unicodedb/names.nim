@@ -102,7 +102,7 @@ proc name*(cp: int): string {.raises: [].} =
 
   let
     blockOffset = int(namesOffsets[cp div blockSize]) * blockSize
-    idx = namesIndices[blockOffset + cp mod blockSize]
+    idx = int(namesIndices[blockOffset + cp mod blockSize])
   if idx == -1:
     result = ""
     return
@@ -113,7 +113,7 @@ proc name*(cp: int): string {.raises: [].} =
     j = 1
     k = 0
   while true:
-    let wordOffset = wordsOffsets[namesTable[idx + j]]
+    let wordOffset = int(wordsOffsets[namesTable[idx + j]])
     k = 0
     while true:
       assert i <= length

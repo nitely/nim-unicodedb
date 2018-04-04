@@ -14,13 +14,13 @@ proc unicodeTypes*(cp: int): int =
   assert cp <= 0x10FFFF
   let
     blockOffset = int(typesOffsets[cp div blockSize]) * blockSize
-    idx = int(typesIndices[blockOffset + cp mod blockSize])
+    idx = typesIndices[blockOffset + cp mod blockSize]
   result = typesData[idx]
 
 proc unicodeTypes*(cp: Rune): int {.inline.} =
   ## Return types for a given code point.
   ## Use `contains` to retrieve a single type
-  result = unicodeTypes(int(cp))
+  unicodeTypes(cp.int32)
 
 proc contains*(ut: int, utm: UnicodeTypeMask): bool =
   ## Check if the given type mask is
