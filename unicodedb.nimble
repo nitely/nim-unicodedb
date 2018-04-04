@@ -1,9 +1,9 @@
 # Package
 
-version       = "0.2.3"
-author        = "Esteban Castro Borsani (@nitely)"
-description   = "Unicode Character Database (UCD) access for Nim"
-license       = "MIT"
+version = "0.2.4"
+author = "Esteban Castro Borsani (@nitely)"
+description = "Unicode Character Database (UCD) access for Nim"
+license = "MIT"
 srcDir = "src"
 
 skipDirs = @["tests", "gen"]

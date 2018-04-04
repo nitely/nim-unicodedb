@@ -1,3 +1,11 @@
+v0.2.4
+==================
+
+* Minimal perf improvements
+  for procs taking Runes
+* Replaced generics by concrete
+  types in APIs
+
 v0.2.3
 ==================
 
