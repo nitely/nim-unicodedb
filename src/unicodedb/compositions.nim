@@ -32,7 +32,8 @@ proc composition*(cpA: int, cpB: int): int {.raises: [].} =
   assert cpB <= 0x10FFFF
   let cps = mphLookup([cpA, cpB])
   if cpA != cps[0] or cpB != cps[1]:
-    return -1
+    result = -1
+    return
   result = cps[2]
 
 proc composition*(

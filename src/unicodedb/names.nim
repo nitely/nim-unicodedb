@@ -92,17 +92,20 @@ proc name*(cp: int): string {.raises: [].} =
   ## point does not has a name
   assert cp <= 0x10FFFF
   if 0xAC00 <= cp and cp <= 0xD7A3:
-    return hangulName(cp)
+    result = hangulName(cp)
+    return
 
   let prName = getNameInPrefixRange(cp)
   if prName.len > 0:
-    return prName
+    result = prName
+    return
 
   let
     blockOffset = int(namesOffsets[cp div blockSize]) * blockSize
     idx = namesIndices[blockOffset + cp mod blockSize]
   if idx == -1:
-    return ""
+    result = ""
+    return
   let length = namesTable[idx]
   result = newString(length)
   var
@@ -173,7 +176,8 @@ proc lookupStrict*(cpName: string): Rune {.raises: [KeyError].} =
         raise newException(KeyError, "Name not found")
       if formatHex(cp) != rawCp:
         raise newException(KeyError, "Name not found")
-      return Rune(cp)
+      result = Rune(cp)
+      return
 
   cp = mphLookup(cpName)
   if cpName != name(cp):
