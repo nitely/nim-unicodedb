@@ -11,7 +11,7 @@ having O(1) access for every API and be lightweight in size.
 Properties:
 ```nim
 import unicode
-import unicodedb
+import unicodedb/properties
 
 echo "A".runeAt(0).category()  # 'L'etter, 'u'ppercase
 # "Lu"
@@ -30,7 +30,7 @@ echo nfcQcNo in Rune(0x0374).quickCheck()
 Names:
 ```nim
 import unicode
-import unicodedb
+import unicodedb/names
 
 echo lookupStrict("LEFT CURLY BRACKET")  # '{'
 # Rune(0x007B)
@@ -43,7 +43,7 @@ echo "/".runeAt(0).name()
 Compositions:
 ```nim
 import unicode
-import unicodedb
+import unicodedb/compositions
 
 echo composition(Rune(108), Rune(803))
 # Rune(7735)
@@ -53,7 +53,7 @@ echo composition(Rune(108), Rune(803))
 Decompositions:
 ```nim
 import unicode
-import unicodedb
+import unicodedb/decompositions
 
 echo Rune(0x0F9D).decomposition()
 # @[Rune(0x0F9C), Rune(0x0FB7)]
@@ -63,7 +63,7 @@ echo Rune(0x0F9D).decomposition()
 Types:
 ```nim
 import unicode
-import unicodedb
+import unicodedb/types
 
 assert utmDecimal in Rune(0x0030).unicodeTypes()
 assert utmDigit in Rune(0x00B2).unicodeTypes()
