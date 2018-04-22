@@ -1,3 +1,8 @@
+v0.2.5
+==================
+
+* Exceptionless `composition` API
+
 v0.2.4
 ==================
 
