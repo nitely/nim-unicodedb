@@ -45,7 +45,7 @@ proc composition*(cpA: int, cpB: int): int {.raises: [].} =
 
 proc composition*(
     cpA: Rune,
-    cpB: Rune): Rune {.inline, raises: [ValueError].} =
+    cpB: Rune): Rune {.raises: [ValueError].} =
   ## Return the primary composition for
   ## a given decomposition. This is not a full composition.
   ## Raises `ValueError` if composition was not found
@@ -53,6 +53,19 @@ proc composition*(
   if cp == -1:
     raise newException(ValueError, "Composition not found")
   result = Rune(cp)
+
+proc composition*(
+    r: var Rune,
+    cpA: Rune,
+    cpB: Rune): int {.raises: [].} =
+  ## Assign the primary composition for
+  ## a given decomposition to ``r`` param.
+  ## This is not a full composition.
+  ## Return ``-1`` if composition was not found
+  result = compositionImpl(cpA.int32, cpB.int32)
+  if result == -1:
+    return
+  r = Rune(result)
 
 when isMainModule:
   echo(

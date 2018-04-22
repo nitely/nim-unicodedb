@@ -32,10 +32,17 @@ test "Test some compositions":
 
 test "Test compositions with Runes":
   check composition(Rune(108), Rune(803)) == Rune(7735)
+  block:
+    var r: Rune
+    check composition(r, Rune(108), Rune(803)) != -1
+    check r == Rune(7735)
 
 test "Test compositions with bad Runes":
   expect(ValueError):
     discard composition(Rune(123), Rune(123))
+  block:
+    var r: Rune
+    check composition(r, Rune(123), Rune(123)) == -1
 
 test "Test decompositions":
   for decomp in allDecomps:
