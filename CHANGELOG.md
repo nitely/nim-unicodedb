@@ -1,3 +1,10 @@
+v0.3.1
+==================
+
+* Deprecated `composition(int, int)`
+* Breaking change: `composition(var Rune, Rune, Rune)`
+  return `bool` instead of `int`
+
 v0.2.5
 ==================
 

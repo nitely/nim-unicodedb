@@ -34,7 +34,7 @@ test "Test compositions with Runes":
   check composition(Rune(108), Rune(803)) == Rune(7735)
   block:
     var r: Rune
-    check composition(r, Rune(108), Rune(803)) != -1
+    check composition(r, Rune(108), Rune(803))
     check r == Rune(7735)
 
 test "Test compositions with bad Runes":
@@ -42,7 +42,7 @@ test "Test compositions with bad Runes":
     discard composition(Rune(123), Rune(123))
   block:
     var r: Rune
-    check composition(r, Rune(123), Rune(123)) == -1
+    check(not composition(r, Rune(123), Rune(123)))
 
 test "Test decompositions":
   for decomp in allDecomps:
