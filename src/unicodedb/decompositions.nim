@@ -5,32 +5,26 @@ import unicode
 
 import decompositions_data
 
-iterator decompositionImpl(cp: int): int32 {.inline, raises: [].} =
-  assert cp <= 0x10FFFF
-  let
-    blockOffset = int(decompsOffsets[cp div blockSize]) * blockSize
-    idx = int(decompsIndices[blockOffset + cp mod blockSize])
-  if idx != -1:
-    let length = decompsData[idx] shr 1
-    assert length <= 18
-    for i in idx + 1 .. idx + length:
-      yield decompsData[i]
-
-iterator decomposition*(cp: int): int {.inline, raises: [].} =
-  ## Iterates over the decomposition of a
-  ## given code point, returning each decomposition
-  ## code point. Returns at most 18 code points.
-  ## This is not a full decomposition.
-  for dcp in decompositionImpl(cp):
-    yield dcp
-
 iterator decomposition*(cp: Rune): Rune {.inline, raises: [].} =
   ## Iterates over the decomposition of a
   ## given rune, returning each decomposition
   ## rune. Returns at most 18 runes.
   ## This is not a full decomposition.
-  for dcp in decompositionImpl(cp.int32):
-    yield Rune(dcp)
+  assert cp.int <= 0x10FFFF
+  let
+    blockOffset = (decompsOffsets[cp.int div blockSize]).int * blockSize
+    idx = (decompsIndices[blockOffset + cp.int mod blockSize]).int
+  if idx != -1:
+    let length = decompsData[idx] shr 1
+    assert length <= 18
+    for i in idx+1 .. idx+length:
+      yield decompsData[i].Rune
+
+iterator decomposition*(cp: int): int {.inline, deprecated.} =
+  ## **Deprecated since version 0.3.0**;
+  ## Use ``decomposition(Rune)`` instead.
+  for dcp in decomposition(cp.Rune):
+    yield dcp.int
 
 proc decompositionImpl[T: int | Rune](
     result: var seq[T],
@@ -39,23 +33,26 @@ proc decompositionImpl[T: int | Rune](
   for dcp in decomposition(cp):
     result.add(dcp)
 
-proc decomposition*(cp: int): seq[int] {.raises: [].} =
-  ## Return a sequence of the
-  ## decomposition for a given code point.
-  ## Returns an empty seq when there is no decomposition.
-  decompositionImpl(result, cp)
-
 proc decomposition*(cp: Rune): seq[Rune] {.raises: [].} =
   ## Return a sequence of the
   ## decomposition for a given code point.
   ## Returns an empty seq when there is no decomposition.
   decompositionImpl(result, cp)
 
-iterator canonicalDecompositionImpl(cp: int): int32 {.inline, raises: [].} =
-  assert cp <= 0x10FFFF
+proc decomposition*(cp: int): seq[int] {.deprecated.} =
+  ## **Deprecated since version 0.3.0**;
+  ## Use ``decomposition(Rune)`` instead.
+  decompositionImpl(result, cp)
+
+iterator canonicalDecomposition*(cp: Rune): Rune {.inline, raises: [].} =
+  ## Iterates over the canonical decomposition of a
+  ## given rune, returning each decomposition
+  ## rune. Returns at most 2 runes.
+  ## This is not a full decomposition.
+  assert cp.int <= 0x10FFFF
   let
-    blockOffset = int(decompsOffsets[cp div blockSize]) * blockSize
-    idx = int(decompsIndices[blockOffset + cp mod blockSize])
+    blockOffset = (decompsOffsets[cp.int div blockSize]).int * blockSize
+    idx = (decompsIndices[blockOffset + cp.int mod blockSize]).int
   if idx != -1:
     let
       extra = decompsData[idx]
@@ -63,24 +60,14 @@ iterator canonicalDecompositionImpl(cp: int): int32 {.inline, raises: [].} =
     if isCanonical:
       let length = extra shr 1
       assert length <= 2
-      for i in idx + 1 .. idx + length:
-        yield decompsData[i]
+      for i in idx+1 .. idx+length:
+        yield decompsData[i].Rune
 
-iterator canonicalDecomposition*(cp: int): int {.inline, raises: [].} =
-  ## Iterates over the canonical decomposition of a
-  ## given code point, returning each decomposition
-  ## code point. Returns at most 2 code points.
-  ## This is not a full decomposition.
-  for dcp in canonicalDecompositionImpl(cp):
-    yield dcp
-
-iterator canonicalDecomposition*(cp: Rune): Rune {.inline, raises: [].} =
-  ## Iterates over the canonical decomposition of a
-  ## given rune, returning each decomposition
-  ## rune. Returns at most 2 runes.
-  ## This is not a full decomposition.
-  for dcp in canonicalDecompositionImpl(cp.int32):
-    yield Rune(dcp)
+iterator canonicalDecomposition*(cp: int): int {.inline, deprecated.} =
+  ## **Deprecated since version 0.3.0**;
+  ## Use ``canonicalDecomposition(Rune)`` instead.
+  for dcp in canonicalDecomposition(cp.Rune):
+    yield dcp.int
 
 proc canonicalDecompositionImpl[T: int | Rune](
     result: var seq[T],
@@ -89,18 +76,16 @@ proc canonicalDecompositionImpl[T: int | Rune](
   for dcp in canonicalDecomposition(cp):
     result.add(dcp)
 
-proc canonicalDecomposition*(cp: int): seq[int] {.raises: [].} =
+proc canonicalDecomposition*(cp: Rune): seq[Rune] {.raises: [].} =
   ## Return a sequence of the canonical
   ## decomposition for a given code point.
   ## It will return an empty sequence when
   ## there is no decomposition.
   canonicalDecompositionImpl(result, cp)
 
-proc canonicalDecomposition*(cp: Rune): seq[Rune] {.raises: [].} =
-  ## Return a sequence of the canonical
-  ## decomposition for a given code point.
-  ## It will return an empty sequence when
-  ## there is no decomposition.
+proc canonicalDecomposition*(cp: int): seq[int] {.deprecated.} =
+  ## **Deprecated since version 0.3.0**;
+  ## Use ``canonicalDecomposition(Rune)`` instead.
   canonicalDecompositionImpl(result, cp)
 
 when isMainModule:

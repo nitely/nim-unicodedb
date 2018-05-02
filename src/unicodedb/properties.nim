@@ -23,19 +23,6 @@ type
     ## Use `UnicodeProp` to get one of them.
     ## It contains raw data for some of them.
 
-proc properties*(cp: int): UnicodeProps =
-  ## Return properties for a given code point.
-  ## Includes: Category, Canonical Combining Class,
-  ## Bidi Class and QC. This may be used as an optimization
-  ## when more than one property is required. This contains
-  ## raw data for some of the properties, so one of
-  ## the auxiliary procedures must be used in conjuntion.
-  assert cp <= 0x10FFFF
-  let
-    blockOffset = int(propsOffsets[cp div blockSize]) * blockSize
-    idx = propsIndices[blockOffset + cp mod blockSize]
-  result = propsData[idx]
-
 proc properties*(cp: Rune): UnicodeProps =
   ## Return properties for a given code point.
   ## Includes: Category, Canonical Combining Class,
@@ -43,14 +30,24 @@ proc properties*(cp: Rune): UnicodeProps =
   ## when more than one property is required. This contains
   ## raw data for some of the properties, so one of
   ## the auxiliary procedures must be used in conjuntion.
-  properties(cp.int32)
+  assert cp.int <= 0x10FFFF
+  let
+    blockOffset = (propsOffsets[cp.int div blockSize]).int * blockSize
+    idx = propsIndices[blockOffset + cp.int mod blockSize]
+  result = propsData[idx]
+
+proc properties*(cp: int): UnicodeProps {.deprecated.} =
+  ## **Deprecated since version 0.3.0**;
+  ## Use ``properties(Rune)`` instead.
+  properties(cp.Rune)
 
 proc category*(props: UnicodeProps): string {.inline.} =
   ## Return category property name for a given `UnicodeProps`
   result = categoryNames[props[upropCat]]
 
-proc category*(cp: int): string {.inline.} =
-  ## Return category property name for a given code point
+proc category*(cp: int): string {.deprecated.} =
+  ## **Deprecated since version 0.3.0**;
+  ## Use ``category(Rune)`` instead.
   category(properties(cp))
 
 proc category*(cp: Rune): string {.inline.} =
@@ -61,8 +58,9 @@ proc bidirectional*(props: UnicodeProps): string {.inline.} =
   ## Return bidirectional class name for a given `UnicodeProps`
   result = bidirectionalNames[props[upropBi]]
 
-proc bidirectional*(cp: int): string {.inline.} =
-  ## Return bidirectional class name for a given code point
+proc bidirectional*(cp: int): string {.deprecated.} =
+  ## **Deprecated since version 0.3.0**;
+  ## Use ``bidirectional(Rune)`` instead.
   bidirectional(properties(cp))
 
 proc bidirectional*(cp: Rune): string {.inline.} =
@@ -74,9 +72,9 @@ proc combining*(props: UnicodeProps): int {.inline.} =
   ## for a given `Props`
   result = props[upropCcc]
 
-proc combining*(cp: int): int {.inline.} =
-  ## Return canonical combining class property
-  ## for a given code point
+proc combining*(cp: int): int {.deprecated.} =
+  ## **Deprecated since version 0.3.0**;
+  ## Use ``bidirectional(Rune)`` instead.
   combining(properties(cp))
 
 proc combining*(cp: Rune): int {.inline.} =
@@ -88,8 +86,9 @@ proc quickCheck*(props: UnicodeProps): int {.inline.} =
   ## Return quick check property for a given `UnicodeProps`
   result = props[upropQc]
 
-proc quickCheck*(cp: int): int {.inline.} =
-  ## Return quick check property
+proc quickCheck*(cp: int): int {.deprecated.} =
+  ## **Deprecated since version 0.3.0**;
+  ## Use ``quickCheck(Rune)`` instead.
   quickCheck(properties(cp))
 
 proc quickCheck*(cp: Rune): int {.inline.} =

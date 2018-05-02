@@ -6,8 +6,8 @@ import unicode
 import compositions_data
 
 proc fnv32a(
-    cpA: Rune,
-    cpB: Rune,
+    cpA: int32,
+    cpB: int32,
     seed: uint32): uint32 {.inline, raises: [].} =
   ## Calculates a distinct hash function for a given sequence
   ## FNV algorithm from http://isthe.com/chongo/tech/comp/fnv/
@@ -19,7 +19,7 @@ proc fnv32a(
   result = result xor uint32(cpB)
   result = result * 16777619'u32
 
-proc mphLookup(cpA: Rune, cpB: Rune): array[3, int32] {.inline, raises: [].} =
+proc mphLookup(cpA: int32, cpB: int32): array[3, int32] {.inline, raises: [].} =
   ## Hash map lookup for compositions. Return a
   ## decomposition and its composition
   assert compsHashes.len <= int32.high
@@ -38,7 +38,7 @@ proc composition*(
   ## was found, otherwise return ``false``
   assert cpA.int <= 0x10FFFF
   assert cpB.int <= 0x10FFFF
-  let cps = mphLookup(cpA, cpB)
+  let cps = mphLookup(cpA.int32, cpB.int32)
   result = cpA == cps[0].Rune and cpB == cps[1].Rune
   r = cps[2].Rune
 
@@ -52,7 +52,7 @@ proc composition*(
     raise newException(ValueError, "Composition not found")
 
 proc composition*(cpA: int, cpB: int): int {.deprecated.} =
-  ## **Deprecated since version 0.3.1**;
+  ## **Deprecated since version 0.3.0**;
   ## Use ``composition(var Rune, Rune, Rune)`` instead.
   var r: Rune
   if not composition(r, cpA.Rune, cpB.Rune):

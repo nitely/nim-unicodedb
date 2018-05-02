@@ -1,9 +1,12 @@
 v0.3.1
 ==================
 
-* Deprecated `composition(int, int)`
 * Breaking change: `composition(var Rune, Rune, Rune)`
   return `bool` instead of `int`
+* Deprecated `composition(int, int)`, `decomposition(int)`,
+  `canonicalDecomposition(int)`, `name(int)`, `properties(int)`,
+  `category(int)`, `bidirectional(int)`, `combining(int)`,
+  `quickCheck(int)` and `unicodeTypes(int)`
 
 v0.2.5
 ==================

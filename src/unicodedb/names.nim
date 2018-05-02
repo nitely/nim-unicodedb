@@ -28,10 +28,10 @@ const
     "S", "SS", "NG", "J", "C", "K", "T", "P", "H"
   ]
 
-proc hangulName(s: int): string {.inline, raises: [].} =
+proc hangulName(r: Rune): string {.inline, raises: [].} =
   ## Hangul name generator. Implementation based on
   ## Unicode standard 10 - Chapter 3
-  let SIndex = s - SBase
+  let SIndex = r.int - SBase
   assert(not (0 > SIndex or SIndex >= SCount))  # Is hangul
   let
     LIndex = SIndex div NCount
@@ -78,31 +78,29 @@ proc formatHex(cp: int): string {.inline, raises: [].} =
     chars = {'0'},
     trailing = false)
 
-proc getNameInPrefixRange(cp: int): string {.inline, raises: [].} =
+proc getNameInPrefixRange(cp: Rune): string {.inline, raises: [].} =
   result = ""
   for pr in prefixRanges:
-    if pr.first <= cp and cp <= pr.last:
+    if pr.first <= cp.int and cp.int <= pr.last:
       result = prefixNames[pr.name]
-      result.add(formatHex(cp))
+      result.add(formatHex(cp.int))
       break
 
-proc name*(cp: int): string {.raises: [].} =
-  ## Return the name for a given code point.
-  ## An empty string is returned if the code
-  ## point does not has a name
-  assert cp <= 0x10FFFF
-  if 0xAC00 <= cp and cp <= 0xD7A3:
+proc name*(cp: Rune): string {.inline, raises: [].} =
+  ## Return the name for a given rune.
+  ## An empty string is returned if the
+  ## rune does not has a name
+  assert cp.int <= 0x10FFFF
+  if 0xAC00 <= cp.int and cp.int <= 0xD7A3:
     result = hangulName(cp)
     return
-
   let prName = getNameInPrefixRange(cp)
   if prName.len > 0:
     result = prName
     return
-
   let
-    blockOffset = int(namesOffsets[cp div blockSize]) * blockSize
-    idx = int(namesIndices[blockOffset + cp mod blockSize])
+    blockOffset = (namesOffsets[cp.int div blockSize]).int * blockSize
+    idx = (namesIndices[blockOffset + cp.int mod blockSize]).int
   if idx == -1:
     result = ""
     return
@@ -113,11 +111,11 @@ proc name*(cp: int): string {.raises: [].} =
     j = 1
     k = 0
   while true:
-    let wordOffset = int(wordsOffsets[namesTable[idx + j]])
+    let wordOffset = int(wordsOffsets[namesTable[idx+j]])
     k = 0
     while true:
       assert i <= length
-      let letter = wordsData[wordOffset + k]
+      let letter = wordsData[wordOffset+k]
       if letter == 0:
         break
       result[i] = char(letter)
@@ -130,11 +128,10 @@ proc name*(cp: int): string {.raises: [].} =
     inc j
   assert i == length
 
-proc name*(cp: Rune): string {.inline, raises: [].} =
-  ## Return the name for a given rune.
-  ## An empty string is returned if the
-  ## rune does not has a name
-  name(int(cp))
+proc name*(cp: int): string {.deprecated.} =
+  ## **Deprecated since version 0.3.0**;
+  ## Use ``name(Rune)`` instead.
+  name(cp.Rune)
 
 proc fnv32a(key: string, seed: uint32): uint32 {.inline, raises: [].} =
   ## Calculates a distinct hash function for a given sequence
@@ -150,8 +147,8 @@ proc mphLookup(key: string): int {.inline, raises: [].} =
   ## Based on minimal perfect hashing algorithm
   assert namesHashes.len <= int32.high
   assert namesValues.len <= int32.high
-  let d = namesHashes[int(fnv32a(key, 0'u32) mod namesHashes.len)]
-  result = namesValues[int(fnv32a(key, d.uint32) mod namesValues.len)]
+  let d = namesHashes[(fnv32a(key, 0'u32) mod namesHashes.len).int]
+  result = namesValues[(fnv32a(key, d.uint32) mod namesValues.len).int]
 
 # todo: proc lookup*(cpName: string, loose = true): Rune =
 
@@ -178,7 +175,6 @@ proc lookupStrict*(cpName: string): Rune {.raises: [KeyError].} =
         raise newException(KeyError, "Name not found")
       result = Rune(cp)
       return
-
   cp = mphLookup(cpName)
   if cpName != name(cp):
     raise newException(KeyError, "Name not found")
