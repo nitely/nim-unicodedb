@@ -6,18 +6,21 @@ gen/decompositions
 gen/names
 gen/properties
 gen/types
+gen/widths
 
 src/unicodedb/compositions
 src/unicodedb/decompositions
 src/unicodedb/names
 src/unicodedb/properties
 src/unicodedb/types
+src/unicodedb/widths
 
 gen/UCD/*
 !gen/UCD/UnicodeData.txt
 !gen/UCD/DerivedNormalizationProps.txt
 !gen/UCD/DerivedCoreProperties.txt
 !gen/UCD/PropList.txt
+!gen/UCD/EastAsianWidth.txt
 
 !gen/UCD/extracted
 gen/UCD/extracted/*

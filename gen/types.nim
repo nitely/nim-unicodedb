@@ -27,8 +27,7 @@ proc numTypeMap(numType: string): int =
   of "Numeric":
     utmNumeric.ord
   else:
-    assert false
-    -1
+    raise newException(ValueError, "Bad value: " & numType)
 
 proc parseNumericType(numsRaw: seq[seq[string]]): seq[int] =
   result = newSeq[int](numsRaw.len)

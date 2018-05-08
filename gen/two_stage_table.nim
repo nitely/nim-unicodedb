@@ -1,5 +1,6 @@
 import math
 import tables
+import algorithm
 
 const
   maxCP = 0x10FFFF
@@ -7,14 +8,15 @@ const
 type
   Stage2Type = int or seq[int]
 
-  Stages*[T: Stage2Type] = tuple
-    stage1: seq[int]
-    stage2: seq[T]
-    blockSize: int
+  Stages*[T: Stage2Type] = object
+    ## Two-stage table
+    stage1*: seq[int]
+    stage2*: seq[T]
+    blockSize*: int
 
 proc makeTable*[T: Stage2Type](data: seq[T], blockSize: int): Stages[T] =
   let blocksCount = (maxCP + 1) div blockSize
-  result = (
+  result = Stages[T](
     stage1: newSeq[int](blocksCount),
     stage2: newSeqOfCap[T](len(data)),
     blockSize: blockSize)
@@ -44,7 +46,6 @@ proc findBestTable*[T: Stage2Type](data: seq[T]): Stages[T] =
   #       both tables may have int16.high as max size while a
   #       better table would have int8.high for one table and
   #       int16.high for the other (and yet more items when put togheter)
-  result = (stage1: nil, stage2: nil, blockSize: 0)
   var best = -1
   var i = 1
 
@@ -58,3 +59,47 @@ proc findBestTable*[T: Stage2Type](data: seq[T]): Stages[T] =
     best = total
     inc i
     result = stagesTmp
+
+type
+  SomeData = int or seq[int]
+
+  DataTable[T: SomeData] = object
+    data: seq[T]
+    offsets: seq[int]
+
+proc buildDataTable[T](data: seq[T]): DataTable[T] =
+  ## Return uncompressed table
+  ## with unique data and offsets to it
+  assert data.len == maxCP
+  result = DataTable[T](
+    data: newSeq[T](),
+    offsets: newSeq[int](data.len))
+  result.offsets.fill(-1)
+  for cp, d in data.pairs:
+    let idx = result.data.find(d)
+    if idx != -1:
+      result.offsets[cp] = idx
+      continue
+    result.offsets[cp] = result.data.len
+    result.data.add(d)
+
+type
+  ThreeStageTable*[T: SomeData] = object
+    stage1*: seq[int]
+    stage2*: seq[int]
+    stage3*: seq[T]
+    blockSize*: int
+
+proc buildThreeStageTable*[T](data: seq[T]): ThreeStageTable[T] =
+  ## Build a 3-stage table.
+  ## Passed data gets de-duplicated.
+  ## Use ``findBestTable`` to get a 2-stage table
+  let
+    dataTable = buildDataTable(data)
+    stages = findBestTable(dataTable.offsets)
+  assert stages.blockSize > 0
+  result = ThreeStageTable[T](
+    stage1: stages.stage1,
+    stage2: stages.stage2,
+    stage3: dataTable.data,
+    blockSize: stages.blockSize)
