@@ -37,7 +37,7 @@ proc widthMap(uwdt: string): int =
     raise newException(ValueError, "Bad value: " & uwdt)
 
 proc parseWidth(data: seq[seq[string]]): seq[int] =
-  result = newSeq[int](maxCP)
+  result = newSeq[int](maxCP+1)
   result.fill("N".widthMap())
   for cp, d in data:
     if d.len == 0: continue

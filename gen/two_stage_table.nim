@@ -1,6 +1,5 @@
 import math
 import tables
-import algorithm
 
 const
   maxCP = 0x10FFFF
@@ -60,6 +59,10 @@ proc findBestTable*[T: Stage2Type](data: seq[T]): Stages[T] =
     inc i
     result = stagesTmp
 
+proc buildTwoStageTable*(data: seq[int]): Stages[int] =
+  ## ``findBestTable`` alias
+  findBestTable(data)
+
 type
   SomeData = int or seq[int]
 
@@ -70,11 +73,10 @@ type
 proc buildDataTable[T](data: seq[T]): DataTable[T] =
   ## Return uncompressed table
   ## with unique data and offsets to it
-  assert data.len == maxCP
+  assert data.len == maxCP+1
   result = DataTable[T](
     data: newSeq[T](),
     offsets: newSeq[int](data.len))
-  result.offsets.fill(-1)
   for cp, d in data.pairs:
     let idx = result.data.find(d)
     if idx != -1:

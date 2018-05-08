@@ -7,6 +7,7 @@ gen/names
 gen/properties
 gen/types
 gen/widths
+gen/widths_legacy
 
 src/unicodedb/compositions
 src/unicodedb/decompositions
@@ -14,6 +15,7 @@ src/unicodedb/names
 src/unicodedb/properties
 src/unicodedb/types
 src/unicodedb/widths
+src/unicodedb/widths_legacy
 
 gen/UCD/*
 !gen/UCD/UnicodeData.txt
