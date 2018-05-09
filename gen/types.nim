@@ -125,47 +125,8 @@ proc parse(
   for cp, pp in ud:
     result[cp] = result[cp] or pp
 
-type
-  PropsTable = tuple
-    props: seq[int]
-    offsets: seq[int]
-
-proc buildPropsTable(props: seq[int]): PropsTable =
-  ## Return table with unique props and offsets
-  result = (
-    props: newSeqOfCap[int](255),
-    offsets: newSeq[int](len(props)))
-  for i in 0 ..< len(props):
-    result.offsets[i] = -1
-  for cp, p in pairs(props):
-    let pIdx = result.props.find(p)
-    if pIdx != -1:
-      result.offsets[cp] = pIdx
-      continue
-    result.offsets[cp] = len(result.props)
-    result.props.add(p)
-
-type
-  MultiStageTable = tuple
-    props: seq[int]
-    stage1: seq[int]
-    stage2: seq[int]
-    blockSize: int
-
-proc build(props: seq[int]): MultiStageTable =
-  let propsTable = buildPropsTable(props)
-  echo len(propsTable.props)
-  echo len(propsTable.offsets)
-  let stageTable = findBestTable(propsTable.offsets)
-  assert stageTable.blockSize > 0
-  echo stageTable.blockSize
-  echo len(stageTable.stage1)
-  echo len(stageTable.stage2)
-  result = (
-    props: propsTable.props,
-    stage1: stageTable.stage1,
-    stage2: stageTable.stage2,
-    blockSize: stageTable.blockSize)
+proc build(props: seq[int]): ThreeStageTable[int] =
+  buildThreeStageTable(props)
 
 const propsTemplate = """## This is auto-generated. Do not modify it
 
@@ -197,11 +158,17 @@ const
 """
 
 when isMainModule:
-  var stages = build(parse(
+  let stages = parse(
     "./gen/UCD/extracted/DerivedNumericType.txt",
     "./gen/UCD/DerivedCoreProperties.txt",
     "./gen/UCD/PropList.txt",
-    "./gen/UCD/UnicodeData.txt"))
+    "./gen/UCD/UnicodeData.txt"
+  ).build()
+
+  echo stages.blockSize
+  echo stages.stage1.len
+  echo stages.stage2.len
+  echo stages.stage3.len
 
   var f = open("./src/unicodedb/types_data.nim", fmWrite)
   try:
@@ -216,7 +183,7 @@ when isMainModule:
       $utmWord.ord,
       prettyTable(stages.stage1, 15, "'u8"),
       prettyTable(stages.stage2, 15, "'i8"),
-      prettyTable(stages.props, 15, "'i16"),
+      prettyTable(stages.stage3, 15, "'i16"),
       $stages.blockSize])
   finally:
     close(f)

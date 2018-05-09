@@ -93,47 +93,8 @@ proc parse(
   for cp, qc in qcs:
     result[cp].add(qc)
 
-type
-  PropsTable = tuple
-    props: seq[seq[int]]
-    offsets: seq[int]
-
-proc buildPropsTable(props: seq[seq[int]]): PropsTable =
-  ## Return table with unique props and offsets
-  result = (
-    props: newSeqOfCap[seq[int]](255),
-    offsets: newSeq[int](len(props)))
-  for i in 0 ..< len(props):
-    result.offsets[i] = -1
-  for cp, p in pairs(props):
-    let pIdx = result.props.find(p)
-    if pIdx != -1:
-      result.offsets[cp] = pIdx
-      continue
-    result.offsets[cp] = len(result.props)
-    result.props.add(p)
-
-type
-  MultiStageTable = tuple
-    props: seq[seq[int]]
-    stage1: seq[int]
-    stage2: seq[int]
-    blockSize: int
-
-proc build(props: seq[seq[int]]): MultiStageTable =
-  let propsTable = buildPropsTable(props)
-  echo len(propsTable.props)
-  echo len(propsTable.offsets)
-  let stageTable = findBestTable(propsTable.offsets)
-  assert stageTable.blockSize > 0
-  echo stageTable.blockSize
-  echo len(stageTable.stage1)
-  echo len(stageTable.stage2)
-  result = (
-    props: propsTable.props,
-    stage1: stageTable.stage1,
-    stage2: stageTable.stage2,
-    blockSize: stageTable.blockSize)
+proc build(props: seq[seq[int]]): ThreeStageTable[seq[int]] =
+  buildThreeStageTable(props)
 
 const propsTemplate = """## This is auto-generated. Do not modify it
 
@@ -177,11 +138,16 @@ when isMainModule:
     "./gen/UCD/extracted/DerivedBidiClass.txt",
     "./gen/UCD/DerivedNormalizationProps.txt"))
 
+  echo stages.blockSize
+  echo stages.stage1.len
+  echo stages.stage2.len
+  echo stages.stage3.len
+
   let propsLen = 4
   let maxCP = 0x10FFFF
 
-  var propsGen = newSeq[string](len(stages.props))
-  for i, p in stages.props:
+  var propsGen = newSeq[string](stages.stage3.len)
+  for i, p in stages.stage3:
     assert len(p) == propsLen
     propsGen[i] = "[$#]" % join(p, "'i16, ")
   var categoryNamesGen = newSeq[string](len(categoryNames))

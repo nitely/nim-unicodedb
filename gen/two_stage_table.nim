@@ -75,7 +75,7 @@ proc buildDataTable[T](data: seq[T]): DataTable[T] =
   ## with unique data and offsets to it
   assert data.len == maxCP+1
   result = DataTable[T](
-    data: newSeq[T](),
+    data: newSeqOfCap[T](data.len),
     offsets: newSeq[int](data.len))
   for cp, d in data.pairs:
     let idx = result.data.find(d)
