@@ -6,7 +6,8 @@
 ## Since this is non-portable,
 ## this is not part of ``nimble gen``
 
-# TODO: fixme! wcwidth returns -1 for everything but ascii in my system
+# TODO: wcwidth returns -1 for everything but ascii on my system (RHEL)
+# TODO: remove?
 
 import algorithm
 import strutils

@@ -1,6 +1,7 @@
 import unittest, strutils, unicode
 
 import unicodedb
+import unicodedb/widths
 from unicodedb/compositions_data import compsValues
 from compositions_test_data import allComps
 from decompositions_test_data import allDecomps
@@ -350,3 +351,24 @@ test "Test Word":
         # Join_Control
         cp in {0x200C .. 0x200D}):
       check utmWord in unicodeTypes(cp)
+
+test "Test Width":
+  for c in 'a' .. 'z':
+    check c.ord.Rune.unicodeWidth == uwdtNarrow
+  for c in 'A' .. 'Z':
+    check c.ord.Rune.unicodeWidth == uwdtNarrow
+  for c in '0' .. '9':
+    check c.ord.Rune.unicodeWidth == uwdtNarrow
+  for c in 0x0000 .. 0x001F:
+    check c.Rune.unicodeWidth == uwdtNeutral
+  check 0x10FFFD.Rune.unicodeWidth == uwdtAmbiguous
+  check 0x3400.Rune.unicodeWidth == uwdtWide
+  check 0x20000.Rune.unicodeWidth == uwdtWide
+  check 0x2FA1D.Rune.unicodeWidth == uwdtWide
+  check 0x20A9.Rune.unicodeWidth == uwdtHalf
+  check 0x3000.Rune.unicodeWidth == uwdtFull
+  check 0x10FFFF.Rune.unicodeWidth == uwdtNeutral
+  check 0x0DC7.Rune.unicodeWidth == uwdtNeutral
+  check 0x11358.Rune.unicodeWidth == uwdtNeutral
+  check "🕺".runeAt(0).unicodeWidth == uwdtWide
+  check "🇦".runeAt(0).unicodeWidth == uwdtNeutral
