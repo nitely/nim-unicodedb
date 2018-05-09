@@ -28,7 +28,5 @@ proc widthMap(w: int): UnicodeWidth =
 proc unicodeWidth*(r: Rune): UnicodeWidth =
   ## Return width for a given rune
   assert r.int <= 0x10FFFF
-  let
-    blockOffset = (widthsOffsets[r.int div blockSize]).int * blockSize
-    idx = widthsIndices[blockOffset + r.int mod blockSize]
-  result = widthsData[idx].widthMap
+  let blockOffset = (widthsIndices[r.int div blockSize]).int * blockSize
+  result = widthsData[blockOffset + r.int mod blockSize].widthMap

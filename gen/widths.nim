@@ -46,8 +46,8 @@ proc parseWidth(data: seq[seq[string]]): seq[int] =
 proc parse(filePath: string): seq[int] =
   filePath.parseUDDNoDups.parseWidth
 
-proc build(data: seq[int]): ThreeStageTable[int] =
-  buildThreeStageTable[int](data)
+proc build(data: seq[int]): Stages[int] =
+  buildTwoStageTable(data)
 
 const dataTemplate = """## This is auto-generated. Do not modify it
 
@@ -61,9 +61,6 @@ type
     uwdtNeutral = $#
 
 const
-  widthsOffsets* = [
-    $#
-  ]
   widthsIndices* = [
     $#
   ]
@@ -75,8 +72,7 @@ const
 """
 
 when isMainModule:
-  let stages = build(parse(
-    "./gen/UCD/EastAsianWidth.txt"))
+  let stages = "./gen/UCD/EastAsianWidth.txt".parse.build
 
   var f = open("./src/unicodedb/widths_data.nim", fmWrite)
   try:
@@ -89,7 +85,6 @@ when isMainModule:
       $uwdtNeutral.ord,
       prettyTable(stages.stage1, 15, "'i8"),
       prettyTable(stages.stage2, 15, "'i8"),
-      prettyTable(stages.stage3, 15, "'i8"),
       $stages.blockSize])
   finally:
     close(f)
