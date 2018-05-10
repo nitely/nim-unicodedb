@@ -26,7 +26,10 @@ proc widthMap(w: int): UnicodeWidth =
     uwdtNeutral
 
 proc unicodeWidth*(r: Rune): UnicodeWidth =
-  ## Return width for a given rune
+  ## Return width for a given rune.
+  ## Return value is one of: ``uwdtAmbiguous``,
+  ## ``uwdtFull``, ``uwdtHalf``, ``uwdtNarrow``,
+  ## ``uwdtWide`` and ``uwdtNeutral``
   assert r.int <= 0x10FFFF
   let blockOffset = (widthsIndices[r.int div blockSize]).int * blockSize
   result = widthsData[blockOffset + r.int mod blockSize].widthMap
