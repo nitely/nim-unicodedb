@@ -76,6 +76,15 @@ assert utmWord in Rune(0x1E69).unicodeTypes()
 ```
 [docs](https://nitely.github.io/nim-unicodedb/unicodedb/types.html)
 
+Widths:
+```nim
+import unicode
+import unicodedb/widths
+
+assert "🕺".runeAt(0).unicodeWidth() == uwdtWide
+```
+[docs](https://nitely.github.io/nim-unicodedb/unicodedb/widths.html)
+
 ## Related libraries
 
 * [nim-unicodeplus](https://github.com/nitely/nim-unicodeplus)
