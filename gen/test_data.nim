@@ -44,6 +44,40 @@ const catTemplate = """const allCats* = [
 $#]
 """
 
+proc isAssigned(r: Rune): bool =
+  r.category() != "Cn"
+
+proc combiningData(): seq[tuple[
+    cpFirst: int,
+    cpLast: int,
+    ccc: int,
+    assigned: bool]] =
+  result = @[]
+  var lastData = 0.Rune.combining()
+  var lastAssigned = 0.Rune.isAssigned()
+  var lastCP = 0
+  for cp in 0 .. maxCP:
+    let data = cp.Rune.combining()
+    let assigned = cp.Rune.isAssigned()
+    if data != lastData or assigned != lastAssigned:
+      result.add((
+        cpFirst: lastCP,
+        cpLast: cp-1,
+        ccc: lastData,
+        assigned: lastAssigned))
+      lastData = data
+      lastAssigned = assigned
+      lastCP = cp
+  result.add((
+    cpFirst: lastCP,
+    cpLast: maxCP,
+    ccc: lastData,
+    assigned: lastAssigned))
+
+const combiningTemplate = """const allCombining* = [
+$#]
+"""
+
 when isMainModule:
   var bidi = ""
   for d in bidiData():
@@ -61,6 +95,14 @@ when isMainModule:
     cat.add(',')
     cat.add('\L')
   write("./tests/category_test_data.nim", catTemplate % cat)
+  var comb = ""
+  for d in combiningData():
+    comb.add(' ')
+    comb.add(' ')
+    comb.add($d)
+    comb.add(',')
+    comb.add('\L')
+  write("./tests/combining_test_data.nim", combiningTemplate % comb)
 
 
 #[

@@ -137,12 +137,15 @@ test "Test some bidirectional class for runes":
   check bidirectional(Rune(0x07F7)) == "ON"
 
 test "Test canonical combining class":
+  var i = 0
   for cpData in allCombining:
-    # Don't check non-assigned coz Python's DB is 9.0
-    if not cpData.assigned:
-      continue
     for cp in cpData.cpFirst .. cpData.cpLast:
-      check combining(cp) == cpData.ccc
+      if cpData.assigned:
+        check combining(cp) == cpData.ccc
+      elif combining(cp) != cpData.ccc:
+        inc i
+  # should be lesser or equal to missing code points in previous UCD
+  check i <= 0
 
 test "Test some canonical combining class":
   check combining(0x860) == 0
