@@ -13,19 +13,37 @@ proc write(path: string, s: string) =
   finally:
     close(f)
 
+proc isAssigned(r: Rune): bool =
+  r.category() != "Cn"
+
 const maxCP = 0x10FFFF
 
-proc bidiData(): seq[tuple[cpFirst: int, cpLast: int, bi: string]] =
+proc bidiData(): seq[tuple[
+    cpFirst: int,
+    cpLast: int,
+    bi: string,
+    assigned: bool]] =
   result = @[]
   var lastData = 0.Rune.bidirectional()
   var lastCP = 0
+  var lastAssigned = 0.Rune.isAssigned()
   for cp in 0 .. maxCP:
     let data = cp.Rune.bidirectional()
-    if data != lastData:
-      result.add((cpFirst: lastCP, cpLast: cp-1, bi: lastData))
+    let assigned = cp.Rune.isAssigned()
+    if data != lastData or assigned != lastAssigned:
+      result.add((
+        cpFirst: lastCP,
+        cpLast: cp-1,
+        bi: lastData,
+        assigned: lastAssigned))
       lastData = data
+      lastAssigned = assigned
       lastCP = cp
-  result.add((cpFirst: lastCP, cpLast: maxCP, bi: lastData))
+  result.add((
+    cpFirst: lastCP,
+    cpLast: maxCP,
+    bi: lastData,
+    assigned: lastAssigned))
 
 const bidiTemplate = """const allBidis* = [
 $#]
@@ -46,9 +64,6 @@ proc categoryData(): seq[tuple[cpFirst: int, cpLast: int, cat: string]] =
 const catTemplate = """const allCats* = [
 $#]
 """
-
-proc isAssigned(r: Rune): bool =
-  r.category() != "Cn"
 
 proc combiningData(): seq[tuple[
     cpFirst: int,

@@ -98,11 +98,17 @@ test "Test categories":
   for cpData in allCats:
     for cp in cpData.cpFirst .. cpData.cpLast:
       # Skip unassigned since test data has previous UCD version
-      #if category(cp) != cpData.cat and cpData.cat == "Cn":
-      #  inc i
-      #  continue
+      if category(cp) != cpData.cat and cpData.cat == "Cn":
+        inc i
+        continue
+      if cp >= 4304 and cp <= 4351:
+        # the 46 georgia letters changed in unicode 11
+        continue
+      if cp == 70089 or cp == 72199 or cp == 72200:
+        check category(cp) == "Mn"
+        continue
       check category(cp) == cpData.cat
-  #check i == 8518  # New code points in 10.0
+  check i == 684  # New code points
 
 test "Test categories with props":
   check category(properties(7913)) == "Ll"
@@ -115,6 +121,10 @@ test "Test some categories":
   check category(1048576) == "Co"
   # New in unicode 10
   check category(0x860) == "Lo"
+  # New in unicode 11
+  check category(70089) == "Mn"
+  check category(72199) == "Mn"
+  check category(72200) == "Mn"
 
 test "Test categories with runes":
   check category(Rune(7913)) == "Ll"
@@ -123,6 +133,11 @@ test "Test categories with runes":
 test "Test bidirectional class":
   for cpData in allBidis:
     for cp in cpData.cpFirst .. cpData.cpLast:
+      if bidirectional(cp) != cpData.bi and not cpData.assigned:
+        continue
+      if cp == 0x111c9:  # unicode 11
+        check bidirectional(cp) == "NSM"
+        continue
       check bidirectional(cp) == cpData.bi
 
 test "Test some bidirectional class":
@@ -131,6 +146,11 @@ test "Test some bidirectional class":
   check bidirectional(0x1EEFF) == "AL"
   check bidirectional(0) == "BN"
   check bidirectional(0x07F7) == "ON"
+  # New in Unicode 11
+  check bidirectional(0x111c9) == "NSM"
+  check bidirectional(0x111CC) == "NSM"
+  check bidirectional(0x1133B) == "NSM"
+  check bidirectional(0x1133C) == "NSM"
 
 test "Test some bidirectional class for runes":
   check bidirectional(Rune(0)) == "BN"
@@ -144,8 +164,7 @@ test "Test canonical combining class":
         check combining(cp) == cpData.ccc
       elif combining(cp) != cpData.ccc:
         inc i
-  # should be lesser or equal to missing code points in previous UCD
-  check i <= 0
+  check i == 23
 
 test "Test some canonical combining class":
   check combining(0x860) == 0
@@ -272,9 +291,13 @@ test "Test types":
       check(utmDecimal in unicodeTypes(cp) == cpData.de)
       check(utmDigit in unicodeTypes(cp) == cpData.di)
       check(utmNumeric in unicodeTypes(cp) == cpData.nu)
-      check(utmLowercase in unicodeTypes(cp) == cpData.lo)
+      if cp >= 4304 and cp <= 4351:
+        # the 46 georgia letters changed in unicode 11
+        discard
+      else:
+        check(utmLowercase in unicodeTypes(cp) == cpData.lo)
       check(utmUppercase in unicodeTypes(cp) == cpData.up)
-  #check i == 8518  # New code points in 10.0
+  check i == 684  # new codepoints
 
 test "Test some types":
   check utmDecimal in unicodeTypes(Rune(0x0030))
@@ -312,6 +335,8 @@ test "Test some types":
   check utmWhiteSpace in unicodeTypes(Rune(0x000D))
   check utmWhiteSpace in unicodeTypes(Rune(0x3000))
   check utmWhiteSpace notin unicodeTypes(Rune('$'.ord))
+
+  check(utmLowercase in unicodeTypes(Rune(0x10D0)))
 
 test "Test WhiteSpace":
   let expected = {

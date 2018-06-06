@@ -33,4 +33,4 @@ export name, lookupStrict
 export UnicodeTypeMask, unicodeTypes
 
 const
-  unicodeVersion* = "10.0.0"
+  unicodeVersion* = "11.0.0"

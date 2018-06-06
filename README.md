@@ -119,6 +119,9 @@ something that's missing, please open an issue or PR
 > Note: PR's upgrading the unicode version
 > won't get merged, open an issue instead!
 
+* Run `nimble gen` to check there are no changes
+  to `./src/*_data.nim`. If there are try an older
+  Nim version and fix the generators accordingly
 * Run `nimble gen_tests` to update all test data to current
   unicode version. The tests for a new unicode version run
   against the previous unicode version.
