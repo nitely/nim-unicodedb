@@ -97,12 +97,12 @@ test "Test categories":
   var i = 0
   for cpData in allCats:
     for cp in cpData.cpFirst .. cpData.cpLast:
-      # Skip unassigned since Python's DB is 9.0
-      if category(cp) != cpData.cat and cpData.cat == "Cn":
-        inc i
-        continue
+      # Skip unassigned since test data has previous UCD version
+      #if category(cp) != cpData.cat and cpData.cat == "Cn":
+      #  inc i
+      #  continue
       check category(cp) == cpData.cat
-  check i == 8518  # New code points in 10.0
+  #check i == 8518  # New code points in 10.0
 
 test "Test categories with props":
   check category(properties(7913)) == "Ll"
