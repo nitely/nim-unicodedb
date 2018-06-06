@@ -12,6 +12,10 @@ having O(1) access for every API and be lightweight in size.
 nimble install unicodedb
 ```
 
+## Compatibility
+
+Nim 0.17.2, 0.18.0
+
 ## Usage
 
 Properties:
