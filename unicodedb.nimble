@@ -28,3 +28,6 @@ task gen, "Gen data":
   exec "nim c -r gen/decompositions.nim"
   exec "nim c -r gen/names.nim"
   exec "nim c -r gen/properties.nim"
+
+task gen_tests, "Gen test data":
+  exec "nim c -r gen/test_data.nim"
