@@ -6,6 +6,12 @@
 This library aims to bring the unicode database to Nim. Main goal is
 having O(1) access for every API and be lightweight in size.
 
+## Install
+
+```
+nimble install unicodedb
+```
+
 ## Usage
 
 Properties:
