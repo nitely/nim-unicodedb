@@ -114,9 +114,27 @@ New APIs will be added from time to time. If you need
 something that's missing, please open an issue or PR
 (please, do mention the use-case).
 
+## Upgrading Unicode version
+
+> Note: PR's upgrading the unicode version
+> won't get merged, open an issue instead!
+
+* Run `nimble gen_tests` to update all test data to current
+  unicode version. The tests for a new unicode version run
+  against the previous unicode version.
+* Run tests and fix all failing tests. This should
+  require just temporarily commenting out
+  all checks for missing unicode points.
+* Overwrite `./gen/UCD` data with
+  [latest unicode UCD](http://unicode.org/Public/UCD/latest/ucd/UCD.zip).
+* Run `nimble gen` to generate the new data.
+* Run tests. Add checks for missing unicode points back.
+  A handful of unicode points may have change its data, check
+  the unicode changelog page, make sure they are correct and skip them.
+
 ## Tests
 
-Initial tests are ran against [a dump of] Python's
+Initial tests were ran against [a dump of] Python's
 `unicodedata` module to ensure correctness.
 Also, the related libraries have their own custom tests
 (some of the test data is provided by the unicode consortium).
