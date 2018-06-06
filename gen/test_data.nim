@@ -2,6 +2,8 @@ import unicode
 import strutils
 
 import ../src/unicodedb/properties
+import ../src/unicodedb/compositions
+import ../src/unicodedb/decompositions
 
 proc write(path: string, s: string) =
   var f = open(path, fmWrite)
@@ -78,7 +80,22 @@ const combiningTemplate = """const allCombining* = [
 $#]
 """
 
+proc compositionData(): seq[array[3, int]] =
+  result = @[]
+  var comp = 0.Rune
+  for cp in 0 .. maxCP:
+    let decomp = canonicalDecomposition(cp.Rune)
+    if decomp.len == 2:
+      if composition(comp, decomp[0], decomp[1]):
+        result.add([cp, decomp[0].int, decomp[1].int])
+        assert comp == cp.Rune
+
+const compositionTemplate = """const allComps* = [
+$#]
+"""
+
 when isMainModule:
+  echo "Generating bidirectional data"
   var bidi = ""
   for d in bidiData():
     bidi.add(' ')
@@ -87,6 +104,7 @@ when isMainModule:
     bidi.add(',')
     bidi.add('\L')
   write("./tests/bidi_test_data.nim", bidiTemplate % bidi)
+  echo "Generating category data"
   var cat = ""
   for d in categoryData():
     cat.add(' ')
@@ -95,6 +113,7 @@ when isMainModule:
     cat.add(',')
     cat.add('\L')
   write("./tests/category_test_data.nim", catTemplate % cat)
+  echo "Generating combining data"
   var comb = ""
   for d in combiningData():
     comb.add(' ')
@@ -103,24 +122,12 @@ when isMainModule:
     comb.add(',')
     comb.add('\L')
   write("./tests/combining_test_data.nim", combiningTemplate % comb)
-
-
-#[
-
-res = []
-last_cat = getData(0)
-last_cp = 0
-for cp in range(0x10FFFF+1):
-    if getData(cp) != last_cat:
-        res.append((last_cp, cp - 1, *last_cat))
-        last_cat = getData(cp)
-        last_cp = cp
-res.append((last_cp, cp, *last_cat))
-
-with open('./out', 'w') as fh:
-    for cp in res:
-        fh.write('  (first: %d, last: %d, de: %s, di: %s, nu: %s, lo: %s, up: %s, asig: %s),' % cp)
-        fh.write('\n')
-
-
-]#
+  echo "Generating compositions data"
+  var comp = ""
+  for d in compositionData():
+    comp.add(' ')
+    comp.add(' ')
+    comp.add($d)
+    comp.add(',')
+    comp.add('\L')
+  write("./tests/compositions_test_data.nim", compositionTemplate % comp)
