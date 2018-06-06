@@ -123,10 +123,7 @@ test "Test categories with runes":
 test "Test bidirectional class":
   for cpData in allBidis:
     for cp in cpData.cpFirst .. cpData.cpLast:
-      # Python's DB has empty values as default
-      # (doesn't extract from derived bidi)
-      if cpData.bi.len > 0:
-        check bidirectional(cp) == cpData.bi
+      check bidirectional(cp) == cpData.bi
 
 test "Test some bidirectional class":
   check bidirectional(0x860) == "AL"

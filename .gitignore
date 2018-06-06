@@ -9,6 +9,7 @@ gen/types
 gen/widths
 gen/widths_legacy
 gen/UnifontMedium.sfd
+gen/test_data
 
 src/unicodedb/compositions
 src/unicodedb/decompositions
