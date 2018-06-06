@@ -4,6 +4,7 @@ import strutils
 import ../src/unicodedb/properties
 import ../src/unicodedb/compositions
 import ../src/unicodedb/decompositions
+import ../src/unicodedb/types
 
 proc write(path: string, s: string) =
   var f = open(path, fmWrite)
@@ -114,6 +115,70 @@ const decompositionTemplate = """const allDecomps* = [
 $#]
 """
 
+proc typesData(): seq[tuple[
+    first: int,
+    last: int,
+    de: bool,
+    di: bool,
+    nu: bool,
+    lo: bool,
+    up: bool,
+    asig: bool]] =
+  #[
+  utmDecimal = 1
+  utmDigit = 2
+  utmNumeric = 4
+  utmLowercase = 8
+  utmUppercase = 16
+  utmCased = 32
+  utmWhiteSpace = 64
+  utmWord = 128
+  ]#
+  result = @[]
+  let t = 0.Rune.unicodeTypes()
+  var lastData = [
+    utmDecimal in t,
+    utmDigit in t,
+    utmNumeric in t,
+    utmLowercase in t,
+    utmUppercase in t,
+    0.Rune.isAssigned()]
+  var lastCP = 0
+  for cp in 0 .. maxCP:
+    let t = cp.Rune.unicodeTypes()
+    let data = [
+      utmDecimal in t,
+      utmDigit in t,
+      utmNumeric in t,
+      utmLowercase in t,
+      utmUppercase in t,
+      cp.Rune.isAssigned()]
+    if data != lastData:
+      result.add((
+        first: lastCP,
+        last: cp-1,
+        de: lastData[0],
+        di: lastData[1],
+        nu: lastData[2],
+        lo: lastData[3],
+        up: lastData[4],
+        asig: lastData[5]))
+      lastData = data
+      lastCP = cp
+  result.add((
+    first: lastCP,
+    last: maxCP,
+    de: lastData[0],
+    di: lastData[1],
+    nu: lastData[2],
+    lo: lastData[3],
+    up: lastData[4],
+    asig: lastData[5]))
+
+const typesTemplate = """const allTypes* = [
+$#]
+"""
+
 when isMainModule:
   echo "Generating bidirectional data"
   var bidi = ""
@@ -160,3 +225,12 @@ when isMainModule:
     decomp.add(',')
     decomp.add('\L')
   write("./tests/decompositions_test_data.nim", decompositionTemplate % decomp)
+  echo "Generating types data"
+  var ts = ""
+  for d in typesData():
+    ts.add(' ')
+    ts.add(' ')
+    ts.add($d)
+    ts.add(',')
+    ts.add('\L')
+  write("./tests/types_test_data.nim", typesTemplate % ts)
