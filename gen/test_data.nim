@@ -94,6 +94,26 @@ const compositionTemplate = """const allComps* = [
 $#]
 """
 
+proc decompositionData(): seq[tuple[
+    cp: int,
+    isCanonical: bool,
+    dcp: seq[int]]] =
+  result = @[]
+  for cp in 0 .. maxCP:
+    let decomp = decomposition(cp.Rune)
+    if decomp.len > 0:
+      var decompInt = newSeq[int]()
+      for dcp in decomp:
+        decompInt.add(dcp.int)
+      result.add((
+        cp: cp,
+        isCanonical: canonicalDecomposition(cp.Rune).len > 0,
+        dcp: decompInt))
+
+const decompositionTemplate = """const allDecomps* = [
+$#]
+"""
+
 when isMainModule:
   echo "Generating bidirectional data"
   var bidi = ""
@@ -131,3 +151,12 @@ when isMainModule:
     comp.add(',')
     comp.add('\L')
   write("./tests/compositions_test_data.nim", compositionTemplate % comp)
+  echo "Generating decompositions data"
+  var decomp = ""
+  for d in decompositionData():
+    decomp.add(' ')
+    decomp.add(' ')
+    decomp.add($d)
+    decomp.add(',')
+    decomp.add('\L')
+  write("./tests/decompositions_test_data.nim", decompositionTemplate % decomp)

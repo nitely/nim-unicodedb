@@ -5720,5 +5720,5 @@ const allDecomps* = [
   (cp: 195098, isCanonical: true, dcp: @[40719]),
   (cp: 195099, isCanonical: true, dcp: @[40726]),
   (cp: 195100, isCanonical: true, dcp: @[40763]),
-  (cp: 195101, isCanonical: true, dcp: @[173568])
+  (cp: 195101, isCanonical: true, dcp: @[173568]),
 ]
