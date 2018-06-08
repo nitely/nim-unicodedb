@@ -131,17 +131,19 @@ proc build(props: seq[int]): ThreeStageTable[int] =
 const propsTemplate = """## This is auto-generated. Do not modify it
 
 type
-  UnicodeTypeMask* = enum
+  UnicodeTypeMask* = distinct int
     ## For extracting a single type
     ## value out of types
-    utmDecimal = $#
-    utmDigit = $#
-    utmNumeric = $#
-    utmLowercase = $#
-    utmUppercase = $#
-    utmCased = $#
-    utmWhiteSpace = $#
-    utmWord = $#
+
+const
+  utmDecimal* = $#.UnicodeTypeMask
+  utmDigit* = $#.UnicodeTypeMask
+  utmNumeric* = $#.UnicodeTypeMask
+  utmLowercase* = $#.UnicodeTypeMask
+  utmUppercase* = $#.UnicodeTypeMask
+  utmCased* = $#.UnicodeTypeMask
+  utmWhiteSpace* = $#.UnicodeTypeMask
+  utmWord* = $#.UnicodeTypeMask
 
 const
   typesOffsets* = [

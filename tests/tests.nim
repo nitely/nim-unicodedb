@@ -338,6 +338,18 @@ test "Test some types":
 
   check(utmLowercase in unicodeTypes(Rune(0x10D0)))
 
+  check utmDecimal + utmWhiteSpace in 0x0030.Rune.unicodeTypes
+  check utmDecimal + utmWhiteSpace in 0x0009.Rune.unicodeTypes
+  check utmUppercase + utmLowercase in 0x0041.Rune.unicodeTypes
+  check utmUppercase + utmLowercase in 0x1E69.Rune.unicodeTypes
+  check utmUppercase + utmLowercase notin 0x0030.Rune.unicodeTypes
+  block:
+    const typ = utmDecimal + utmUppercase + utmLowercase + utmWhiteSpace
+    check typ in 0x0030.Rune.unicodeTypes
+    check typ in 0x0009.Rune.unicodeTypes
+    check typ in 0x0041.Rune.unicodeTypes
+    check typ in 0x1E69.Rune.unicodeTypes
+
 test "Test WhiteSpace":
   let expected = {
     0x0009 .. 0x000D, 0x0020, 0x0085, 0x00A0,

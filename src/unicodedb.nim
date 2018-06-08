@@ -30,7 +30,7 @@ export NfMask, UnicodeProp, UnicodeProps, properties,
        category, bidirectional,
        combining, quickCheck
 export name, lookupStrict
-export UnicodeTypeMask, unicodeTypes
+export types
 
 const
   unicodeVersion* = "11.0.0"

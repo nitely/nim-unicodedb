@@ -1,17 +1,19 @@
 ## This is auto-generated. Do not modify it
 
 type
-  UnicodeTypeMask* = enum
+  UnicodeTypeMask* = distinct int
     ## For extracting a single type
     ## value out of types
-    utmDecimal = 1
-    utmDigit = 2
-    utmNumeric = 4
-    utmLowercase = 8
-    utmUppercase = 16
-    utmCased = 32
-    utmWhiteSpace = 64
-    utmWord = 128
+
+const
+  utmDecimal* = 1.UnicodeTypeMask
+  utmDigit* = 2.UnicodeTypeMask
+  utmNumeric* = 4.UnicodeTypeMask
+  utmLowercase* = 8.UnicodeTypeMask
+  utmUppercase* = 16.UnicodeTypeMask
+  utmCased* = 32.UnicodeTypeMask
+  utmWhiteSpace* = 64.UnicodeTypeMask
+  utmWord* = 128.UnicodeTypeMask
 
 const
   typesOffsets* = [

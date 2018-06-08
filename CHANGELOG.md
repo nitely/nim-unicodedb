@@ -1,6 +1,11 @@
 v0.4.0
 ==================
 
+* Make `utm` types composable
+
+v0.4.0
+==================
+
 * Update to Unicode 11
 
 v0.3.2

@@ -83,6 +83,11 @@ assert utmUppercase in Rune(0x0041).unicodeTypes()
 assert utmCased in Rune(0x0041).unicodeTypes()
 assert utmWhiteSpace in Rune(0x0009).unicodeTypes()
 assert utmWord in Rune(0x1E69).unicodeTypes()
+
+const alphaNumeric = utmLowercase + utmUppercase + utmNumeric
+assert alphaNumeric in Rune(0x2CFD).unicodeTypes()
+assert alphaNumeric in Rune(0x1E69).unicodeTypes()
+assert alphaNumeric in Rune(0x0041).unicodeTypes()
 ```
 [docs](https://nitely.github.io/nim-unicodedb/unicodedb/types.html)
 

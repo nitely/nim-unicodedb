@@ -6,7 +6,16 @@ import unicode
 
 import types_data
 
-export UnicodeTypeMask
+export
+  UnicodeTypeMask,
+  utmDecimal,
+  utmDigit,
+  utmNumeric,
+  utmLowercase,
+  utmUppercase,
+  utmCased,
+  utmWhiteSpace,
+  utmWord
 
 proc unicodeTypes*(cp: Rune): int {.inline.} =
   ## Return types for a given code point.
@@ -29,4 +38,7 @@ proc contains*(ut: int, utm: UnicodeTypeMask): bool =
   ## .. code-block:: nim
   ##   assert utmUppercase in Rune(0x0041).unicodeTypes()
   ##
-  result = (ut and utm.ord) != 0
+  result = (ut and utm.int) != 0
+
+proc `+`*(utmA, utmB: UnicodeTypeMask): UnicodeTypeMask =
+  (utmA.int + utmB.int).UnicodeTypeMask
