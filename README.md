@@ -18,7 +18,8 @@ Nim 0.17.2, 0.18.0
 
 ## Usage
 
-Properties:
+### Properties
+
 ```nim
 import unicode
 import unicodedb/properties
@@ -37,7 +38,8 @@ echo nfcQcNo in Rune(0x0374).quickCheck()
 ```
 [docs](https://nitely.github.io/nim-unicodedb/unicodedb/properties.html)
 
-Names:
+### Names
+
 ```nim
 import unicode
 import unicodedb/names
@@ -50,7 +52,8 @@ echo "/".runeAt(0).name()
 ```
 [docs](https://nitely.github.io/nim-unicodedb/unicodedb/names.html)
 
-Compositions:
+### Compositions
+
 ```nim
 import unicode
 import unicodedb/compositions
@@ -60,7 +63,8 @@ echo composition(Rune(108), Rune(803))
 ```
 [docs](https://nitely.github.io/nim-unicodedb/unicodedb/compositions.html)
 
-Decompositions:
+### Decompositions
+
 ```nim
 import unicode
 import unicodedb/decompositions
@@ -70,7 +74,8 @@ echo Rune(0x0F9D).decomposition()
 ```
 [docs](https://nitely.github.io/nim-unicodedb/unicodedb/decompositions.html)
 
-Types:
+### Types
+
 ```nim
 import unicode
 import unicodedb/types
@@ -91,7 +96,8 @@ assert alphaNumeric in Rune(0x0041).unicodeTypes()
 ```
 [docs](https://nitely.github.io/nim-unicodedb/unicodedb/types.html)
 
-Widths:
+### Widths
+
 ```nim
 import unicode
 import unicodedb/widths
