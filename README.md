@@ -24,8 +24,9 @@ Nim 0.17.2, 0.18.0
 import unicode
 import unicodedb/properties
 
-echo "A".runeAt(0).category()  # 'L'etter, 'u'ppercase
-# "Lu"
+assert Rune('A'.ord).unicodeCategory() == ctgLu  # 'L'etter, 'u'ppercase
+assert Rune('A'.ord).unicodeCategory() in ctgLm+ctgLo+ctgLu+ctgLl+ctgLt
+assert Rune('A'.ord).unicodeCategory() in ctgL
 
 echo Rune(0x0660).bidirectional() # 'A'rabic, 'N'umber
 # "AN"
