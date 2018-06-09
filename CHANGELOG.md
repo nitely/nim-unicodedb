@@ -1,6 +1,8 @@
-v0.4.0
+v0.4.1
 ==================
 
+* Add `unicodeCategory` functions
+* Deprecate `category` functions
 * Make `utm` types composable
 
 v0.4.0

@@ -17,20 +17,19 @@
 ## There are more examples inluded
 ## within the tests module
 
-import unicodedb/compositions
-import unicodedb/decompositions
-import unicodedb/properties
-import unicodedb/names
-import unicodedb/types
+import
+  unicodedb/compositions,
+  unicodedb/decompositions,
+  unicodedb/properties,
+  unicodedb/names,
+  unicodedb/types
 
-export contains
-export composition
-export decomposition, canonicalDecomposition
-export NfMask, UnicodeProp, UnicodeProps, properties,
-       category, bidirectional,
-       combining, quickCheck
-export name, lookupStrict
-export types
+export
+  compositions,
+  decompositions,
+  properties,
+  names,
+  types
 
 const
   unicodeVersion* = "11.0.0"

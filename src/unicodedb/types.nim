@@ -41,4 +41,4 @@ proc contains*(ut: int, utm: UnicodeTypeMask): bool =
   result = (ut and utm.int) != 0
 
 proc `+`*(utmA, utmB: UnicodeTypeMask): UnicodeTypeMask =
-  (utmA.int + utmB.int).UnicodeTypeMask
+  (utmA.int or utmB.int).UnicodeTypeMask

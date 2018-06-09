@@ -6,7 +6,75 @@ import unicode
 
 import properties_data
 
-export NfMask
+export
+  NfMask,
+  UnicodeCategory,
+  ctgLm,
+  ctgLo,
+  ctgLu,
+  ctgLl,
+  ctgLt,
+  ctgMn,
+  ctgMc,
+  ctgMe,
+  ctgNd,
+  ctgNl,
+  ctgNo,
+  ctgZs,
+  ctgZl,
+  ctgZp,
+  ctgCc,
+  ctgCf,
+  ctgCs,
+  ctgCo,
+  ctgCn,
+  ctgPc,
+  ctgPd,
+  ctgPs,
+  ctgPe,
+  ctgPi,
+  ctgPf,
+  ctgPo,
+  ctgSm,
+  ctgSc,
+  ctgSk,
+  ctgSo
+
+type
+  UnicodeCategorySet* = distinct int32
+    ## A set of ``UnicodeCategory`` elements
+
+proc contains*(a: UnicodeCategorySet, b: UnicodeCategory): bool =
+  ## Check if the given category is
+  ## within the categories.
+  ##
+  ## .. code-block:: nim
+  ##   assert Rune(0x0097).category() in ctgL
+  ##
+  result = (b.int and a.int) != 0
+
+template ucPlusImpl(a, b): UnicodeCategorySet =
+  UnicodeCategorySet(a.int32 or b.int32)
+proc `+`*(a: UnicodeCategorySet, b: UnicodeCategory): UnicodeCategorySet =
+  ucPlusImpl(a, b)
+proc `+`*(a: UnicodeCategory, b: UnicodeCategorySet): UnicodeCategorySet =
+  ucPlusImpl(a, b)
+proc `+`*(a, b: UnicodeCategorySet): UnicodeCategorySet =
+  ucPlusImpl(a, b)
+proc `+`*(a, b: UnicodeCategory): UnicodeCategorySet =
+  ucPlusImpl(a, b)
+
+proc `==`*(a, b: UnicodeCategory): bool =
+  result = (a.int and b.int) != 0
+
+const
+  ctgL* = ctgLm + ctgLo + ctgLu + ctgLl + ctgLt
+  ctgM* = ctgMn + ctgMc + ctgMe
+  ctgN* = ctgNd + ctgNl + ctgNo
+  ctgZ* = ctgZs + ctgZl + ctgZp
+  ctgC* = ctgCc + ctgCf + ctgCs + ctgCo + ctgCn
+  ctgP* = ctgPc + ctgPd + ctgPs + ctgPe + ctgPi + ctgPf + ctgPo
+  ctgS* = ctgSm + ctgSc + ctgSk + ctgSo
 
 type
   UnicodeProp* = enum
@@ -17,7 +85,7 @@ type
     upropBi  # Bidirectional
     upropQc  # QuikCheck
 
-  UnicodeProps* = array[UnicodeProp, int16]
+  UnicodeProps* = array[UnicodeProp, int32]
     ## A type holding all common
     ## properties for a character.
     ## Use `UnicodeProp` to get one of them.
@@ -41,17 +109,93 @@ proc properties*(cp: int): UnicodeProps {.deprecated.} =
   ## Use ``properties(Rune)`` instead.
   properties(cp.Rune)
 
-proc category*(props: UnicodeProps): string {.inline.} =
-  ## Return category property name for a given `UnicodeProps`
-  result = categoryNames[props[upropCat]]
+proc unicodeCategory*(props: UnicodeProps): UnicodeCategory {.inline.} =
+  ## Return category for a given `UnicodeProps`
+  result = props[upropCat].UnicodeCategory
+
+proc unicodeCategory*(cp: Rune): UnicodeCategory {.inline.} =
+  ## Return category for a given code point
+  cp.properties.unicodeCategory
+
+proc categoryMap(s: UnicodeCategory): string =
+  case s
+  of ctgLm:
+    "Lm"
+  of ctgLo:
+    "Lo"
+  of ctgLu:
+    "Lu"
+  of ctgLl:
+    "Ll"
+  of ctgLt:
+    "Lt"
+  of ctgMn:
+    "Mn"
+  of ctgMc:
+    "Mc"
+  of ctgMe:
+    "Me"
+  of ctgNd:
+    "Nd"
+  of ctgNl:
+    "Nl"
+  of ctgNo:
+    "No"
+  of ctgZs:
+    "Zs"
+  of ctgZl:
+    "Zl"
+  of ctgZp:
+    "Zp"
+  of ctgCc:
+    "Cc"
+  of ctgCf:
+    "Cf"
+  of ctgCs:
+    "Cs"
+  of ctgCo:
+    "Co"
+  of ctgCn:
+    "Cn"
+  of ctgPc:
+    "Pc"
+  of ctgPd:
+    "Pd"
+  of ctgPs:
+    "Ps"
+  of ctgPe:
+    "Pe"
+  of ctgPi:
+    "Pi"
+  of ctgPf:
+    "Pf"
+  of ctgPo:
+    "Po"
+  of ctgSm:
+    "Sm"
+  of ctgSc:
+    "Sc"
+  of ctgSk:
+    "Sk"
+  of ctgSo:
+    "So"
+  else:
+    assert false
+    ""
+
+proc category*(props: UnicodeProps): string {.deprecated, inline.} =
+  ## **Deprecated since version 0.4.1**;
+  ## Use ``unicodeCategory(UnicodeProps)`` instead.
+  result = props[upropCat].UnicodeCategory.categoryMap()
 
 proc category*(cp: int): string {.deprecated.} =
   ## **Deprecated since version 0.3.0**;
-  ## Use ``category(Rune)`` instead.
+  ## Use ``unicodeCategory(Rune)`` instead.
   category(properties(cp))
 
-proc category*(cp: Rune): string {.inline.} =
-  ## Return category property name for a given code point
+proc category*(cp: Rune): string {.deprecated, inline.} =
+  ## **Deprecated since version 0.4.1**;
+  ## Use ``unicodeCategory(Rune)`` instead.
   category(properties(cp))
 
 proc bidirectional*(props: UnicodeProps): string {.inline.} =
