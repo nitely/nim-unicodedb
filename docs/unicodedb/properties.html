@@ -1286,6 +1286,10 @@ function main() {
     title="`+`(a, b: UnicodeCategory): UnicodeCategorySet"><wbr />`+`<span class="attachedType" style="visibility:hidden">UnicodeCategorySet</span></a></li>
   <li><a class="reference" href="#==,UnicodeCategory,UnicodeCategory"
     title="`==`(a, b: UnicodeCategory): bool"><wbr />`==`<span class="attachedType" style="visibility:hidden"></span></a></li>
+  <li><a class="reference" href="#categorySetMap,string"
+    title="categorySetMap(s: string): UnicodeCategorySet"><wbr />category<wbr />Set<wbr />Map<span class="attachedType" style="visibility:hidden">UnicodeCategorySet</span></a></li>
+  <li><a class="reference" href="#categoryMap,string"
+    title="categoryMap(s: string): UnicodeCategory"><wbr />category<wbr />Map<span class="attachedType" style="visibility:hidden"></span></a></li>
   <li><a class="reference" href="#properties,Rune"
     title="properties(cp: Rune): UnicodeProps"><wbr />properties<span class="attachedType" style="visibility:hidden">UnicodeProps</span></a></li>
   <li><a class="reference" href="#properties,int"
@@ -1432,6 +1436,16 @@ Check if the given category is within the categories.<pre class="listing"><span 
 
 
 </dd>
+<dt id="categorySetMap"><a name="categorySetMap,string"></a><pre><span class="Keyword">proc</span> <span class="Identifier">categorySetMap</span><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">UnicodeCategorySet</span> <span class="Other pragmabegin">{.</span><div class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></div><span class="Other pragmaend">.}</span></pre></dt>
+<dd>
+Map category string to <tt class="docutils literal"><span class="pre">UnicodeCategorySet</span></tt>. Raise <tt class="docutils literal"><span class="pre">ValueError</span></tt> if there's no match
+
+</dd>
+<dt id="categoryMap"><a name="categoryMap,string"></a><pre><span class="Keyword">proc</span> <span class="Identifier">categoryMap</span><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">UnicodeCategory</span> <span class="Other pragmabegin">{.</span><div class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></div><span class="Other pragmaend">.}</span></pre></dt>
+<dd>
+Map category string to <tt class="docutils literal"><span class="pre">UnicodeCategory</span></tt>. Raise <tt class="docutils literal"><span class="pre">ValueError</span></tt> if there's no match
+
+</dd>
 <dt id="properties"><a name="properties,Rune"></a><pre><span class="Keyword">proc</span> <span class="Identifier">properties</span><span class="Other">(</span><span class="Identifier">cp</span><span class="Other">:</span> <span class="Identifier">Rune</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">UnicodeProps</span> <span class="Other pragmabegin">{.</span><div class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></div><span class="Other pragmaend">.}</span></pre></dt>
 <dd>
 Return properties for a given code point. Includes: Category, Canonical Combining Class, Bidi Class and QC. This may be used as an optimization when more than one property is required. This contains raw data for some of the properties, so one of the auxiliary procedures must be used in conjuntion.
@@ -1528,7 +1542,7 @@ Check if the given NF mask is within the quick-check values.<pre class="listing"
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small>Made with Nim. Generated: 2018-06-09 08:57:16 UTC</small>
+        <small>Made with Nim. Generated: 2018-06-09 09:32:24 UTC</small>
       </div>
     </div>
   </div>
