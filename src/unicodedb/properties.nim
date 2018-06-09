@@ -80,6 +80,96 @@ const
   ctgP* = ctgPc + ctgPd + ctgPs + ctgPe + ctgPi + ctgPf + ctgPo
   ctgS* = ctgSm + ctgSc + ctgSk + ctgSo
 
+proc categorySetMap*(s: string): UnicodeCategorySet =
+  ## Map category string to ``UnicodeCategorySet``.
+  ## Raise ``ValueError`` if there's no match
+  # todo: result = .. is needed in Nim 0.18 to work at compile time
+  case s
+  of "L":
+    result = ctgL
+  of "M":
+    result = ctgM
+  of "N":
+    result = ctgN
+  of "Z":
+    result = ctgZ
+  of "C":
+    result = ctgC
+  of "P":
+    result = ctgP
+  of "S":
+    result = ctgS
+  else:
+    raise newException(ValueError, "Bad category")
+
+proc categoryMap*(s: string): UnicodeCategory =
+  ## Map category string to ``UnicodeCategory``.
+  ## Raise ``ValueError`` if there's no match
+  # todo: result = .. is needed in Nim 0.18 to work at compile time
+  case s
+  of "Lm":
+    result = ctgLm
+  of "Lo":
+    result = ctgLo
+  of "Lu":
+    result = ctgLu
+  of "Ll":
+    result = ctgLl
+  of "Lt":
+    result = ctgLt
+  of "Mn":
+    result = ctgMn
+  of "Mc":
+    result = ctgMc
+  of "Me":
+    result = ctgMe
+  of "Nd":
+    result = ctgNd
+  of "Nl":
+    result = ctgNl
+  of "No":
+    result = ctgNo
+  of "Zs":
+    result = ctgZs
+  of "Zl":
+    result = ctgZl
+  of "Zp":
+    result = ctgZp
+  of "Cc":
+    result = ctgCc
+  of "Cf":
+    result = ctgCf
+  of "Cs":
+    result = ctgCs
+  of "Co":
+    result = ctgCo
+  of "Cn":
+    result = ctgCn
+  of "Pc":
+    result = ctgPc
+  of "Pd":
+    result = ctgPd
+  of "Ps":
+    result = ctgPs
+  of "Pe":
+    result = ctgPe
+  of "Pi":
+    result = ctgPi
+  of "Pf":
+    result = ctgPf
+  of "Po":
+    result = ctgPo
+  of "Sm":
+    result = ctgSm
+  of "Sc":
+    result = ctgSc
+  of "Sk":
+    result = ctgSk
+  of "So":
+    result = ctgSo
+  else:
+    raise newException(ValueError, "Bad category")
+
 type
   UnicodeProp* = enum
     ## A type for getting a single

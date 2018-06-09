@@ -1,3 +1,8 @@
+v0.5.1
+==================
+
+* Add `categorySetMap` and `categoryMap`
+
 v0.5.0
 ==================
 
