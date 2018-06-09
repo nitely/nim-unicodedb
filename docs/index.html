@@ -57,7 +57,7 @@ body {
   line-height: 20px;
   color: #444;
   letter-spacing: 0.15px;
-  background-color: #FDFBFA; }
+  background-color: rgba(252, 248, 244, 0.45); }
 
 /* Skeleton grid */
 .container {
@@ -192,10 +192,10 @@ dd > pre {
   table-layout: fixed; }
 
 /* Nim search input */
-div#searchInputDiv {
+div#searchInput {
   margin-bottom: 8px;
 }
-div#searchInputDiv input#searchInput {
+div#searchInput input#searchInput {
   width: 10em;
 }
 div.search-groupby {
@@ -1143,7 +1143,7 @@ dt pre > span.Identifier ~ span.Identifier, dt pre > span.Operator ~ span.Identi
   color: inherit;
   font-weight: inherit; }
 
-dt pre > span.Operator ~ span.Identifier {
+dt pre > span.Operator ~ span.Identifier, dt pre > span.Operator ~ span.Operator {
   color: inherit;
   font-weight: inherit; }
 
@@ -1220,7 +1220,7 @@ function main() {
     <ul class="simple">
     </ul>
   </div>
-  <div id="searchInputDiv">
+  <div id="searchInput">
     Search: <input type="text" id="searchInput"
       onkeyup="search()" />
   </div>
@@ -1256,7 +1256,7 @@ function main() {
 <p>Usage:</p>
 <pre class="listing"><span class="Keyword">import</span> <span class="Identifier">unicode</span>
 <span class="Keyword">import</span> <span class="Identifier">unicodedb</span>
-<span class="Identifier">assert</span> <span class="Identifier">category</span><span class="Punctuation">(</span><span class="Identifier">Rune</span><span class="Punctuation">(</span><span class="HexNumber">0x860</span><span class="Punctuation">)</span><span class="Punctuation">)</span> <span class="Operator">==</span> <span class="StringLit">&quot;Lo&quot;</span>
+<span class="Identifier">assert</span> <span class="Identifier">unicodeCategory</span><span class="Punctuation">(</span><span class="Identifier">Rune</span><span class="Punctuation">(</span><span class="HexNumber">0x860</span><span class="Punctuation">)</span><span class="Punctuation">)</span> <span class="Operator">==</span> <span class="Identifier">ctgLo</span>
 <span class="Identifier">assert</span> <span class="Identifier">bidirectional</span><span class="Punctuation">(</span><span class="Identifier">Rune</span><span class="Punctuation">(</span><span class="HexNumber">0x07F7</span><span class="Punctuation">)</span><span class="Punctuation">)</span> <span class="Operator">==</span> <span class="StringLit">&quot;ON&quot;</span>
 <span class="Identifier">assert</span> <span class="Identifier">combining</span><span class="Punctuation">(</span><span class="Identifier">Rune</span><span class="Punctuation">(</span><span class="HexNumber">0x860</span><span class="Punctuation">)</span><span class="Punctuation">)</span> <span class="Operator">==</span> <span class="DecNumber">0</span>
 <span class="Identifier">assert</span> <span class="Identifier">name</span><span class="Punctuation">(</span><span class="Identifier">Rune</span><span class="Punctuation">(</span><span class="DecNumber">32</span><span class="Punctuation">)</span><span class="Punctuation">)</span> <span class="Operator">==</span> <span class="StringLit">&quot;SPACE&quot;</span>
@@ -1287,7 +1287,7 @@ function main() {
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small>Made with Nim. Generated: 2018-06-06 17:48:20 UTC</small>
+        <small>Made with Nim. Generated: 2018-06-09 08:57:18 UTC</small>
       </div>
     </div>
   </div>

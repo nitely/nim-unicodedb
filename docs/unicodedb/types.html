@@ -57,7 +57,7 @@ body {
   line-height: 20px;
   color: #444;
   letter-spacing: 0.15px;
-  background-color: #FDFBFA; }
+  background-color: rgba(252, 248, 244, 0.45); }
 
 /* Skeleton grid */
 .container {
@@ -192,10 +192,10 @@ dd > pre {
   table-layout: fixed; }
 
 /* Nim search input */
-div#searchInputDiv {
+div#searchInput {
   margin-bottom: 8px;
 }
-div#searchInputDiv input#searchInput {
+div#searchInput input#searchInput {
   width: 10em;
 }
 div.search-groupby {
@@ -1143,7 +1143,7 @@ dt pre > span.Identifier ~ span.Identifier, dt pre > span.Operator ~ span.Identi
   color: inherit;
   font-weight: inherit; }
 
-dt pre > span.Operator ~ span.Identifier {
+dt pre > span.Operator ~ span.Identifier, dt pre > span.Operator ~ span.Operator {
   color: inherit;
   font-weight: inherit; }
 
@@ -1220,7 +1220,7 @@ function main() {
     <ul class="simple">
     </ul>
   </div>
-  <div id="searchInputDiv">
+  <div id="searchInput">
     Search: <input type="text" id="searchInput"
       onkeyup="search()" />
   </div>
@@ -1247,6 +1247,8 @@ function main() {
     title="unicodeTypes(cp: int): int"><wbr />unicode<wbr />Types<span class="attachedType" style="visibility:hidden"></span></a></li>
   <li><a class="reference" href="#contains,int,UnicodeTypeMask"
     title="contains(ut: int; utm: UnicodeTypeMask): bool"><wbr />contains<span class="attachedType" style="visibility:hidden"></span></a></li>
+  <li><a class="reference" href="#+,UnicodeTypeMask,UnicodeTypeMask"
+    title="`+`(utmA, utmB: UnicodeTypeMask): UnicodeTypeMask"><wbr />`+`<span class="attachedType" style="visibility:hidden"></span></a></li>
 
   </ul>
 </li>
@@ -1280,6 +1282,11 @@ Return types for a given code point. Use <cite>contains</cite> to retrieve a sin
 Check if the given type mask is within the types.<pre class="listing"><span class="Identifier">assert</span> <span class="Identifier">utmUppercase</span> <span class="Keyword">in</span> <span class="Identifier">Rune</span><span class="Punctuation">(</span><span class="HexNumber">0x0041</span><span class="Punctuation">)</span><span class="Operator">.</span><span class="Identifier">unicodeTypes</span><span class="Punctuation">(</span><span class="Punctuation">)</span></pre>
 
 </dd>
+<dt id="+"><a name="+,UnicodeTypeMask,UnicodeTypeMask"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`+`</span><span class="Other">(</span><span class="Identifier">utmA</span><span class="Other">,</span> <span class="Identifier">utmB</span><span class="Other">:</span> <span class="Identifier">UnicodeTypeMask</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">UnicodeTypeMask</span> <span class="Other pragmabegin">{.</span><div class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></div><span class="Other pragmaend">.}</span></pre></dt>
+<dd>
+
+
+</dd>
 
 </dl></div>
 
@@ -1290,7 +1297,7 @@ Check if the given type mask is within the types.<pre class="listing"><span clas
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small>Made with Nim. Generated: 2018-06-06 17:48:20 UTC</small>
+        <small>Made with Nim. Generated: 2018-06-09 08:57:18 UTC</small>
       </div>
     </div>
   </div>
