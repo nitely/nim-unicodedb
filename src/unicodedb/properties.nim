@@ -44,7 +44,7 @@ type
   UnicodeCategorySet* = distinct int32
     ## A set of ``UnicodeCategory`` elements
 
-proc contains*(a: UnicodeCategorySet, b: UnicodeCategory): bool =
+proc contains*(a: UnicodeCategorySet, b: UnicodeCategory): bool {.inline.} =
   ## Check if the given category is
   ## within the categories.
   ##
@@ -55,16 +55,20 @@ proc contains*(a: UnicodeCategorySet, b: UnicodeCategory): bool =
 
 template ucPlusImpl(a, b): UnicodeCategorySet =
   UnicodeCategorySet(int32(a) or int32(b))
-proc `+`*(a: UnicodeCategorySet, b: UnicodeCategory): UnicodeCategorySet =
+proc `+`*(
+    a: UnicodeCategorySet,
+    b: UnicodeCategory): UnicodeCategorySet {.inline.} =
   ucPlusImpl(a, b)
-proc `+`*(a: UnicodeCategory, b: UnicodeCategorySet): UnicodeCategorySet =
+proc `+`*(
+    a: UnicodeCategory,
+    b: UnicodeCategorySet): UnicodeCategorySet {.inline.} =
   ucPlusImpl(a, b)
-proc `+`*(a, b: UnicodeCategorySet): UnicodeCategorySet =
+proc `+`*(a, b: UnicodeCategorySet): UnicodeCategorySet {.inline.} =
   ucPlusImpl(a, b)
-proc `+`*(a, b: UnicodeCategory): UnicodeCategorySet =
+proc `+`*(a, b: UnicodeCategory): UnicodeCategorySet {.inline.} =
   ucPlusImpl(a, b)
 
-proc `==`*(a, b: UnicodeCategory): bool =
+proc `==`*(a, b: UnicodeCategory): bool {.inline.} =
   result = (a.int and b.int) != 0
 
 const

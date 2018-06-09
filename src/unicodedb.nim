@@ -6,7 +6,7 @@
 ## .. code-block:: nim
 ##   import unicode
 ##   import unicodedb
-##   assert category(Rune(0x860)) == "Lo"
+##   assert unicodeCategory(Rune(0x860)) == ctgLo
 ##   assert bidirectional(Rune(0x07F7)) == "ON"
 ##   assert combining(Rune(0x860)) == 0
 ##   assert name(Rune(32)) == "SPACE"
