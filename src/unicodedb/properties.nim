@@ -54,7 +54,7 @@ proc contains*(a: UnicodeCategorySet, b: UnicodeCategory): bool =
   result = (b.int and a.int) != 0
 
 template ucPlusImpl(a, b): UnicodeCategorySet =
-  UnicodeCategorySet(a.int32 or b.int32)
+  UnicodeCategorySet(int32(a) or int32(b))
 proc `+`*(a: UnicodeCategorySet, b: UnicodeCategory): UnicodeCategorySet =
   ucPlusImpl(a, b)
 proc `+`*(a: UnicodeCategory, b: UnicodeCategorySet): UnicodeCategorySet =

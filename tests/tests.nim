@@ -106,12 +106,14 @@ test "Test categories":
         continue
       if cp == 70089 or cp == 72199 or cp == 72200:
         check category(cp) == "Mn"
+        check unicodeCategory(cp.Rune) == ctgMn
         continue
       check category(cp) == cpData.cat
   check i == 684  # New code points
 
 test "Test categories with props":
   check category(properties(7913)) == "Ll"
+  check unicodeCategory(properties(7913)) == ctgLl
 
 test "Test some categories":
   # check an unassiged cp
@@ -119,16 +121,26 @@ test "Test some categories":
   check category(7913) == "Ll"
   check category(0) == "Cc"
   check category(1048576) == "Co"
+  check unicodeCategory(64110.Rune) == ctgCn
+  check unicodeCategory(7913.Rune) == ctgLl
+  check unicodeCategory(0.Rune) == ctgCc
+  check unicodeCategory(1048576.Rune) == ctgCo
   # New in unicode 10
   check category(0x860) == "Lo"
+  check unicodeCategory(0x860.Rune) == ctgLo
   # New in unicode 11
   check category(70089) == "Mn"
   check category(72199) == "Mn"
   check category(72200) == "Mn"
+  check unicodeCategory(70089.Rune) == ctgMn
+  check unicodeCategory(72199.Rune) == ctgMn
+  check unicodeCategory(72200.Rune) == ctgMn
 
 test "Test categories with runes":
   check category(Rune(7913)) == "Ll"
+  check unicodeCategory(Rune(7913)) == ctgLl
   check category(properties(Rune(7913))) == "Ll"
+  check unicodeCategory(properties(Rune(7913))) == ctgLl
 
 test "Test bidirectional class":
   for cpData in allBidis:
@@ -372,6 +384,16 @@ test "Test Word":
         utmUppercase in unicodeTypes(cp) or
         category(cp) in ["Lt", "Lm", "Lo", "Nl"] or
         category(cp) in ["Mn", "Mc", "So"] or
+        # Join_Control
+        cp in {0x200C .. 0x200D})
+      check(
+        unicodeCategory(cp.Rune) in ctgPc+ctgMn+ctgMc+ctgMe or
+        utmDecimal in unicodeTypes(cp) or
+        # alphanumeric
+        utmLowercase in unicodeTypes(cp) or
+        utmUppercase in unicodeTypes(cp) or
+        unicodeCategory(cp.Rune) in ctgLt+ctgLm+ctgLo+ctgNl or
+        unicodeCategory(cp.Rune) in ctgMn+ctgMc+ctgSo or
         # Join_Control
         cp in {0x200C .. 0x200D})
     # No idea how to derive Other_Alphanumeric,
