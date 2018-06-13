@@ -69,7 +69,7 @@ proc `+`*(a, b: UnicodeCategory): UnicodeCategorySet {.inline.} =
   ucPlusImpl(a, b)
 
 proc `==`*(a, b: UnicodeCategory): bool {.inline.} =
-  result = (a.int and b.int) != 0
+  result = a.int == b.int
 
 const
   ctgL* = ctgLm + ctgLo + ctgLu + ctgLl + ctgLt
