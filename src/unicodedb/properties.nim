@@ -69,6 +69,8 @@ proc `+`*(a, b: UnicodeCategory): UnicodeCategorySet {.inline.} =
   ucPlusImpl(a, b)
 
 proc `==`*(a, b: UnicodeCategory): bool {.inline.} =
+  assert (a.int and a.int-1) == 0, "not a power of two"
+  assert (b.int and b.int-1) == 0, "not a power of two"
   result = a.int == b.int
 
 const
