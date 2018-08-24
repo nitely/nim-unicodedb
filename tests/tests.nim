@@ -581,3 +581,4 @@ test "Test Script":
   check Rune(124928).unicodeScript == sptMendeKikakui
   check Rune(125184).unicodeScript == sptAdlam
   check Rune(0x10FFFF).unicodeScript == UnicodeScript(0)
+  check "諸".runeAt(0).unicodeScript() == sptHan

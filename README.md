@@ -107,6 +107,16 @@ assert "🕺".runeAt(0).unicodeWidth() == uwdtWide
 ```
 [docs](https://nitely.github.io/nim-unicodedb/unicodedb/widths.html)
 
+### Scripts
+
+```nim
+import unicode
+import unicodedb/scripts
+
+assert "諸".runeAt(0).unicodeScript() == sptHan
+```
+[docs](https://nitely.github.io/nim-unicodedb/unicodedb/scripts.html)
+
 ## Related libraries
 
 * [nim-unicodeplus](https://github.com/nitely/nim-unicodeplus)
