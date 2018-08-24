@@ -16,6 +16,7 @@ task test, "Test":
   exec "nim c -r tests/tests"
 
 task docs, "Docs":
+  exec "nim doc2 -o:./docs/unicodedb --project ./src/unicodedb/scripts.nim"
   exec "nim doc2 -o:./docs/unicodedb --project ./src/unicodedb/widths.nim"
   exec "nim doc2 -o:./docs --project ./src/unicodedb.nim"
   exec "mv ./docs/unicodedb.html ./docs/index.html"
