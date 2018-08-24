@@ -468,6 +468,9 @@ proc parseScripts(propsRaw: seq[seq[string]]): seq[int] =
       continue
     #if props[0] notin s:
     #  s.add(props[0])
+    #  echo(
+    #    "check Rune($#).unicodeScript == spt$#" %
+    #    [$cp, props[0].replace("_", "")])
     result[cp] = result[cp] or props[0].scriptMap()
   #for ss in s:
   #  echo "of \"$#\":\n  spt$#" % [ss, ss.replace("_", "")]

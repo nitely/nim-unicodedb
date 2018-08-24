@@ -161,3 +161,6 @@ proc unicodeScript*(cp: Rune): UnicodeScript {.inline.} =
   assert cp.int <= 0x10FFFF
   let blockOffset = (typesIndices[cp.int div blockSize]).int * blockSize
   result = typesData[blockOffset + cp.int mod blockSize].UnicodeScript
+
+proc `==`*(a, b: UnicodeScript): bool {.inline.} =
+  a.int == b.int
