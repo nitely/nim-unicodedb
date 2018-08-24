@@ -22,6 +22,7 @@ task docs, "Docs":
   exec "rm -fr ./docs/*/*_data.html"
 
 task gen, "Gen data":
+  exec "nim c -r gen/scripts.nim"
   exec "nim c -r gen/widths.nim"
   exec "nim c -r gen/types.nim"
   exec "nim c -r gen/compositions.nim"

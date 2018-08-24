@@ -2,6 +2,7 @@ import unittest, strutils, unicode
 
 import unicodedb
 import unicodedb/widths
+import unicodedb/scripts
 from unicodedb/compositions_data import compsValues
 from compositions_test_data import allComps
 from decompositions_test_data import allDecomps

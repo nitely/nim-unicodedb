@@ -4,6 +4,7 @@ import algorithm
 proc fnv32a*(key: openarray[int], seed: uint32): uint32 =
   ## Calculates a distinct hash function for a given sequence
   ## FNV algorithm from http://isthe.com/chongo/tech/comp/fnv/
+  # XXX this should be 2166136261'u32
   result = 18652614'u32  # -> 2166136261 mod int32.high
   if seed > 0'u32:
     result = seed
@@ -54,6 +55,7 @@ proc mph*[T: MphValueType](
     if len(bucket) == 0:
       break
 
+    # XXX: d should be 0
     var d = 1
     var item = 0
     var slots = newSeqOfCap[int](len(bucket))
