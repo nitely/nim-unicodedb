@@ -1,3 +1,10 @@
+v0.6.0
+==================
+
+* Drop support for Nim 0.17
+* Add support for Nim 0.19 (no changes were required)
+* Remove all derecated APIs
+
 v0.5.2
 ==================
 

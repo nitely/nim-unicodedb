@@ -20,29 +20,13 @@ iterator decomposition*(cp: Rune): Rune {.inline, raises: [].} =
     for i in idx+1 .. idx+length:
       yield decompsData[i].Rune
 
-iterator decomposition*(cp: int): int {.inline, deprecated.} =
-  ## **Deprecated since version 0.3.0**;
-  ## Use ``decomposition(Rune)`` instead.
-  for dcp in decomposition(cp.Rune):
-    yield dcp.int
-
-proc decompositionImpl[T: int | Rune](
-    result: var seq[T],
-    cp: T) {.raises: [].} =
-  result = newSeqOfCap[T](18)
-  for dcp in decomposition(cp):
-    result.add(dcp)
-
 proc decomposition*(cp: Rune): seq[Rune] {.raises: [].} =
   ## Return a sequence of the
   ## decomposition for a given code point.
   ## Returns an empty seq when there is no decomposition.
-  decompositionImpl(result, cp)
-
-proc decomposition*(cp: int): seq[int] {.deprecated.} =
-  ## **Deprecated since version 0.3.0**;
-  ## Use ``decomposition(Rune)`` instead.
-  decompositionImpl(result, cp)
+  result = newSeqOfCap[Rune](18)
+  for dcp in decomposition(cp):
+    result.add(dcp)
 
 iterator canonicalDecomposition*(cp: Rune): Rune {.inline, raises: [].} =
   ## Iterates over the canonical decomposition of a
@@ -63,30 +47,14 @@ iterator canonicalDecomposition*(cp: Rune): Rune {.inline, raises: [].} =
       for i in idx+1 .. idx+length:
         yield decompsData[i].Rune
 
-iterator canonicalDecomposition*(cp: int): int {.inline, deprecated.} =
-  ## **Deprecated since version 0.3.0**;
-  ## Use ``canonicalDecomposition(Rune)`` instead.
-  for dcp in canonicalDecomposition(cp.Rune):
-    yield dcp.int
-
-proc canonicalDecompositionImpl[T: int | Rune](
-    result: var seq[T],
-    cp: T) {.inline, raises: [].} =
-  result = newSeqOfCap[T](2)
-  for dcp in canonicalDecomposition(cp):
-    result.add(dcp)
-
 proc canonicalDecomposition*(cp: Rune): seq[Rune] {.raises: [].} =
   ## Return a sequence of the canonical
   ## decomposition for a given code point.
   ## It will return an empty sequence when
   ## there is no decomposition.
-  canonicalDecompositionImpl(result, cp)
-
-proc canonicalDecomposition*(cp: int): seq[int] {.deprecated.} =
-  ## **Deprecated since version 0.3.0**;
-  ## Use ``canonicalDecomposition(Rune)`` instead.
-  canonicalDecompositionImpl(result, cp)
+  result = newSeqOfCap[Rune](2)
+  for dcp in canonicalDecomposition(cp):
+    result.add(dcp)
 
 when isMainModule:
   echo(

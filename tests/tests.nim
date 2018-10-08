@@ -13,42 +13,36 @@ from types_test_data import allTypes
 
 const maxCP = 0x10FFFF
 
+proc toRunes(runes: seq[int]): seq[Rune] =
+  result = @[]
+  for cp in runes:
+    result.add(cp.Rune)
+
 test "Test all compositions":
   for cps in allComps:
-    check cps[0] == composition(cps[1], cps[2])
+    check cps[0].Rune == composition(cps[1].Rune, cps[2].Rune)
 
 test "Test decompose-compose inception":
   var i = 0
   for cps in compsValues:
-    let dcp = canonicalDecomposition(cps[2].int)
+    let dcp = canonicalDecomposition(cps[2].Rune)
     check dcp.len == 2
-    check composition(dcp[0], dcp[1]) == cps[2]
+    check composition(dcp[0], dcp[1]) == cps[2].Rune
     inc i
   check i == 940
 
 test "Test some compositions":
-  check composition(123, 123) == -1
+  block:
+    var r: Rune
+    check(not composition(r, 123.Rune, 123.Rune))
   # 0x0F9D -> 0x0F9C 0x0FB7 (but it's excluded)
-  check composition(0x0F9C, 0x0FB7) == -1
-  check composition(108, 803) == 7735
-
-test "Test compositions with Runes":
-  check composition(Rune(108), Rune(803)) == Rune(7735)
-  block:
-    var r: Rune
-    check composition(r, Rune(108), Rune(803))
-    check r == Rune(7735)
-
-test "Test compositions with bad Runes":
   expect(ValueError):
-    discard composition(Rune(123), Rune(123))
-  block:
-    var r: Rune
-    check(not composition(r, Rune(123), Rune(123)))
+    discard composition(0x0F9C.Rune, 0x0FB7.Rune)
+  check composition(108.Rune, 803.Rune) == 7735.Rune
 
 test "Test decompositions":
   for decomp in allDecomps:
-    check decomposition(decomp.cp) == decomp.dcp
+    check decomposition(decomp.cp.Rune) == decomp.dcp.toRunes
 
 test "Test non-decompositions":
   var decomposableCps = newSeq[bool](maxCP)
@@ -56,22 +50,18 @@ test "Test non-decompositions":
     decomposableCps[decomp.cp] = true
   for cp, isDecomposable in decomposableCps:
     if not isDecomposable:
-      check decomposition(cp).len == 0
+      check decomposition(cp.Rune).len == 0
 
 test "Test some decompositions":
-  check decomposition(0x0F9D) == @[0x0F9C, 0x0FB7]
-  check decomposition(190) == @[51, 8260, 52]
-  check decomposition(192) == @[65, 768]
-  check decomposition(123).len == 0
-
-test "Test decompositions with Runes":
-  check decomposition(Rune(0x0F9D)) == @[Rune(0x0F9C), Rune(0x0FB7)]
-  check decomposition(Rune(123)).len == 0
+  check decomposition(0x0F9D.Rune) == @[0x0F9C.Rune, 0x0FB7.Rune]
+  check decomposition(190.Rune) == @[51.Rune, 8260.Rune, 52.Rune]
+  check decomposition(192.Rune) == @[65.Rune, 768.Rune]
+  check decomposition(123.Rune).len == 0
 
 test "Test canonical decompositions":
   for decomp in allDecomps:
     if decomp.isCanonical:
-      check canonicalDecomposition(decomp.cp) == decomp.dcp
+      check canonicalDecomposition(decomp.cp.Rune) == decomp.dcp.toRunes
 
 test "Test non-canonical decompositions":
   var decomposableCps = newSeq[bool](maxCP)
@@ -80,182 +70,144 @@ test "Test non-canonical decompositions":
       decomposableCps[decomp.cp] = true
   for cp, isDecomposable in decomposableCps:
     if not isDecomposable:
-      check canonicalDecomposition(cp).len == 0
+      check canonicalDecomposition(cp.Rune).len == 0
 
 test "Test some canonical decompositions":
-  check canonicalDecomposition(192) == @[65, 768]
-  check canonicalDecomposition(0x0F9D) == @[0x0F9C, 0x0FB7]
-  check canonicalDecomposition(190).len == 0
-  check decomposition(123).len == 0
-
-test "Test canonical decompositions with Runes":
-  check(
-    canonicalDecomposition(Rune(0x0F9D)) == @[
-      Rune(0x0F9C), Rune(0x0FB7)])
-  check canonicalDecomposition(Rune(123)).len == 0
+  check canonicalDecomposition(192.Rune) == @[65.Rune, 768.Rune]
+  check canonicalDecomposition(0x0F9D.Rune) == @[0x0F9C.Rune, 0x0FB7.Rune]
+  check canonicalDecomposition(190.Rune).len == 0
+  check decomposition(123.Rune).len == 0
 
 test "Test categories":
   var i = 0
   for cpData in allCats:
     for cp in cpData.cpFirst .. cpData.cpLast:
       # Skip unassigned since test data has previous UCD version
-      if category(cp) != cpData.cat and cpData.cat == "Cn":
+      if unicodeCategory(cp.Rune) != cpData.cat.categoryMap and cpData.cat == "Cn":
         inc i
         continue
       if cp >= 4304 and cp <= 4351:
         # the 46 georgia letters changed in unicode 11
         continue
       if cp == 70089 or cp == 72199 or cp == 72200:
-        check category(cp) == "Mn"
         check unicodeCategory(cp.Rune) == ctgMn
         continue
-      check category(cp) == cpData.cat
+      check unicodeCategory(cp.Rune) == cpData.cat.categoryMap
   check i == 684  # New code points
 
 test "Test categories with props":
-  check category(properties(7913)) == "Ll"
-  check unicodeCategory(properties(7913)) == ctgLl
+  check unicodeCategory(properties(7913.Rune)) == ctgLl
 
 test "Test some categories":
   # check an unassiged cp
-  check category(64110) == "Cn"
-  check category(7913) == "Ll"
-  check category(0) == "Cc"
-  check category(1048576) == "Co"
   check unicodeCategory(64110.Rune) == ctgCn
   check unicodeCategory(7913.Rune) == ctgLl
   check unicodeCategory(0.Rune) == ctgCc
   check unicodeCategory(1048576.Rune) == ctgCo
   # New in unicode 10
-  check category(0x860) == "Lo"
   check unicodeCategory(0x860.Rune) == ctgLo
   # New in unicode 11
-  check category(70089) == "Mn"
-  check category(72199) == "Mn"
-  check category(72200) == "Mn"
   check unicodeCategory(70089.Rune) == ctgMn
   check unicodeCategory(72199.Rune) == ctgMn
   check unicodeCategory(72200.Rune) == ctgMn
 
-test "Test categories with runes":
-  check category(Rune(7913)) == "Ll"
-  check unicodeCategory(Rune(7913)) == ctgLl
-  check category(properties(Rune(7913))) == "Ll"
-  check unicodeCategory(properties(Rune(7913))) == ctgLl
-
 test "Test bidirectional class":
   for cpData in allBidis:
     for cp in cpData.cpFirst .. cpData.cpLast:
-      if bidirectional(cp) != cpData.bi and not cpData.assigned:
+      if bidirectional(cp.Rune) != cpData.bi and not cpData.assigned:
         continue
       if cp == 0x111c9:  # unicode 11
-        check bidirectional(cp) == "NSM"
+        check bidirectional(cp.Rune) == "NSM"
         continue
-      check bidirectional(cp) == cpData.bi
+      check bidirectional(cp.Rune) == cpData.bi
 
 test "Test some bidirectional class":
-  check bidirectional(0x860) == "AL"
-  check bidirectional(0x0924) == "L"
-  check bidirectional(0x1EEFF) == "AL"
-  check bidirectional(0) == "BN"
-  check bidirectional(0x07F7) == "ON"
+  check bidirectional(0x860.Rune) == "AL"
+  check bidirectional(0x0924.Rune) == "L"
+  check bidirectional(0x1EEFF.Rune) == "AL"
+  check bidirectional(0.Rune) == "BN"
+  check bidirectional(0x07F7.Rune) == "ON"
   # New in Unicode 11
-  check bidirectional(0x111c9) == "NSM"
-  check bidirectional(0x111CC) == "NSM"
-  check bidirectional(0x1133B) == "NSM"
-  check bidirectional(0x1133C) == "NSM"
-
-test "Test some bidirectional class for runes":
-  check bidirectional(Rune(0)) == "BN"
-  check bidirectional(Rune(0x07F7)) == "ON"
+  check bidirectional(0x111c9.Rune) == "NSM"
+  check bidirectional(0x111CC.Rune) == "NSM"
+  check bidirectional(0x1133B.Rune) == "NSM"
+  check bidirectional(0x1133C.Rune) == "NSM"
 
 test "Test canonical combining class":
   var i = 0
   for cpData in allCombining:
     for cp in cpData.cpFirst .. cpData.cpLast:
       if cpData.assigned:
-        check combining(cp) == cpData.ccc
-      elif combining(cp) != cpData.ccc:
+        check combining(cp.Rune) == cpData.ccc
+      elif combining(cp.Rune) != cpData.ccc:
         inc i
   check i == 23
 
 test "Test some canonical combining class":
-  check combining(0x860) == 0
-  check combining(0x1ABC) == 230
-  check combining(0x1ABD) == 220
-  check combining(0) == 0
-  check combining(0x0BC8) == 0  # non-assigned
-  check combining(64110) == 0  # non-assigned
-  check combining(1114110) == 0  # non-assigned
-
-test "Test some canonical combining class for runes":
-  check combining(Rune(0x860)) == 0
-  check combining(Rune(0x1ABC)) == 230
+  check combining(0x860.Rune) == 0
+  check combining(0x1ABC.Rune) == 230
+  check combining(0x1ABD.Rune) == 220
+  check combining(0.Rune) == 0
+  check combining(0x0BC8.Rune) == 0  # non-assigned
+  check combining(64110.Rune) == 0  # non-assigned
+  check combining(1114110.Rune) == 0  # non-assigned
 
 test "Test some quick check":
-  check nfcQcNo in quickCheck(0x0374)
-  check nfcQcMaybe notin quickCheck(0x0374)
-  check nfcQcMaybe in quickCheck(0x115AF)
-  check nfcQcNo notin quickCheck(0x115AF)
-  check nfcQcMaybe in quickCheck(0x1161)
-  check nfcQcNo notin quickCheck(0x1161)
-  check nfcQcMaybe in quickCheck(0x1175)
-  check nfcQcNo notin quickCheck(0x1175)
-  check nfcQcMaybe notin quickCheck(0)
-  check nfcQcNo notin quickCheck(0)
+  check nfcQcNo in quickCheck(0x0374.Rune)
+  check nfcQcMaybe notin quickCheck(0x0374.Rune)
+  check nfcQcMaybe in quickCheck(0x115AF.Rune)
+  check nfcQcNo notin quickCheck(0x115AF.Rune)
+  check nfcQcMaybe in quickCheck(0x1161.Rune)
+  check nfcQcNo notin quickCheck(0x1161.Rune)
+  check nfcQcMaybe in quickCheck(0x1175.Rune)
+  check nfcQcNo notin quickCheck(0x1175.Rune)
+  check nfcQcMaybe notin quickCheck(0.Rune)
+  check nfcQcNo notin quickCheck(0.Rune)
 
-  check nfkcQcNo in quickCheck(0x00A0)
-  check nfkcQcMaybe notin quickCheck(0x00A0)
-  check nfkcQcMaybe in quickCheck(0x0CD6)
-  check nfkcQcNo notin quickCheck(0x0CD6)
-  check nfkcQcMaybe in quickCheck(0x115AF)
-  check nfkcQcNo notin quickCheck(0x115AF)
-  check nfkcQcNo notin quickCheck(0)
-  check nfkcQcMaybe notin quickCheck(0)
+  check nfkcQcNo in quickCheck(0x00A0.Rune)
+  check nfkcQcMaybe notin quickCheck(0x00A0.Rune)
+  check nfkcQcMaybe in quickCheck(0x0CD6.Rune)
+  check nfkcQcNo notin quickCheck(0x0CD6.Rune)
+  check nfkcQcMaybe in quickCheck(0x115AF.Rune)
+  check nfkcQcNo notin quickCheck(0x115AF.Rune)
+  check nfkcQcNo notin quickCheck(0.Rune)
+  check nfkcQcMaybe notin quickCheck(0.Rune)
 
-  check nfdQcNo in quickCheck(0x00D6)
-  check nfdQcNo in quickCheck(0x2FA1D)
-  check nfdQcNo notin quickCheck(0)
+  check nfdQcNo in quickCheck(0x00D6.Rune)
+  check nfdQcNo in quickCheck(0x2FA1D.Rune)
+  check nfdQcNo notin quickCheck(0.Rune)
 
-  check nfkdQcNo in quickCheck(0x00D6)
-  check nfkdQcNo in quickCheck(0x2FA1D)
-  check nfkdQcNo notin quickCheck(0)
-
-test "Test some quick check for runes":
-  check nfcQcNo in quickCheck(Rune(0x0374))
-  check nfcQcMaybe notin quickCheck(Rune(0x0374))
+  check nfkdQcNo in quickCheck(0x00D6.Rune)
+  check nfkdQcNo in quickCheck(0x2FA1D.Rune)
+  check nfkdQcNo notin quickCheck(0.Rune)
 
 # There used to be a full test for names,
 # but it was ~6MBs of data
 
 test "Test some name":
-  check name(32) == "SPACE"
-  check name(0x12199) == "CUNEIFORM SIGN KAL CROSSING KAL"
-  check name(917999) == "VARIATION SELECTOR-256"
-  check name(44032) == "HANGUL SYLLABLE GA"
-  check name(53728) == "HANGUL SYLLABLE TWAEL"
-  check name(55203) == "HANGUL SYLLABLE HIH"
-  check name(0x4E8C) == "CJK UNIFIED IDEOGRAPH-4E8C"
-  check name(0x20059) == "CJK UNIFIED IDEOGRAPH-20059"
-  check name(0x17000) == "TANGUT IDEOGRAPH-17000"
-  check name(0x17001) == "TANGUT IDEOGRAPH-17001"
-  check name(0x187EC) == "TANGUT IDEOGRAPH-187EC"
-  check name(0x187ED) == ""
-  check name(0x1B170) == "NUSHU CHARACTER-1B170"
-  check name(0x1B171) == "NUSHU CHARACTER-1B171"
-  check name(0x1B2FB) == "NUSHU CHARACTER-1B2FB"
-  check name(0xF900) == "CJK COMPATIBILITY IDEOGRAPH-F900"
-  check name(0xFAD9) == "CJK COMPATIBILITY IDEOGRAPH-FAD9"
-  check name(0xF0000) == ""
-  check name(0x10FFFD) == ""
-
-test "Test some name for runes":
-  check name(Rune(32)) == "SPACE"
-  check name(Rune(0x10FFFD)) == ""
+  check name(32.Rune) == "SPACE"
+  check name(0x12199.Rune) == "CUNEIFORM SIGN KAL CROSSING KAL"
+  check name(917999.Rune) == "VARIATION SELECTOR-256"
+  check name(44032.Rune) == "HANGUL SYLLABLE GA"
+  check name(53728.Rune) == "HANGUL SYLLABLE TWAEL"
+  check name(55203.Rune) == "HANGUL SYLLABLE HIH"
+  check name(0x4E8C.Rune) == "CJK UNIFIED IDEOGRAPH-4E8C"
+  check name(0x20059.Rune) == "CJK UNIFIED IDEOGRAPH-20059"
+  check name(0x17000.Rune) == "TANGUT IDEOGRAPH-17000"
+  check name(0x17001.Rune) == "TANGUT IDEOGRAPH-17001"
+  check name(0x187EC.Rune) == "TANGUT IDEOGRAPH-187EC"
+  check name(0x187ED.Rune) == ""
+  check name(0x1B170.Rune) == "NUSHU CHARACTER-1B170"
+  check name(0x1B171.Rune) == "NUSHU CHARACTER-1B171"
+  check name(0x1B2FB.Rune) == "NUSHU CHARACTER-1B2FB"
+  check name(0xF900.Rune) == "CJK COMPATIBILITY IDEOGRAPH-F900"
+  check name(0xFAD9.Rune) == "CJK COMPATIBILITY IDEOGRAPH-FAD9"
+  check name(0xF0000.Rune) == ""
+  check name(0x10FFFD.Rune) == ""
 
 test "Test lookup names":
   for cp in 0 .. 0x10FFFF:
-    let cpName = name(cp)
+    let cpName = name(cp.Rune)
     if cpName.len > 0:
       check lookupStrict(cpName) == Rune(cp)
 
@@ -298,18 +250,18 @@ test "Test types":
   for cpData in allTypes:
     for cp in cpData.first .. cpData.last:
       # Skip unassigned
-      if category(cp) != "Cn" and not cpData.asig:
+      if unicodeCategory(cp.Rune) != ctgCn and not cpData.asig:
         inc i
         continue
-      check(utmDecimal in unicodeTypes(cp) == cpData.de)
-      check(utmDigit in unicodeTypes(cp) == cpData.di)
-      check(utmNumeric in unicodeTypes(cp) == cpData.nu)
+      check(utmDecimal in unicodeTypes(cp.Rune) == cpData.de)
+      check(utmDigit in unicodeTypes(cp.Rune) == cpData.di)
+      check(utmNumeric in unicodeTypes(cp.Rune) == cpData.nu)
       if cp >= 4304 and cp <= 4351:
         # the 46 georgia letters changed in unicode 11
         discard
       else:
-        check(utmLowercase in unicodeTypes(cp) == cpData.lo)
-      check(utmUppercase in unicodeTypes(cp) == cpData.up)
+        check(utmLowercase in unicodeTypes(cp.Rune) == cpData.lo)
+      check(utmUppercase in unicodeTypes(cp.Rune) == cpData.up)
   check i == 684  # new codepoints
 
 test "Test some types":
@@ -330,7 +282,7 @@ test "Test some types":
   check utmLowercase in unicodeTypes(Rune(0x1E69))
   check utmLowercase in unicodeTypes(Rune(0x2C74))
   check utmLowercase notin unicodeTypes(Rune('$'.ord))
-  check utmLowercase notin unicodeTypes(0x0041)
+  check utmLowercase notin unicodeTypes(0x0041.Rune)
 
   check utmUppercase in unicodeTypes(Rune(0x0041))
   check utmUppercase in unicodeTypes(Rune(0x005A))
@@ -369,46 +321,36 @@ test "Test WhiteSpace":
     0x1680, 0x2000 .. 0x200A, 0x2028, 0x2029,
     0x202F, 0x205F, 0x3000}
   for cp in 0 .. 0x10FFFF:
-    if utmWhiteSpace in unicodeTypes(cp):
+    if utmWhiteSpace in unicodeTypes(cp.Rune):
       check cp in expected
     if cp <= int16.high and cp in expected:
-      check utmWhiteSpace in unicodeTypes(cp)
+      check utmWhiteSpace in unicodeTypes(cp.Rune)
 
 test "Test Word":
   for cp in 0 .. 0x10FFFF:
-    if utmWord in unicodeTypes(cp):
-      check(
-        category(cp) in ["Pc", "Mn", "Mc", "Me"] or
-        utmDecimal in unicodeTypes(cp) or
-        # alphanumeric
-        utmLowercase in unicodeTypes(cp) or
-        utmUppercase in unicodeTypes(cp) or
-        category(cp) in ["Lt", "Lm", "Lo", "Nl"] or
-        category(cp) in ["Mn", "Mc", "So"] or
-        # Join_Control
-        cp in {0x200C .. 0x200D})
+    if utmWord in unicodeTypes(cp.Rune):
       check(
         unicodeCategory(cp.Rune) in ctgPc+ctgMn+ctgMc+ctgMe or
-        utmDecimal in unicodeTypes(cp) or
+        utmDecimal in unicodeTypes(cp.Rune) or
         # alphanumeric
-        utmLowercase in unicodeTypes(cp) or
-        utmUppercase in unicodeTypes(cp) or
+        utmLowercase in unicodeTypes(cp.Rune) or
+        utmUppercase in unicodeTypes(cp.Rune) or
         unicodeCategory(cp.Rune) in ctgLt+ctgLm+ctgLo+ctgNl or
         unicodeCategory(cp.Rune) in ctgMn+ctgMc+ctgSo or
         # Join_Control
         cp in {0x200C .. 0x200D})
     # No idea how to derive Other_Alphanumeric,
     # but this is good enough
-    if (category(cp) in ["Pc", "Mn", "Mc", "Me"] or
-        utmDecimal in unicodeTypes(cp) or
+    if (unicodeCategory(cp.Rune) in ctgPc+ctgMn+ctgMc+ctgMe or
+        utmDecimal in unicodeTypes(cp.Rune) or
         # alphanumeric
-        utmLowercase in unicodeTypes(cp) or
-        utmUppercase in unicodeTypes(cp) or
-        category(cp) in ["Lt", "Lm", "Lo", "Nl"] or
+        utmLowercase in unicodeTypes(cp.Rune) or
+        utmUppercase in unicodeTypes(cp.Rune) or
+        unicodeCategory(cp.Rune) in ctgLt+ctgLm+ctgLo+ctgNl or
         #category(cp) in ["Mn", "Mc", "So"] or
         # Join_Control
         cp in {0x200C .. 0x200D}):
-      check utmWord in unicodeTypes(cp)
+      check utmWord in unicodeTypes(cp.Rune)
 
 test "Test Width":
   for c in 'a' .. 'z':

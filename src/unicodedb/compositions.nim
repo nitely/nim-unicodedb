@@ -51,15 +51,6 @@ proc composition*(
   if not composition(result, cpA, cpB):
     raise newException(ValueError, "Composition not found")
 
-proc composition*(cpA: int, cpB: int): int {.deprecated.} =
-  ## **Deprecated since version 0.3.0**;
-  ## Use ``composition(var Rune, Rune, Rune)`` instead.
-  var r: Rune
-  if not composition(r, cpA.Rune, cpB.Rune):
-    result = -1
-    return
-  result = r.int
-
 when isMainModule:
   echo(
     (sizeof(compsHashes) +
