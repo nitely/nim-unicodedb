@@ -26,11 +26,6 @@ proc unicodeTypes*(cp: Rune): int {.inline.} =
     idx = typesIndices[blockOffset + cp.int mod blockSize]
   result = typesData[idx]
 
-proc unicodeTypes*(cp: int): int {.deprecated.} =
-  ## **Deprecated since version 0.3.0**;
-  ## Use ``unicodeTypes(Rune)`` instead.
-  unicodeTypes(cp.Rune)
-
 proc contains*(ut: int, utm: UnicodeTypeMask): bool =
   ## Check if the given type mask is
   ## within the types.

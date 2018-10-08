@@ -1,6 +1,6 @@
 # Package
 
-version = "0.5.2"
+version = "0.6.0"
 author = "Esteban Castro Borsani (@nitely)"
 description = "Unicode Character Database (UCD) access for Nim"
 license = "MIT"
@@ -10,7 +10,7 @@ skipDirs = @["tests", "gen"]
 
 # Dependencies
 
-requires "nim >= 0.17.2"
+requires "nim >= 0.18.0"
 
 task test, "Test":
   exec "nim c -r tests/tests"

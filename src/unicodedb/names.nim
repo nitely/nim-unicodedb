@@ -128,11 +128,6 @@ proc name*(cp: Rune): string {.inline, raises: [].} =
     inc j
   assert i == length
 
-proc name*(cp: int): string {.deprecated.} =
-  ## **Deprecated since version 0.3.0**;
-  ## Use ``name(Rune)`` instead.
-  name(cp.Rune)
-
 proc fnv32a(key: string, seed: uint32): uint32 {.inline, raises: [].} =
   ## Calculates a distinct hash function for a given sequence
   ## FNV algorithm from http://isthe.com/chongo/tech/comp/fnv/
@@ -176,7 +171,7 @@ proc lookupStrict*(cpName: string): Rune {.raises: [KeyError].} =
       result = Rune(cp)
       return
   cp = mphLookup(cpName)
-  if cpName != name(cp):
+  if cpName != name(cp.Rune):
     raise newException(KeyError, "Name not found")
   result = Rune(cp)
 

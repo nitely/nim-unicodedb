@@ -49,7 +49,7 @@ proc contains*(a: UnicodeCategorySet, b: UnicodeCategory): bool {.inline.} =
   ## within the categories.
   ##
   ## .. code-block:: nim
-  ##   assert Rune(0x0097).category() in ctgL
+  ##   assert Rune(0x0097).unicodeCategory() in ctgL
   ##
   result = (b.int and a.int) != 0
 
@@ -200,11 +200,6 @@ proc properties*(cp: Rune): UnicodeProps =
     idx = propsIndices[blockOffset + cp.int mod blockSize]
   result = propsData[idx]
 
-proc properties*(cp: int): UnicodeProps {.deprecated.} =
-  ## **Deprecated since version 0.3.0**;
-  ## Use ``properties(Rune)`` instead.
-  properties(cp.Rune)
-
 proc unicodeCategory*(props: UnicodeProps): UnicodeCategory {.inline.} =
   ## Return category for a given `UnicodeProps`
   result = props[upropCat].UnicodeCategory
@@ -213,95 +208,9 @@ proc unicodeCategory*(cp: Rune): UnicodeCategory {.inline.} =
   ## Return category for a given code point
   cp.properties.unicodeCategory
 
-proc categoryMap(s: UnicodeCategory): string =
-  case s
-  of ctgLm:
-    "Lm"
-  of ctgLo:
-    "Lo"
-  of ctgLu:
-    "Lu"
-  of ctgLl:
-    "Ll"
-  of ctgLt:
-    "Lt"
-  of ctgMn:
-    "Mn"
-  of ctgMc:
-    "Mc"
-  of ctgMe:
-    "Me"
-  of ctgNd:
-    "Nd"
-  of ctgNl:
-    "Nl"
-  of ctgNo:
-    "No"
-  of ctgZs:
-    "Zs"
-  of ctgZl:
-    "Zl"
-  of ctgZp:
-    "Zp"
-  of ctgCc:
-    "Cc"
-  of ctgCf:
-    "Cf"
-  of ctgCs:
-    "Cs"
-  of ctgCo:
-    "Co"
-  of ctgCn:
-    "Cn"
-  of ctgPc:
-    "Pc"
-  of ctgPd:
-    "Pd"
-  of ctgPs:
-    "Ps"
-  of ctgPe:
-    "Pe"
-  of ctgPi:
-    "Pi"
-  of ctgPf:
-    "Pf"
-  of ctgPo:
-    "Po"
-  of ctgSm:
-    "Sm"
-  of ctgSc:
-    "Sc"
-  of ctgSk:
-    "Sk"
-  of ctgSo:
-    "So"
-  else:
-    assert false
-    ""
-
-proc category*(props: UnicodeProps): string {.deprecated, inline.} =
-  ## **Deprecated since version 0.4.1**;
-  ## Use ``unicodeCategory(UnicodeProps)`` instead.
-  result = props[upropCat].UnicodeCategory.categoryMap()
-
-proc category*(cp: int): string {.deprecated.} =
-  ## **Deprecated since version 0.3.0**;
-  ## Use ``unicodeCategory(Rune)`` instead.
-  category(properties(cp))
-
-proc category*(cp: Rune): string {.deprecated, inline.} =
-  ## **Deprecated since version 0.4.1**;
-  ## Use ``unicodeCategory(Rune)`` instead.
-  category(properties(cp))
-
 proc bidirectional*(props: UnicodeProps): string {.inline.} =
   ## Return bidirectional class name for a given `UnicodeProps`
   result = bidirectionalNames[props[upropBi]]
-
-proc bidirectional*(cp: int): string {.deprecated.} =
-  ## **Deprecated since version 0.3.0**;
-  ## Use ``bidirectional(Rune)`` instead.
-  bidirectional(properties(cp))
 
 proc bidirectional*(cp: Rune): string {.inline.} =
   ## Return bidirectional class name for a given code point
@@ -312,11 +221,6 @@ proc combining*(props: UnicodeProps): int {.inline.} =
   ## for a given `Props`
   result = props[upropCcc]
 
-proc combining*(cp: int): int {.deprecated.} =
-  ## **Deprecated since version 0.3.0**;
-  ## Use ``bidirectional(Rune)`` instead.
-  combining(properties(cp))
-
 proc combining*(cp: Rune): int {.inline.} =
   ## Return canonical combining class property
   ## for a given code point
@@ -325,11 +229,6 @@ proc combining*(cp: Rune): int {.inline.} =
 proc quickCheck*(props: UnicodeProps): int {.inline.} =
   ## Return quick check property for a given `UnicodeProps`
   result = props[upropQc]
-
-proc quickCheck*(cp: int): int {.deprecated.} =
-  ## **Deprecated since version 0.3.0**;
-  ## Use ``quickCheck(Rune)`` instead.
-  quickCheck(properties(cp))
 
 proc quickCheck*(cp: Rune): int {.inline.} =
   ## Return quick check property
