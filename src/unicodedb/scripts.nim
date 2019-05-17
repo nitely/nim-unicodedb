@@ -154,7 +154,11 @@ export
   sptDuployan,
   sptSignWriting,
   sptMendeKikakui,
-  sptAdlam
+  sptAdlam,
+  sptElymaic,
+  sptNandinagari,
+  sptNyiakengPuachueHmong,
+  sptWancho
 
 proc unicodeScript*(cp: Rune): UnicodeScript {.inline.} =
   ## Return script for a given code point

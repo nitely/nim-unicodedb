@@ -14,7 +14,7 @@ proc write(path: string, s: string) =
     close(f)
 
 proc isAssigned(r: Rune): bool =
-  r.category() != "Cn"
+  r.unicodeCategory() != ctgCn
 
 const maxCP = 0x10FFFF
 
@@ -49,12 +49,12 @@ const bidiTemplate = """const allBidis* = [
 $#]
 """
 
-proc categoryData(): seq[tuple[cpFirst: int, cpLast: int, cat: string]] =
+proc categoryData(): seq[tuple[cpFirst: int, cpLast: int, cat: UnicodeCategory]] =
   result = @[]
-  var lastData = 0.Rune.category()
+  var lastData = 0.Rune.unicodeCategory()
   var lastCP = 0
   for cp in 0 .. maxCP:
-    let data = cp.Rune.category()
+    let data = cp.Rune.unicodeCategory()
     if data != lastData:
       result.add((cpFirst: lastCP, cpLast: cp-1, cat: lastData))
       lastData = data
@@ -193,6 +193,9 @@ proc typesData(): seq[tuple[
 const typesTemplate = """const allTypes* = [
 $#]
 """
+
+proc `$`(uctg: UnicodeCategory): string =
+  $uctg.int
 
 when isMainModule:
   echo "Generating bidirectional data"

@@ -16,7 +16,7 @@
 <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro:400,500,600' rel='stylesheet' type='text/css'/>
 
 <!-- CSS -->
-<title>Module properties</title>
+<title>properties</title>
 <style type="text/css" >
 /*
 Stylesheet for use with Docutils/rst2html.
@@ -1219,7 +1219,7 @@ function main() {
 <body onload="main()">
 <div class="document" id="documentId">
   <div class="container">
-    <h1 class="title">Module properties</h1>
+    <h1 class="title">properties</h1>
     <div class="row">
   <div class="three columns">
   <div id="global-links">
@@ -1416,115 +1416,113 @@ A type holding all common properties for a character. Use <cite>UnicodeProp</cit
 <div class="section" id="12">
 <h1><a class="toc-backref" href="#12">Procs</a></h1>
 <dl class="item">
-<a id="contains%2CUnicodeCategorySet%2CUnicodeCategory"></a>
+<a id="contains,UnicodeCategorySet,UnicodeCategory"></a>
 <dt><pre><span class="Keyword">proc</span> <span class="Identifier">contains</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <a href="properties.html#UnicodeCategorySet"><span class="Identifier">UnicodeCategorySet</span></a><span class="Other">;</span> <span class="Identifier">b</span><span class="Other">:</span> <a href="properties_data.html#UnicodeCategory"><span class="Identifier">UnicodeCategory</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
     <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 Check if the given category is within the categories.<pre class="listing"><span class="Identifier">assert</span> <span class="Identifier">Rune</span><span class="Punctuation">(</span><span class="HexNumber">0x0097</span><span class="Punctuation">)</span><span class="Operator">.</span><span class="Identifier">unicodeCategory</span><span class="Punctuation">(</span><span class="Punctuation">)</span> <span class="Keyword">in</span> <span class="Identifier">ctgL</span></pre>
 
 </dd>
-<a id="%2B%2CUnicodeCategorySet%2CUnicodeCategory"></a>
+<a id="+,UnicodeCategorySet,UnicodeCategory"></a>
 <dt><pre><span class="Keyword">proc</span> <span class="Identifier">`+`</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <a href="properties.html#UnicodeCategorySet"><span class="Identifier">UnicodeCategorySet</span></a><span class="Other">;</span> <span class="Identifier">b</span><span class="Other">:</span> <a href="properties_data.html#UnicodeCategory"><span class="Identifier">UnicodeCategory</span></a><span class="Other">)</span><span class="Other">:</span> <a href="properties.html#UnicodeCategorySet"><span class="Identifier">UnicodeCategorySet</span></a> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span><span class="Other">,</span>
     <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
 
 </dd>
-<a id="%2B%2CUnicodeCategory%2CUnicodeCategorySet"></a>
+<a id="+,UnicodeCategory,UnicodeCategorySet"></a>
 <dt><pre><span class="Keyword">proc</span> <span class="Identifier">`+`</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <a href="properties_data.html#UnicodeCategory"><span class="Identifier">UnicodeCategory</span></a><span class="Other">;</span> <span class="Identifier">b</span><span class="Other">:</span> <a href="properties.html#UnicodeCategorySet"><span class="Identifier">UnicodeCategorySet</span></a><span class="Other">)</span><span class="Other">:</span> <a href="properties.html#UnicodeCategorySet"><span class="Identifier">UnicodeCategorySet</span></a> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span><span class="Other">,</span>
     <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
 
 </dd>
-<a id="%2B%2CUnicodeCategorySet%2CUnicodeCategorySet"></a>
+<a id="+,UnicodeCategorySet,UnicodeCategorySet"></a>
 <dt><pre><span class="Keyword">proc</span> <span class="Identifier">`+`</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <a href="properties.html#UnicodeCategorySet"><span class="Identifier">UnicodeCategorySet</span></a><span class="Other">)</span><span class="Other">:</span> <a href="properties.html#UnicodeCategorySet"><span class="Identifier">UnicodeCategorySet</span></a> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
 
 </dd>
-<a id="%2B%2CUnicodeCategory%2CUnicodeCategory"></a>
+<a id="+,UnicodeCategory,UnicodeCategory"></a>
 <dt><pre><span class="Keyword">proc</span> <span class="Identifier">`+`</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <a href="properties_data.html#UnicodeCategory"><span class="Identifier">UnicodeCategory</span></a><span class="Other">)</span><span class="Other">:</span> <a href="properties.html#UnicodeCategorySet"><span class="Identifier">UnicodeCategorySet</span></a> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
 
 </dd>
-<a id="%3D%3D%2CUnicodeCategory%2CUnicodeCategory"></a>
+<a id="==,UnicodeCategory,UnicodeCategory"></a>
 <dt><pre><span class="Keyword">proc</span> <span class="Identifier">`==`</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <a href="properties_data.html#UnicodeCategory"><span class="Identifier">UnicodeCategory</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
-<p>Raises <tt class="docutils literal"><span class="pre">AssertionError</span></tt> with <cite>msg</cite> if <cite>cond</cite> is false. Note that <tt class="docutils literal"><span class="pre">AssertionError</span></tt> is hidden from the effect system, so it doesn't produce <tt class="docutils literal"><span class="pre">{.raises: [AssertionError].}</span></tt>. This exception is only supposed to be caught by unit testing frameworks.</p>
-<p>The compiler may not generate any code at all for <tt class="docutils literal"><span class="pre">assert</span></tt> if it is advised to do so through the <tt class="docutils literal"><span class="pre">-d:release</span></tt> or <tt class="docutils literal"><span class="pre">--assertions:off</span></tt> <a class="reference external" href="nimc.html#command-line-switches">command line switches</a>.</p>
 
 
 </dd>
-<a id="categorySetMap%2Cstring"></a>
+<a id="categorySetMap,string"></a>
 <dt><pre><span class="Keyword">proc</span> <span class="Identifier">categorySetMap</span><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">)</span><span class="Other">:</span> <a href="properties.html#UnicodeCategorySet"><span class="Identifier">UnicodeCategorySet</span></a> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 Map category string to <tt class="docutils literal"><span class="pre">UnicodeCategorySet</span></tt>. Raise <tt class="docutils literal"><span class="pre">ValueError</span></tt> if there's no match
 
 </dd>
-<a id="categoryMap%2Cstring"></a>
+<a id="categoryMap,string"></a>
 <dt><pre><span class="Keyword">proc</span> <span class="Identifier">categoryMap</span><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">)</span><span class="Other">:</span> <a href="properties_data.html#UnicodeCategory"><span class="Identifier">UnicodeCategory</span></a> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">ValueError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 Map category string to <tt class="docutils literal"><span class="pre">UnicodeCategory</span></tt>. Raise <tt class="docutils literal"><span class="pre">ValueError</span></tt> if there's no match
 
 </dd>
-<a id="properties%2CRune"></a>
+<a id="properties,Rune"></a>
 <dt><pre><span class="Keyword">proc</span> <span class="Identifier">properties</span><span class="Other">(</span><span class="Identifier">cp</span><span class="Other">:</span> <span class="Identifier">Rune</span><span class="Other">)</span><span class="Other">:</span> <a href="properties.html#UnicodeProps"><span class="Identifier">UnicodeProps</span></a> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 Return properties for a given code point. Includes: Category, Canonical Combining Class, Bidi Class and QC. This may be used as an optimization when more than one property is required. This contains raw data for some of the properties, so one of the auxiliary procedures must be used in conjuntion.
 
 </dd>
-<a id="unicodeCategory%2CUnicodeProps"></a>
+<a id="unicodeCategory,UnicodeProps"></a>
 <dt><pre><span class="Keyword">proc</span> <span class="Identifier">unicodeCategory</span><span class="Other">(</span><span class="Identifier">props</span><span class="Other">:</span> <a href="properties.html#UnicodeProps"><span class="Identifier">UnicodeProps</span></a><span class="Other">)</span><span class="Other">:</span> <a href="properties_data.html#UnicodeCategory"><span class="Identifier">UnicodeCategory</span></a> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
     <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 Return category for a given <cite>UnicodeProps</cite>
 
 </dd>
-<a id="unicodeCategory%2CRune"></a>
+<a id="unicodeCategory,Rune"></a>
 <dt><pre><span class="Keyword">proc</span> <span class="Identifier">unicodeCategory</span><span class="Other">(</span><span class="Identifier">cp</span><span class="Other">:</span> <span class="Identifier">Rune</span><span class="Other">)</span><span class="Other">:</span> <a href="properties_data.html#UnicodeCategory"><span class="Identifier">UnicodeCategory</span></a> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 Return category for a given code point
 
 </dd>
-<a id="bidirectional%2CUnicodeProps"></a>
+<a id="bidirectional,UnicodeProps"></a>
 <dt><pre><span class="Keyword">proc</span> <span class="Identifier">bidirectional</span><span class="Other">(</span><span class="Identifier">props</span><span class="Other">:</span> <a href="properties.html#UnicodeProps"><span class="Identifier">UnicodeProps</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 Return bidirectional class name for a given <cite>UnicodeProps</cite>
 
 </dd>
-<a id="bidirectional%2CRune"></a>
+<a id="bidirectional,Rune"></a>
 <dt><pre><span class="Keyword">proc</span> <span class="Identifier">bidirectional</span><span class="Other">(</span><span class="Identifier">cp</span><span class="Other">:</span> <span class="Identifier">Rune</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 Return bidirectional class name for a given code point
 
 </dd>
-<a id="combining%2CUnicodeProps"></a>
+<a id="combining,UnicodeProps"></a>
 <dt><pre><span class="Keyword">proc</span> <span class="Identifier">combining</span><span class="Other">(</span><span class="Identifier">props</span><span class="Other">:</span> <a href="properties.html#UnicodeProps"><span class="Identifier">UnicodeProps</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 Return canonical combining class property for a given <cite>Props</cite>
 
 </dd>
-<a id="combining%2CRune"></a>
+<a id="combining,Rune"></a>
 <dt><pre><span class="Keyword">proc</span> <span class="Identifier">combining</span><span class="Other">(</span><span class="Identifier">cp</span><span class="Other">:</span> <span class="Identifier">Rune</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 Return canonical combining class property for a given code point
 
 </dd>
-<a id="quickCheck%2CUnicodeProps"></a>
+<a id="quickCheck,UnicodeProps"></a>
 <dt><pre><span class="Keyword">proc</span> <span class="Identifier">quickCheck</span><span class="Other">(</span><span class="Identifier">props</span><span class="Other">:</span> <a href="properties.html#UnicodeProps"><span class="Identifier">UnicodeProps</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 Return quick check property for a given <cite>UnicodeProps</cite>
 
 </dd>
-<a id="quickCheck%2CRune"></a>
+<a id="quickCheck,Rune"></a>
 <dt><pre><span class="Keyword">proc</span> <span class="Identifier">quickCheck</span><span class="Other">(</span><span class="Identifier">cp</span><span class="Other">:</span> <span class="Identifier">Rune</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 Return quick check property
 
 </dd>
-<a id="contains%2Cint%2CNfMask"></a>
+<a id="contains,int,NfMask"></a>
 <dt><pre><span class="Keyword">proc</span> <span class="Identifier">contains</span><span class="Other">(</span><span class="Identifier">qc</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">;</span> <span class="Identifier">m</span><span class="Other">:</span> <a href="properties_data.html#NfMask"><span class="Identifier">NfMask</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 Check if the given NF mask is within the quick-check values.<pre class="listing"><span class="Identifier">assert</span> <span class="Identifier">nfcQcNo</span> <span class="Keyword">in</span> <span class="Identifier">Rune</span><span class="Punctuation">(</span><span class="HexNumber">0x0374</span><span class="Punctuation">)</span><span class="Operator">.</span><span class="Identifier">quickCheck</span><span class="Punctuation">(</span><span class="Punctuation">)</span></pre>
@@ -1540,7 +1538,7 @@ Check if the given NF mask is within the quick-check values.<pre class="listing"
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small>Made with Nim. Generated: 2018-10-08 01:16:05 UTC</small>
+        <small>Made with Nim. Generated: 2019-05-17 19:13:00 UTC</small>
       </div>
     </div>
   </div>
