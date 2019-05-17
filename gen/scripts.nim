@@ -659,6 +659,10 @@ const
   sptSignWriting* = $#.UnicodeScript
   sptMendeKikakui* = $#.UnicodeScript
   sptAdlam* = $#.UnicodeScript
+  sptElymaic* = $#.UnicodeScript
+  sptNandinagari* = $#.UnicodeScript
+  sptNyiakengPuachueHmong* = $#.UnicodeScript
+  sptWancho* = $#.UnicodeScript
 
 const
   typesIndices* = [
@@ -830,6 +834,10 @@ when isMainModule:
       $sptSignWriting,
       $sptMende_Kikakui,
       $sptAdlam,
+      $sptElymaic,
+      $sptNandinagari,
+      $sptNyiakengPuachueHmong,
+      $sptWancho,
       prettyTable(stages.stage1, 15, "'i16"),
       prettyTable(stages.stage2, 15, "'u8"),
       $stages.blockSize])

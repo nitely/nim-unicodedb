@@ -153,6 +153,10 @@ const
   sptSignWriting* = 146.UnicodeScript
   sptMendeKikakui* = 147.UnicodeScript
   sptAdlam* = 148.UnicodeScript
+  sptElymaic* = 149.UnicodeScript
+  sptNandinagari* = 150.UnicodeScript
+  sptNyiakengPuachueHmong* = 151.UnicodeScript
+  sptWancho* = 152.UnicodeScript
 
 const
   typesIndices* = [
