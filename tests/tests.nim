@@ -48,15 +48,21 @@ test "Test non-decompositions":
   var decomposableCps = newSeq[bool](maxCP)
   for decomp in allDecomps:
     decomposableCps[decomp.cp] = true
+  var i = 0
   for cp, isDecomposable in decomposableCps:
-    if not isDecomposable:
-      check decomposition(cp.Rune).len == 0
+    if not isDecomposable and decomposition(cp.Rune).len > 0:
+      #echo cp.Rune.int
+      inc i
+  check i == 2  # new decomposite CPs
 
 test "Test some decompositions":
   check decomposition(0x0F9D.Rune) == @[0x0F9C.Rune, 0x0FB7.Rune]
   check decomposition(190.Rune) == @[51.Rune, 8260.Rune, 52.Rune]
   check decomposition(192.Rune) == @[65.Rune, 768.Rune]
   check decomposition(123.Rune).len == 0
+  # unicode 12
+  check decomposition(0x32FF.Rune) == @[0x4EE4.Rune, 0x548C.Rune]
+  check decomposition(0x1F16C.Rune) == @[0x004D.Rune, 0x0052.Rune]
 
 test "Test canonical decompositions":
   for decomp in allDecomps:
@@ -83,17 +89,24 @@ test "Test categories":
   for cpData in allCats:
     for cp in cpData.cpFirst .. cpData.cpLast:
       # Skip unassigned since test data has previous UCD version
-      if unicodeCategory(cp.Rune) != cpData.cat.categoryMap and cpData.cat == "Cn":
+      if (unicodeCategory(cp.Rune) != cpData.cat.UnicodeCategory and
+          cpData.cat.UnicodeCategory == ctgCn):
         inc i
         continue
-      if cp >= 4304 and cp <= 4351:
-        # the 46 georgia letters changed in unicode 11
+      if cp == 5741:
+        check unicodeCategory(cp.Rune) == ctgSo
         continue
-      if cp == 70089 or cp == 72199 or cp == 72200:
+      if cp == 7410 or cp == 7411:
+        check unicodeCategory(cp.Rune) == ctgLo
+        continue
+      if cp == 43453:
         check unicodeCategory(cp.Rune) == ctgMn
         continue
-      check unicodeCategory(cp.Rune) == cpData.cat.categoryMap
-  check i == 684  # New code points
+      if (unicodeCategory(cp.Rune) != cpData.cat.UnicodeCategory):
+        echo $cp
+        echo $unicodeCategory(cp.Rune).int
+      check unicodeCategory(cp.Rune) == cpData.cat.UnicodeCategory
+  check i == 555  # New code points
 
 test "Test categories with props":
   check unicodeCategory(properties(7913.Rune)) == ctgLl
@@ -110,15 +123,22 @@ test "Test some categories":
   check unicodeCategory(70089.Rune) == ctgMn
   check unicodeCategory(72199.Rune) == ctgMn
   check unicodeCategory(72200.Rune) == ctgMn
+  # New in unicode 12
+  check unicodeCategory(0x166D.Rune) == ctgSo
+  check unicodeCategory(0x1CF2.Rune) == ctgLo
+  check unicodeCategory(0xA9BD.Rune) == ctgMn
 
 test "Test bidirectional class":
   for cpData in allBidis:
     for cp in cpData.cpFirst .. cpData.cpLast:
       if bidirectional(cp.Rune) != cpData.bi and not cpData.assigned:
         continue
-      if cp == 0x111c9:  # unicode 11
+      if cp == 0xA9BD:  # unicode 12
         check bidirectional(cp.Rune) == "NSM"
         continue
+      if (bidirectional(cp.Rune) != cpData.bi):
+        echo $cp
+        echo bidirectional(cp.Rune)
       check bidirectional(cp.Rune) == cpData.bi
 
 test "Test some bidirectional class":
@@ -141,7 +161,7 @@ test "Test canonical combining class":
         check combining(cp.Rune) == cpData.ccc
       elif combining(cp.Rune) != cpData.ccc:
         inc i
-  check i == 23
+  check i == 13
 
 test "Test some canonical combining class":
   check combining(0x860.Rune) == 0
@@ -151,6 +171,10 @@ test "Test some canonical combining class":
   check combining(0x0BC8.Rune) == 0  # non-assigned
   check combining(64110.Rune) == 0  # non-assigned
   check combining(1114110.Rune) == 0  # non-assigned
+  # unicode 12
+  check combining(0xEBA.Rune) == 9
+  check combining(0x1E2EC.Rune) == 230
+  check combining(0x1E2EF.Rune) == 230
 
 test "Test some quick check":
   check nfcQcNo in quickCheck(0x0374.Rune)
@@ -256,13 +280,13 @@ test "Test types":
       check(utmDecimal in unicodeTypes(cp.Rune) == cpData.de)
       check(utmDigit in unicodeTypes(cp.Rune) == cpData.di)
       check(utmNumeric in unicodeTypes(cp.Rune) == cpData.nu)
-      if cp >= 4304 and cp <= 4351:
+      #if cp >= 4304 and cp <= 4351:
         # the 46 georgia letters changed in unicode 11
-        discard
-      else:
-        check(utmLowercase in unicodeTypes(cp.Rune) == cpData.lo)
+      #  discard
+      #else:
+      check(utmLowercase in unicodeTypes(cp.Rune) == cpData.lo)
       check(utmUppercase in unicodeTypes(cp.Rune) == cpData.up)
-  check i == 684  # new codepoints
+  check i == 555  # new codepoints
 
 test "Test some types":
   check utmDecimal in unicodeTypes(Rune(0x0030))

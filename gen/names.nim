@@ -35,7 +35,7 @@ proc isInPrefixRange(cp: int): bool =
 proc parseNames(namesRaw: seq[string]): seq[string] =
   result = newSeq[string](namesRaw.len)
   for cp, nr in namesRaw:
-    if isNil(nr):
+    if nr.len == 0:
       continue
     # These can be auto generated,
     # so we don't store them
@@ -95,13 +95,13 @@ proc buildWords(names: seq[string]): seq[string] =
   result = @[]
   var wordsLookup = newStringTable(modeCaseSensitive)
   for cp, name in names:
-    if isNil(name):
+    if name.len == 0:
       continue
     for word in name.split(' '):
       if wordsLookup.hasKey(word):
         continue
       result.add(word)
-      wordsLookup[word] = nil
+      wordsLookup[word] = ""
 
 type
   WordsTable = ref object
@@ -138,7 +138,7 @@ proc buildNamesTable(names: seq[string], words: seq[string]): NamesTable =
   ## -> [lenA, wordAIdx, wordBIdx, lenB...]
   var maxNamesSize = 0
   for name in names:
-    if name.isNil:
+    if name.len == 0:
       continue
     for word in name.split(' '):
       inc maxNamesSize
@@ -159,11 +159,11 @@ proc buildNamesTable(names: seq[string], words: seq[string]): NamesTable =
   var offset = 0
   var dedupsCount = 0
   for cp, name in names:
-    if isNil(name):
+    if name.len == 0:
       continue
     # De-duplicate name
-    let nl = nameLookup.getOrDefault(name, nil)
-    if not isNil(nl):
+    let nl = nameLookup.getOrDefault(name, "")
+    if nl.len > 0:
       inc dedupsCount
       result.offsets[cp] = result.offsets[parseInt(nl)]
       continue
@@ -181,7 +181,7 @@ proc buildNameLookup(namesRaw: seq[string]): seq[Record[int]] =
   ## Return lookup tables for retrieving a CP from a name
   result = newSeqOfCap[Record[int]](namesRaw.len)
   for cp, nr in namesRaw:
-    if isNil(nr):
+    if nr.len == 0:
       continue
     var rd = (
       key: newSeq[int](nr.len),

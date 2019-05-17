@@ -120,7 +120,7 @@ proc parseProps(propsRaw: seq[seq[string]]): seq[seq[int]] =
     result[i] = @["Cn".categoryMap(), 0]
 
   for cp, props in pairs(propsRaw):
-    if isNil(props):
+    if props.len == 0:
       continue
     result[cp][Props.CAT.ord] = props[0].categoryMap()
     result[cp][Props.CCC.ord] = parseInt(props[1])
@@ -163,7 +163,7 @@ proc parseQC(qcsRaw: seq[seq[string]]): seq[int] =
   result = newSeq[int](qcsRaw.len)
   result.fill(0)
   for cp, qcTVs in qcsRaw:
-    if isNil(qcTVs):
+    if qcTVs.len == 0:
       continue
     for qcTV in qcTVs:
       result[cp] = result[cp] or qcTV.nfMap()
@@ -319,7 +319,7 @@ when isMainModule:
       $ctgSk,
       $ctgSo,
       join(bidirectionalNamesGen, ",\n    "),
-      prettyTable(stages.stage1, 15, "'u8"),
+      prettyTable(stages.stage1, 15, "'i16"),
       prettyTable(stages.stage2, 15, "'u8"),
       join(propsGen, ",\n    "),
       intToStr(stages.blockSize)])

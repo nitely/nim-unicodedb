@@ -155,7 +155,10 @@ const
   sptSignWriting = 146
   sptMende_Kikakui = 147
   sptAdlam = 148
-
+  sptElymaic = 149
+  sptNandinagari = 150
+  sptNyiakengPuachueHmong = 151
+  sptWancho = 152
 
 proc scriptMap(s: string): int =
   case s
@@ -455,6 +458,14 @@ proc scriptMap(s: string): int =
     sptMendeKikakui
   of "Adlam":
     sptAdlam
+  of "Elymaic":
+    sptElymaic
+  of "Nandinagari":
+    sptNandinagari
+  of "Nyiakeng_Puachue_Hmong":
+    sptNyiakengPuachueHmong
+  of "Wancho":
+    sptWancho
   else:
     assert false
     -1
@@ -464,7 +475,7 @@ proc parseScripts(propsRaw: seq[seq[string]]): seq[int] =
   result.fill(0)
   #var s = newSeq[string]()
   for cp, props in propsRaw:
-    if props.isNil:
+    if props.len == 0:
       continue
     #if props[0] notin s:
     #  s.add(props[0])

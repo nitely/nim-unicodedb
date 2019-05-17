@@ -27,20 +27,16 @@ proc parseUDD*(filePath: string): seq[seq[seq[string]]] =
         first = parseHexInt("0x$#" % cpRange[0])
         last = parseHexInt("0x$#" % cpRange[1])
       for cp in first .. last:
-        if result[cp].isNil:
-          result[cp] = @[]
         result[cp].add(props)
       continue
     let cp = parseHexInt("0x$#" % cpRaw)
-    if result[cp].isNil:
-      result[cp] = @[]
     result[cp].add(props)
 
 proc parseUDDNoDups*(filePath: string): seq[seq[string]] =
   ## Same as parseUDD but won't allow duplicates
   result = newSeq[seq[string]](maxCP + 1)
   for cp, props in filePath.parseUDD():
-    if props.isNil:
+    if props.len == 0:
       continue
     doAssert props.len == 1
     result[cp] = props[0]
@@ -49,14 +45,14 @@ proc parseDBC*(filePath: string): seq[string] =
   result = newSeq[string](maxCP + 1)
   result.fill("L")
   for cp, props in filePath.parseUDDNoDups():
-    if props.isNil:
+    if props.len == 0:
       continue
     result[cp] = props[0]
 
 proc parseDNPQC*(filePath: string): seq[seq[string]] =
   result = newSeq[seq[string]](maxCP + 1)
   for cp, props in filePath.parseUDD():
-    if props.isNil:
+    if props.len == 0:
       continue
     for p in props:
       if p.len < 2:
@@ -67,14 +63,12 @@ proc parseDNPQC*(filePath: string): seq[seq[string]] =
           "NFD_QC",
           "NFKD_QC"]:
         continue
-      if result[cp].isNil:
-        result[cp] = newSeqOfCap[string](8)
       result[cp].add("$#_$#" % [p[0], p[1]])
 
 proc parseDNPExclusion*(filePath: string): seq[int] =
   result = newSeqOfCap[int](maxCP + 1)
   for cp, props in filePath.parseUDD():
-    if props.isNil:
+    if props.len == 0:
       continue
     for p in props:
       if p[0] != "Full_Composition_Exclusion":

@@ -11,12 +11,12 @@ proc parseComps(
     ): seq[Record[seq[int]]] =
   var maxCompSize = 0
   for dcp in decompsRaw:
-    if not isNil(dcp):
+    if dcp.len > 0:
       inc maxCompSize
 
   result = newSeqOfCap[Record[seq[int]]](maxCompSize)
   for cp, dcp in pairs(decompsRaw):
-    if isNil(dcp):
+    if dcp.len == 0:
       continue
     if cp in exclude:
       continue

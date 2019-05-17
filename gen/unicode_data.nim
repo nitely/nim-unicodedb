@@ -34,19 +34,19 @@ proc parseUD*(filePath: string): seq[seq[string]] =
 proc parseUDNames*(filePath: string): seq[string] =
   result = newSeq[string](maxCP + 1)
   for cp, record in pairs(parseUD(filePath)):
-    if not isNil(record):
+    if record.len > 0:
       result[cp] = record[0]
 
 proc parseUDProps*(filePath: string): seq[seq[string]] =
   result = newSeq[seq[string]](maxCP + 1)
   for cp, record in pairs(parseUD(filePath)):
-    if not isNil(record):
+    if record.len > 0:
       result[cp] = @[record[1], record[2], record[3]]
 
 proc parseUDDecomps*(filePath: string): seq[string] =
   result = newSeq[string](maxCP + 1)
   for cp, record in pairs(parseUD(filePath)):
-    if isNil(record):
+    if record.len == 0:
       continue
     if len(record[4]) == 0:
       continue

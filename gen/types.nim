@@ -33,7 +33,7 @@ proc parseNumericType(numsRaw: seq[seq[string]]): seq[int] =
   result = newSeq[int](numsRaw.len)
   result.fill(0)
   for cp, props in numsRaw:
-    if props.isNil:
+    if props.len == 0:
       continue
     result[cp] = result[cp] or props[0].numTypeMap()
 
@@ -55,7 +55,7 @@ proc parseCoreProps(propsRaw: seq[seq[seq[string]]]): seq[int] =
   result = newSeq[int](propsRaw.len)
   result.fill(0)
   for cp, props in propsRaw:
-    if props.isNil:
+    if props.len == 0:
       continue
     for p in props:
       result[cp] = result[cp] or p[0].coreTypeMap()
@@ -74,7 +74,7 @@ proc parsePropList(propsRaw: seq[seq[seq[string]]]): seq[int] =
   result = newSeq[int](propsRaw.len)
   result.fill(0)
   for cp, props in propsRaw:
-    if props.isNil:
+    if props.len == 0:
       continue
     for p in props:
       result[cp] = result[cp] or p[0].propListTypeMap()
@@ -97,7 +97,7 @@ proc parseUnicodeDataProps(propsRaw: seq[seq[string]]): seq[int] =
   result = newSeq[int](propsRaw.len)
   result.fill(0)
   for cp, props in propsRaw:
-    if props.isNil:
+    if props.len == 0:
       continue
     result[cp] = result[cp] or props[0].udCatTypeMap()
 

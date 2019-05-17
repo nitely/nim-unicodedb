@@ -12,7 +12,7 @@ type
 proc parseDecomps(decompsRaw: seq[string]): seq[Decomposition] =
   result = newSeq[Decomposition](len(decompsRaw))
   for cp, decomp in pairs(decompsRaw):
-    if isNil(decomp):
+    if decomp.len == 0:
       continue
     result[cp].isCanonical = true
     result[cp].cps = newSeqOfCap[int](18)
@@ -34,7 +34,7 @@ type
 proc buildDecompTable(decomps: seq[Decomposition]): DecompTable =
   var decompsSize = 0
   for dcp in decomps:
-    if not isNil(dcp.cps):
+    if dcp.cps.len > 0:
       decompsSize += len(dcp.cps) + 1  # + len
 
   result = (
@@ -45,7 +45,7 @@ proc buildDecompTable(decomps: seq[Decomposition]): DecompTable =
 
   var offset = 0
   for cp, dcp in pairs(decomps):
-    if isNil(dcp.cps):
+    if dcp.cps.len == 0:
       continue
     assert len(dcp.cps) > 0
     # Use length >> 1 to retrieve original length
