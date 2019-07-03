@@ -1,3 +1,8 @@
+v0.7.1
+==================
+
+* Make `Types` work at CT (@timotheecour) PR #7
+
 v0.7.0
 ==================
 

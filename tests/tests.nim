@@ -339,6 +339,13 @@ test "Test some types":
     check typ in 0x0041.Rune.unicodeTypes
     check typ in 0x1E69.Rune.unicodeTypes
 
+test "Test some types at CT":
+  static:
+    doAssert utmDecimal in unicodeTypes(Rune(0x0030))
+    doAssert utmDecimal in unicodeTypes(Rune(0x0039))
+    doAssert utmDecimal in unicodeTypes(Rune(0x1E959))
+    doAssert utmDecimal notin unicodeTypes(Rune(0x2CFD))
+
 test "Test WhiteSpace":
   let expected = {
     0x0009 .. 0x000D, 0x0020, 0x0085, 0x00A0,
