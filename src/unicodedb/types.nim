@@ -35,7 +35,7 @@ proc unicodeTypes*(cp: Rune): int {.inline.} =
     const t1 = typesIndices[N2 ..< 2*N2]
     const t2 = typesIndices[2*N2 ..< N]
 
-    proc getTypeIndex(sub: static int, ind: int): auto =
+    proc getTypeIndex(sub: static[int], ind: int): auto =
       when sub == 0: return t0[ind]
       elif sub == 1: return t1[ind]
       else: return t2[ind]
