@@ -1,3 +1,8 @@
+v0.7.2
+==================
+
+* Make `properties` module work at CT
+
 v0.7.1
 ==================
 

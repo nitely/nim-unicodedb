@@ -128,6 +128,20 @@ test "Test some categories":
   check unicodeCategory(0x1CF2.Rune) == ctgLo
   check unicodeCategory(0xA9BD.Rune) == ctgMn
 
+test "Test some categories at CT":
+  static:
+    doAssert unicodeCategory(64110.Rune) == ctgCn
+    doAssert unicodeCategory(7913.Rune) == ctgLl
+    doAssert unicodeCategory(0.Rune) == ctgCc
+    doAssert unicodeCategory(1048576.Rune) == ctgCo
+    doAssert unicodeCategory(0x860.Rune) == ctgLo
+    doAssert unicodeCategory(70089.Rune) == ctgMn
+    doAssert unicodeCategory(72199.Rune) == ctgMn
+    doAssert unicodeCategory(72200.Rune) == ctgMn
+    doAssert unicodeCategory(0x166D.Rune) == ctgSo
+    doAssert unicodeCategory(0x1CF2.Rune) == ctgLo
+    doAssert unicodeCategory(0xA9BD.Rune) == ctgMn
+
 test "Test bidirectional class":
   for cpData in allBidis:
     for cp in cpData.cpFirst .. cpData.cpLast:

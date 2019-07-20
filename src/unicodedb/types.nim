@@ -51,7 +51,6 @@ proc unicodeTypes*(cp: Rune): int {.inline.} =
       of 2: idx = getTypeIndex(2, j)
       else: assert false
       result = typesData[idx]
-
   else:
     block:
       let blockOffset = (typesOffsets[cp.int div blockSize]).int * blockSize
