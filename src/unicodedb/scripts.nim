@@ -160,9 +160,19 @@ export
   sptNyiakengPuachueHmong,
   sptWancho
 
+proc genAsciiScripts(): array[128, UnicodeScript] =
+  assert blockSize >= 127
+  const t = typesData[0 .. 127]  # VM workaround
+  for i in 0 .. result.len-1:
+    result[i] = t[i].UnicodeScript
+
+const asciiScripts = genAsciiScripts()
+
 proc unicodeScript*(cp: Rune): UnicodeScript {.inline.} =
   ## Return script for a given code point
   assert cp.int <= 0x10FFFF
+  if cp.int <= 127:  # ascii perf
+    return asciiScripts[cp.int]
   let blockOffset = (typesIndices[cp.int div blockSize]).int * blockSize
   result = typesData[blockOffset + cp.int mod blockSize].UnicodeScript
 

@@ -56,12 +56,14 @@ proc contains*(a: UnicodeCategorySet, b: UnicodeCategory): bool {.inline.} =
 template ucPlusImpl(a, b): UnicodeCategorySet =
   UnicodeCategorySet(int32(a) or int32(b))
 proc `+`*(
-    a: UnicodeCategorySet,
-    b: UnicodeCategory): UnicodeCategorySet {.inline.} =
+  a: UnicodeCategorySet,
+  b: UnicodeCategory
+): UnicodeCategorySet {.inline.} =
   ucPlusImpl(a, b)
 proc `+`*(
-    a: UnicodeCategory,
-    b: UnicodeCategorySet): UnicodeCategorySet {.inline.} =
+  a: UnicodeCategory,
+  b: UnicodeCategorySet
+): UnicodeCategorySet {.inline.} =
   ucPlusImpl(a, b)
 proc `+`*(a, b: UnicodeCategorySet): UnicodeCategorySet {.inline.} =
   ucPlusImpl(a, b)
@@ -85,7 +87,7 @@ const
 proc categorySetMap*(s: string): UnicodeCategorySet =
   ## Map category string to ``UnicodeCategorySet``.
   ## Raise ``ValueError`` if there's no match
-  # todo: result = .. is needed in Nim 0.18 to work at compile time
+  # XXX: result = .. is needed in Nim 0.18 to work at compile time
   case s
   of "L":
     result = ctgL
@@ -107,7 +109,7 @@ proc categorySetMap*(s: string): UnicodeCategorySet =
 proc categoryMap*(s: string): UnicodeCategory =
   ## Map category string to ``UnicodeCategory``.
   ## Raise ``ValueError`` if there's no match
-  # todo: result = .. is needed in Nim 0.18 to work at compile time
+  # XXX: result = .. is needed in Nim 0.18 to work at compile time
   case s
   of "Lm":
     result = ctgLm
@@ -187,6 +189,14 @@ type
     ## Use `UnicodeProp` to get one of them.
     ## It contains raw data for some of them.
 
+proc genAsciiProps(): array[128, UnicodeProps] =
+  assert blockSize >= 127
+  const t0 = propsIndices[0 .. 127]  # VM workaround
+  for i in 0 .. result.len-1:
+    result[i] = propsData[t0[i]]
+
+const asciiProps = genAsciiProps()
+
 proc properties*(cp: Rune): UnicodeProps =
   ## Return properties for a given code point.
   ## Includes: Category, Canonical Combining Class,
@@ -195,6 +205,9 @@ proc properties*(cp: Rune): UnicodeProps =
   ## raw data for some of the properties, so one of
   ## the auxiliary procedures must be used in conjuntion.
   assert cp.int <= 0x10FFFF
+  if cp.int <= 127:  # ascii perf
+    return asciiProps[cp.int]
+
   when nimvm:
     const N = propsIndices.len
     const N2 = N div 4

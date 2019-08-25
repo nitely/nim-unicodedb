@@ -17,10 +17,21 @@ export
   utmWhiteSpace,
   utmWord
 
+proc genAsciiTypes(): array[128, int16] =
+  assert blockSize >= 127
+  const t = typesIndices[0 .. 127]  # VM workaround
+  for i in 0 .. result.len-1:
+    result[i] = typesData[t[i]]
+
+const asciiTypes = genAsciiTypes()
+
 proc unicodeTypes*(cp: Rune): int {.inline.} =
   ## Return types for a given code point.
   ## Use `contains` to retrieve a single type
   assert cp.int <= 0x10FFFF
+  if cp.int <= 127:  # ascii perf
+    return asciiTypes[cp.int]
+
   when nimvm:
     #[
     ugly workaround for https://github.com/nitely/nim-regex/issues/4
