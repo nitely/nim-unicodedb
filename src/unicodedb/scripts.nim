@@ -160,7 +160,7 @@ export
   sptNyiakengPuachueHmong,
   sptWancho
 
-proc unicodeScript*(cp: Rune): UnicodeScript {.inline.} =
+proc unicodeScript*(cp: Rune): UnicodeScript =
   ## Return script for a given code point
   assert cp.int <= 0x10FFFF
   let blockOffset = (typesIndices[cp.int div blockSize]).int * blockSize

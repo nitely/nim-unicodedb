@@ -11,14 +11,15 @@ iterator decomposition*(cp: Rune): Rune {.inline, raises: [].} =
   ## rune. Returns at most 18 runes.
   ## This is not a full decomposition.
   assert cp.int <= 0x10FFFF
-  let
-    blockOffset = (decompsOffsets[cp.int div blockSize]).int * blockSize
-    idx = (decompsIndices[blockOffset + cp.int mod blockSize]).int
-  if idx != -1:
-    let length = decompsData[idx] shr 1
-    assert length <= 18
-    for i in idx+1 .. idx+length:
-      yield decompsData[i].Rune
+  if cp.int > 127:
+    let
+      blockOffset = (decompsOffsets[cp.int div blockSize]).int * blockSize
+      idx = (decompsIndices[blockOffset + cp.int mod blockSize]).int
+    if idx != -1:
+      let length = decompsData[idx] shr 1
+      assert length <= 18
+      for i in idx+1 .. idx+length:
+        yield decompsData[i].Rune
 
 proc decomposition*(cp: Rune): seq[Rune] {.raises: [].} =
   ## Return a sequence of the
@@ -34,18 +35,19 @@ iterator canonicalDecomposition*(cp: Rune): Rune {.inline, raises: [].} =
   ## rune. Returns at most 2 runes.
   ## This is not a full decomposition.
   assert cp.int <= 0x10FFFF
-  let
-    blockOffset = (decompsOffsets[cp.int div blockSize]).int * blockSize
-    idx = (decompsIndices[blockOffset + cp.int mod blockSize]).int
-  if idx != -1:
+  if cp.int > 127:
     let
-      extra = decompsData[idx]
-      isCanonical = (extra and 0x01) == 1
-    if isCanonical:
-      let length = extra shr 1
-      assert length <= 2
-      for i in idx+1 .. idx+length:
-        yield decompsData[i].Rune
+      blockOffset = (decompsOffsets[cp.int div blockSize]).int * blockSize
+      idx = (decompsIndices[blockOffset + cp.int mod blockSize]).int
+    if idx != -1:
+      let
+        extra = decompsData[idx]
+        isCanonical = (extra and 0x01) == 1
+      if isCanonical:
+        let length = extra shr 1
+        assert length <= 2
+        for i in idx+1 .. idx+length:
+          yield decompsData[i].Rune
 
 proc canonicalDecomposition*(cp: Rune): seq[Rune] {.raises: [].} =
   ## Return a sequence of the canonical

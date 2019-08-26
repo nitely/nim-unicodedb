@@ -7,7 +7,7 @@ import widths_data
 
 export UnicodeWidth
 
-proc widthMap(w: int): UnicodeWidth =
+proc widthMap(w: int): UnicodeWidth {.inline.} =
   case w:
   of uwdtAmbiguous.ord:
     uwdtAmbiguous
