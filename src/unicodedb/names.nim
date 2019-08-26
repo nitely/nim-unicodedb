@@ -86,7 +86,7 @@ proc getNameInPrefixRange(cp: Rune): string {.inline, raises: [].} =
       result.add(formatHex(cp.int))
       break
 
-proc name*(cp: Rune): string {.inline, raises: [].} =
+proc name*(cp: Rune): string {.raises: [].} =
   ## Return the name for a given rune.
   ## An empty string is returned if the
   ## rune does not has a name

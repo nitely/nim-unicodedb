@@ -232,7 +232,7 @@ proc unicodeCategory*(props: UnicodeProps): UnicodeCategory {.inline.} =
   ## Return category for a given `UnicodeProps`
   result = props[upropCat].UnicodeCategory
 
-proc unicodeCategory*(cp: Rune): UnicodeCategory {.inline.} =
+proc unicodeCategory*(cp: Rune): UnicodeCategory =
   ## Return category for a given code point
   cp.properties.unicodeCategory
 
@@ -240,29 +240,29 @@ proc bidirectional*(props: UnicodeProps): string {.inline.} =
   ## Return bidirectional class name for a given `UnicodeProps`
   result = bidirectionalNames[props[upropBi]]
 
-proc bidirectional*(cp: Rune): string {.inline.} =
+proc bidirectional*(cp: Rune): string =
   ## Return bidirectional class name for a given code point
-  bidirectional(properties(cp))
+  cp.properties.bidirectional
 
 proc combining*(props: UnicodeProps): int {.inline.} =
   ## Return canonical combining class property
   ## for a given `Props`
   result = props[upropCcc]
 
-proc combining*(cp: Rune): int {.inline.} =
+proc combining*(cp: Rune): int =
   ## Return canonical combining class property
   ## for a given code point
-  combining(properties(cp))
+  cp.properties.combining
 
 proc quickCheck*(props: UnicodeProps): int {.inline.} =
   ## Return quick check property for a given `UnicodeProps`
   result = props[upropQc]
 
-proc quickCheck*(cp: Rune): int {.inline.} =
+proc quickCheck*(cp: Rune): int =
   ## Return quick check property
-  quickCheck(properties(cp))
+  cp.properties.quickCheck
 
-proc contains*(qc: int, m: NfMask): bool =
+proc contains*(qc: int, m: NfMask): bool {.inline.} =
   ## Check if the given NF mask is
   ## within the quick-check values.
   ##

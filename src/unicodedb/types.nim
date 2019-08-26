@@ -17,7 +17,7 @@ export
   utmWhiteSpace,
   utmWord
 
-proc unicodeTypes*(cp: Rune): int {.inline.} =
+proc unicodeTypes*(cp: Rune): int =
   ## Return types for a given code point.
   ## Use `contains` to retrieve a single type
   assert cp.int <= 0x10FFFF
@@ -57,7 +57,7 @@ proc unicodeTypes*(cp: Rune): int {.inline.} =
       let idx = typesIndices[blockOffset + cp.int mod blockSize]
       result = typesData[idx]
 
-proc contains*(ut: int, utm: UnicodeTypeMask): bool =
+proc contains*(ut: int, utm: UnicodeTypeMask): bool {.inline.} =
   ## Check if the given type mask is
   ## within the types.
   ##
@@ -66,5 +66,5 @@ proc contains*(ut: int, utm: UnicodeTypeMask): bool =
   ##
   result = (ut and utm.int) != 0
 
-proc `+`*(utmA, utmB: UnicodeTypeMask): UnicodeTypeMask =
+proc `+`*(utmA, utmB: UnicodeTypeMask): UnicodeTypeMask {.inline.} =
   (utmA.int or utmB.int).UnicodeTypeMask
