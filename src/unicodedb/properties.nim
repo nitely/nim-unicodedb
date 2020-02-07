@@ -195,38 +195,44 @@ proc properties*(cp: Rune): UnicodeProps =
   ## raw data for some of the properties, so one of
   ## the auxiliary procedures must be used in conjuntion.
   assert cp.int <= 0x10FFFF
-  when nimvm:
-    const N = propsIndices.len
-    const N2 = N div 4
-    const t0 = propsIndices[0 ..< N2]
-    const t1 = propsIndices[N2 ..< 2*N2]
-    const t2 = propsIndices[2*N2 ..< 3*N2]
-    const t3 = propsIndices[3*N2 ..< N]
-
-    proc getTypeIndex(sub: static[int], ind: int): auto =
-      when sub == 0: return t0[ind]
-      elif sub == 1: return t1[ind]
-      elif sub == 2: return t2[ind]
-      else: return t3[ind]
-    let blockOffset = (propsOffsets[cp.int div blockSize]).int * blockSize
-    block:
-      let ind = blockOffset + cp.int mod blockSize
-      let ind2 = ind div N2
-      let j = ind mod N2
-      var idx = 0'u8
-      case ind2
-      of 0: idx = getTypeIndex(0, j)
-      of 1: idx = getTypeIndex(1, j)
-      of 2: idx = getTypeIndex(2, j)
-      of 3: idx = getTypeIndex(3, j)
-      else: assert false
-      result = propsData[idx]
+  when (NimMajor, NimMinor) >= (1, 1):
+    let
+      blockOffset = (propsOffsets[cp.int div blockSize]).int * blockSize
+      idx = propsIndices[blockOffset + cp.int mod blockSize]
+    result = propsData[idx]
   else:
-    block:
-      let
-        blockOffset = (propsOffsets[cp.int div blockSize]).int * blockSize
-        idx = propsIndices[blockOffset + cp.int mod blockSize]
-      result = propsData[idx]
+    when nimvm:
+      const N = propsIndices.len
+      const N2 = N div 4
+      const t0 = propsIndices[0 ..< N2]
+      const t1 = propsIndices[N2 ..< 2*N2]
+      const t2 = propsIndices[2*N2 ..< 3*N2]
+      const t3 = propsIndices[3*N2 ..< N]
+
+      proc getTypeIndex(sub: static[int], ind: int): auto =
+        when sub == 0: return t0[ind]
+        elif sub == 1: return t1[ind]
+        elif sub == 2: return t2[ind]
+        else: return t3[ind]
+      let blockOffset = (propsOffsets[cp.int div blockSize]).int * blockSize
+      block:
+        let ind = blockOffset + cp.int mod blockSize
+        let ind2 = ind div N2
+        let j = ind mod N2
+        var idx = 0'u8
+        case ind2
+        of 0: idx = getTypeIndex(0, j)
+        of 1: idx = getTypeIndex(1, j)
+        of 2: idx = getTypeIndex(2, j)
+        of 3: idx = getTypeIndex(3, j)
+        else: assert false
+        result = propsData[idx]
+    else:
+      block:
+        let
+          blockOffset = (propsOffsets[cp.int div blockSize]).int * blockSize
+          idx = propsIndices[blockOffset + cp.int mod blockSize]
+        result = propsData[idx]
 
 proc unicodeCategory*(props: UnicodeProps): UnicodeCategory {.inline.} =
   ## Return category for a given `UnicodeProps`
