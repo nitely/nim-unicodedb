@@ -1,8 +1,12 @@
-import unittest, strutils, unicode
+import unittest
+import strutils
+import unicode
+import sequtils
 
 import unicodedb
 import unicodedb/widths
 import unicodedb/scripts
+import unicodedb/casing
 from unicodedb/compositions_data import compsValues
 from compositions_test_data import allComps
 from decompositions_test_data import allDecomps
@@ -18,6 +22,7 @@ proc toRunes(runes: seq[int]): seq[Rune] =
   for cp in runes:
     result.add(cp.Rune)
 
+#[
 test "Test all compositions":
   for cps in allComps:
     check cps[0].Rune == composition(cps[1].Rune, cps[2].Rune)
@@ -569,3 +574,82 @@ test "Test Script":
   check Rune(125184).unicodeScript == sptAdlam
   check Rune(0x10FFFF).unicodeScript == UnicodeScript(0)
   check "諸".runeAt(0).unicodeScript() == sptHan
+]#
+
+test "Test lowerCase":
+  check toSeq('A'.ord.Rune.lowerCase) == @['a'.ord.Rune]
+  check toSeq('Z'.ord.Rune.lowerCase) == @['z'.ord.Rune]
+  check toSeq(0x24BD.Rune.lowerCase) == @[0x24D7.Rune]
+  check toSeq("Ⓗ".runeAt(0).lowerCase) == @["ⓗ".runeAt(0)]
+  check toSeq('a'.ord.Rune.lowerCase) == @['a'.ord.Rune]
+  check toSeq('z'.ord.Rune.lowerCase) == @['z'.ord.Rune]
+  check toSeq('0'.ord.Rune.lowerCase) == @['0'.ord.Rune]
+  check toSeq('9'.ord.Rune.lowerCase) == @['9'.ord.Rune]
+  check toSeq("諸".runeAt(0).lowerCase) == @["諸".runeAt(0)]
+  check toSeq(0x0130.Rune.lowerCase) == @[0x0069.Rune, 0x0307.Rune]
+  check toSeq(0x0049.Rune.lowerCase) == @['i'.ord.Rune]
+
+test "Test lowerCase Ascii":
+  var letters: seq[Rune]
+  for c in 'a'.ord .. 'z'.ord:
+    letters.add(c.Rune)
+  var i = 0
+  for c in 'A'.ord .. 'Z'.ord:
+    check toSeq(c.Rune.lowerCase) == @[letters[i]]
+    inc i
+  check i == letters.len
+
+test "Test upperCase":
+  check toSeq('a'.ord.Rune.upperCase) == @['A'.ord.Rune]
+  check toSeq('z'.ord.Rune.upperCase) == @['Z'.ord.Rune]
+  check toSeq(0x24D7.Rune.upperCase) == @[0x24BD.Rune]
+  check toSeq("ⓗ".runeAt(0).upperCase) == @["Ⓗ".runeAt(0)]
+  check toSeq('A'.ord.Rune.upperCase) == @['A'.ord.Rune]
+  check toSeq('Z'.ord.Rune.upperCase) == @['Z'.ord.Rune]
+  check toSeq('0'.ord.Rune.upperCase) == @['0'.ord.Rune]
+  check toSeq('9'.ord.Rune.upperCase) == @['9'.ord.Rune]
+  check toSeq("諸".runeAt(0).upperCase) == @["諸".runeAt(0)]
+  check toSeq('i'.ord.Rune.upperCase) == @['I'.ord.Rune]
+  check toSeq(0x00DF.Rune.upperCase) == @[0x0053.Rune, 0x0053.Rune]
+  check toSeq(0x0130.Rune.upperCase) == @[0x0130.Rune]
+  check toSeq(0xFB00.Rune.upperCase) == @[0x0046.Rune, 0x0046.Rune]
+  check toSeq(0xFB03.Rune.upperCase) == @[0x0046.Rune, 0x0046.Rune, 0x0049.Rune]
+  check toSeq(0x1FF6.Rune.upperCase) == @[0x03A9.Rune, 0x0342.Rune]
+
+test "Test upperCase Ascii":
+  var letters: seq[Rune]
+  for c in 'A'.ord .. 'Z'.ord:
+    letters.add(c.Rune)
+  var i = 0
+  for c in 'a'.ord .. 'z'.ord:
+    check toSeq(c.Rune.upperCase) == @[letters[i]]
+    inc i
+  check i == letters.len
+
+test "Test titleCase":
+  check toSeq('a'.ord.Rune.titleCase) == @['A'.ord.Rune]
+  check toSeq('z'.ord.Rune.titleCase) == @['Z'.ord.Rune]
+  check toSeq(0x24D7.Rune.titleCase) == @[0x24BD.Rune]
+  check toSeq("ⓗ".runeAt(0).titleCase) == @["Ⓗ".runeAt(0)]
+  check toSeq('A'.ord.Rune.titleCase) == @['A'.ord.Rune]
+  check toSeq('Z'.ord.Rune.titleCase) == @['Z'.ord.Rune]
+  check toSeq('0'.ord.Rune.titleCase) == @['0'.ord.Rune]
+  check toSeq('9'.ord.Rune.titleCase) == @['9'.ord.Rune]
+  check toSeq("諸".runeAt(0).titleCase) == @["諸".runeAt(0)]
+  check toSeq('i'.ord.Rune.titleCase) == @['I'.ord.Rune]
+  # differs from upperCase
+  check toSeq(0x00DF.Rune.titleCase) == @[0x0053.Rune, 0x0073.Rune]
+  check toSeq(0x0130.Rune.titleCase) == @[0x0130.Rune]
+  check toSeq(0xFB00.Rune.titleCase) == @[0x0046.Rune, 0x0066.Rune]
+  check toSeq(0xFB03.Rune.titleCase) == @[0x0046.Rune, 0x0066.Rune, 0x0069.Rune]
+  check toSeq(0x1FF6.Rune.titleCase) == @[0x03A9.Rune, 0x0342.Rune]
+
+test "Test titleCase Ascii":
+  var letters: seq[Rune]
+  for c in 'A'.ord .. 'Z'.ord:
+    letters.add(c.Rune)
+  var i = 0
+  for c in 'a'.ord .. 'z'.ord:
+    check toSeq(c.Rune.titleCase) == @[letters[i]]
+    inc i
+  check i == letters.len

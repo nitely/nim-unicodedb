@@ -11,9 +11,9 @@ proc parseUDD*(filePath: string): seq[seq[seq[string]]] =
   ## cp1..cp2 ; prop1 ; propN # optional comment
   result = newSeq[seq[seq[string]]](maxCP + 1)
   for line in filePath.lines():
-    if line.strip().len == 0:
+    if line.startsWith('#'):
       continue
-    if line.startsWith("#"):
+    if line.strip().len == 0:
       continue
     let
       parts = line.split('#', 1)[0].split(';')

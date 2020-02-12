@@ -11,6 +11,7 @@ gen/widths_legacy
 gen/UnifontMedium.sfd
 gen/test_data
 gen/scripts
+gen/casing
 
 src/unicodedb/compositions
 src/unicodedb/decompositions
@@ -20,6 +21,7 @@ src/unicodedb/types
 src/unicodedb/widths
 src/unicodedb/widths_legacy
 src/unicodedb/scripts
+src/unicodedb/casing
 
 gen/UCD/*
 !gen/UCD/UnicodeData.txt
@@ -28,6 +30,7 @@ gen/UCD/*
 !gen/UCD/PropList.txt
 !gen/UCD/EastAsianWidth.txt
 !gen/UCD/Scripts.txt
+!gen/UCD/SpecialCasing.txt
 
 !gen/UCD/extracted
 gen/UCD/extracted/*
