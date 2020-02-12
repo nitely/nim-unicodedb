@@ -22,7 +22,6 @@ proc toRunes(runes: seq[int]): seq[Rune] =
   for cp in runes:
     result.add(cp.Rune)
 
-#[
 test "Test all compositions":
   for cps in allComps:
     check cps[0].Rune == composition(cps[1].Rune, cps[2].Rune)
@@ -574,7 +573,6 @@ test "Test Script":
   check Rune(125184).unicodeScript == sptAdlam
   check Rune(0x10FFFF).unicodeScript == UnicodeScript(0)
   check "諸".runeAt(0).unicodeScript() == sptHan
-]#
 
 test "Test lowerCase":
   check toSeq('A'.ord.Rune.lowerCase) == @['a'.ord.Rune]
@@ -590,7 +588,7 @@ test "Test lowerCase":
   check toSeq(0x0049.Rune.lowerCase) == @['i'.ord.Rune]
 
 test "Test lowerCase Ascii":
-  var letters: seq[Rune]
+  var letters = newSeq[Rune]()
   for c in 'a'.ord .. 'z'.ord:
     letters.add(c.Rune)
   var i = 0
@@ -617,7 +615,7 @@ test "Test upperCase":
   check toSeq(0x1FF6.Rune.upperCase) == @[0x03A9.Rune, 0x0342.Rune]
 
 test "Test upperCase Ascii":
-  var letters: seq[Rune]
+  var letters = newSeq[Rune]()
   for c in 'A'.ord .. 'Z'.ord:
     letters.add(c.Rune)
   var i = 0
@@ -645,7 +643,7 @@ test "Test titleCase":
   check toSeq(0x1FF6.Rune.titleCase) == @[0x03A9.Rune, 0x0342.Rune]
 
 test "Test titleCase Ascii":
-  var letters: seq[Rune]
+  var letters = newSeq[Rune]()
   for c in 'A'.ord .. 'Z'.ord:
     letters.add(c.Rune)
   var i = 0
