@@ -117,6 +117,25 @@ assert "諸".runeAt(0).unicodeScript() == sptHan
 ```
 [docs](https://nitely.github.io/nim-unicodedb/unicodedb/scripts.html)
 
+### Casing
+
+```nim
+import sequtils
+import unicode
+import unicodedb/casing
+
+assert toSeq("Ⓗ".runeAt(0).lowerCase) == @["ⓗ".runeAt(0)]
+assert toSeq("İ".runeAt(0).lowerCase) == @[0x0069.Rune, 0x0307.Rune]
+
+assert toSeq("ⓗ".runeAt(0).upperCase) == @["Ⓗ".runeAt(0)]
+assert toSeq("ﬃ".runeAt(0).upperCase) == @['F'.ord.Rune, 'F'.ord.Rune, 'I'.ord.Rune]
+
+assert toSeq("ß".runeAt(0).titleCase) == @['S'.ord.Rune, 's'.ord.Rune]
+
+assert toSeq("ᾈ".runeAt(0).caseFold) == @["ἀ".runeAt(0), "ι".runeAt(0)]
+```
+[docs](https://nitely.github.io/nim-unicodedb/unicodedb/casing.html)
+
 ## Related libraries
 
 * [nim-unicodeplus](https://github.com/nitely/nim-unicodeplus)

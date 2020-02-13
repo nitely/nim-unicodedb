@@ -638,6 +638,7 @@ test "Test upperCase":
   check toSeq(0x00DF.Rune.upperCase) == @[0x0053.Rune, 0x0053.Rune]
   check toSeq(0x0130.Rune.upperCase) == @[0x0130.Rune]
   check toSeq(0xFB00.Rune.upperCase) == @[0x0046.Rune, 0x0046.Rune]
+  check toSeq("ﬃ".runeAt(0).upperCase) == @['F'.ord.Rune, 'F'.ord.Rune, 'I'.ord.Rune]
   check toSeq(0xFB03.Rune.upperCase) == @[0x0046.Rune, 0x0046.Rune, 0x0049.Rune]
   check toSeq(0x1FF6.Rune.upperCase) == @[0x03A9.Rune, 0x0342.Rune]
 
@@ -676,6 +677,7 @@ test "Test titleCase":
   check toSeq("諸".runeAt(0).titleCase) == @["諸".runeAt(0)]
   check toSeq('i'.ord.Rune.titleCase) == @['I'.ord.Rune]
   # differs from upperCase
+  check toSeq("ß".runeAt(0).titleCase) == @['S'.ord.Rune, 's'.ord.Rune]
   check toSeq(0x00DF.Rune.titleCase) == @[0x0053.Rune, 0x0073.Rune]
   check toSeq(0x0130.Rune.titleCase) == @[0x0130.Rune]
   check toSeq(0xFB00.Rune.titleCase) == @[0x0046.Rune, 0x0066.Rune]
@@ -710,3 +712,4 @@ test "Test caseFold":
   check toSeq(0x0132.Rune.caseFold) == @[0x0133.Rune]
   check toSeq(0x1E921.Rune.caseFold) == @[0x1E943.Rune]
   check toSeq(0x1F88.Rune.caseFold) == @[0x1F00.Rune, 0x03B9.Rune]
+  check toSeq("ᾈ".runeAt(0).caseFold) == @["ἀ".runeAt(0), "ι".runeAt(0)]

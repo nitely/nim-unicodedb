@@ -1,5 +1,5 @@
 ## This module provides casing mappings.
-## Beware some mappings are one to many characters
+## Beware some mappings are one to many characters.
 
 import unicode
 
