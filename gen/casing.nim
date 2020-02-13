@@ -101,7 +101,7 @@ proc parseFolding(filePath: string): seq[Folding] =
 
 type
   CasingTable = object
-    cps: seq[int]
+    cps: seq[uint32]
     offsets: seq[int]
 
 # Build table of values with dynamic len
@@ -109,10 +109,10 @@ func buildCasingTable(casings: seq[Mapping]): CasingTable =
   var cpsSize = 0
   for ca in casings:
     if ca.len > 0:
-      cpsSize += len(ca) + 1  # + len
+      cpsSize += len(ca)
 
   result = CasingTable(
-    cps: newSeq[int](cpsSize),
+    cps: newSeq[uint32](cpsSize),
     offsets: newSeq[int](len(casings)))
   for i in 0 ..< len(casings):
     result.offsets[i] = -1
@@ -122,16 +122,20 @@ func buildCasingTable(casings: seq[Mapping]): CasingTable =
     if ca.len == 0:
       continue
     result.offsets[cp] = offset
-    result.cps[offset] = ca.len
+    # Use ca[0] >> 2 to retrieve the first cp
+    # And ca[0] & 0x03 to retrieve the length
+    assert ca.len <= 0x03
+    assert ca[0] == ((ca[0].uint32 shl 2) shr 2).int64
+    result.cps[offset] = (ca[0].uint32 shl 2) + ca.len.uint32
     inc offset
-    for cp2 in ca:
-      result.cps[offset] = cp2
+    for i in 1 .. ca.len-1:
+      result.cps[offset] = ca[i].uint32
       inc offset
   assert offset == result.cps.len
 
 type
   MultiStageTable = object
-    data: seq[int]
+    data: seq[uint32]
     stage1: seq[int]
     stage2: seq[int]
     blockSize: int
@@ -251,19 +255,19 @@ when isMainModule:
     f.write(dataTemplate % [
       prettyTable(lowerTable.stage1, 15, "'i8"),
       prettyTable(lowerTable.stage2, 15, "'i16"),
-      prettyTable(lowerTable.data, 15, "'i32"),
+      prettyTable(lowerTable.data, 15, "'u32"),
       $lowerTable.blockSize,
       prettyTable(upperTable.stage1, 15, "'i8"),
       prettyTable(upperTable.stage2, 15, "'i16"),
-      prettyTable(upperTable.data, 15, "'i32"),
+      prettyTable(upperTable.data, 15, "'u32"),
       $upperTable.blockSize,
       prettyTable(titleTable.stage1, 15, "'i8"),
       prettyTable(titleTable.stage2, 15, "'i16"),
-      prettyTable(titleTable.data, 15, "'i32"),
+      prettyTable(titleTable.data, 15, "'u32"),
       $titleTable.blockSize,
       prettyTable(foldingTable.stage1, 15, "'i8"),
       prettyTable(foldingTable.stage2, 15, "'i16"),
-      prettyTable(foldingTable.data, 15, "'i32"),
+      prettyTable(foldingTable.data, 15, "'u32"),
       $foldingTable.blockSize
     ])
   finally:

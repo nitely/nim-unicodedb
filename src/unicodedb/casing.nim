@@ -10,19 +10,18 @@ import casing_data
 template casingImpl(
   offsets, indices, data, blockSize: untyped
 ): untyped {.dirty.} =
-  # XXX save data len on first integer
-  #     (ie: 2 most significant bits)
-  #     to reduce data table size
   let blockOffset = (offsets[r.int div blockSize]).int * blockSize
   var idx = (indices[blockOffset + r.int mod blockSize]).int
-  let idxEnd = if idx > -1: idx+data[idx] else: -1
-  var rr = if idx > -1: data[idx+1] else: r.int32
+  # The len is encoded into the 2 least 
+  # significant bits of the first cp
+  let idxEnd = if idx > -1: idx+(data[idx] and 0x03).int-1 else: -1
+  var rr = if idx > -1: cast[int32](data[idx] shr 2).Rune else: r
   while true:
-    yield rr.Rune
+    yield rr
     inc idx
-    if idx+1 > idxEnd:
+    if idx > idxEnd:
       break
-    rr = data[idx+1]
+    rr = cast[int32](data[idx]).Rune
 
 iterator lowerCase*(r: Rune): Rune {.inline.} =
   ## Return lower case mapping of `r` if
@@ -56,7 +55,9 @@ iterator titleCase*(r: Rune): Rune {.inline.} =
 
 iterator caseFold*(r: Rune): Rune {.inline.} =
   ## Return full case fold of `r` if
-  ## there is such folding. Return `r` otherwise
+  ## there is such folding. Return `r` otherwise.
+  ## This is meant for internal usage such as caseless
+  ## text comparison
   assert r.int <= 0x10FFFF
   casingImpl(
     casefoldOffsets,
