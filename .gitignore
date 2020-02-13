@@ -31,6 +31,7 @@ gen/UCD/*
 !gen/UCD/EastAsianWidth.txt
 !gen/UCD/Scripts.txt
 !gen/UCD/SpecialCasing.txt
+!gen/UCD/CaseFolding.txt
 
 !gen/UCD/extracted
 gen/UCD/extracted/*

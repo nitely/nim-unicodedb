@@ -14,6 +14,7 @@ from category_test_data import allCats
 from bidi_test_data import allBidis
 from combining_test_data import allCombining
 from types_test_data import allTypes
+import casing_test_data
 
 const maxCP = 0x10FFFF
 
@@ -574,6 +575,19 @@ test "Test Script":
   check Rune(0x10FFFF).unicodeScript == UnicodeScript(0)
   check "諸".runeAt(0).unicodeScript() == sptHan
 
+test "Test all lowerCase":
+  var i = 0
+  for ca in allLowercase:
+    check toSeq(ca.cp.Rune.lowerCase) == ca.cps.toRunes
+    inc i
+  check i == 1390
+  var checked = newSeq[bool](maxCp+1)
+  for ca in allLowercase:
+    checked[ca.cp] = true
+  for cp in 0 .. maxCp:
+    if not checked[cp]:
+      check toSeq(cp.Rune.lowerCase) == @[cp.Rune]
+
 test "Test lowerCase":
   check toSeq('A'.ord.Rune.lowerCase) == @['a'.ord.Rune]
   check toSeq('Z'.ord.Rune.lowerCase) == @['z'.ord.Rune]
@@ -596,6 +610,19 @@ test "Test lowerCase Ascii":
     check toSeq(c.Rune.lowerCase) == @[letters[i]]
     inc i
   check i == letters.len
+
+test "Test all upperCase":
+  var i = 0
+  for ca in allUppercase:
+    check toSeq(ca.cp.Rune.upperCase) == ca.cps.toRunes
+    inc i
+  check i == 1482
+  var checked = newSeq[bool](maxCp+1)
+  for ca in allUppercase:
+    checked[ca.cp] = true
+  for cp in 0 .. maxCp:
+    if not checked[cp]:
+      check toSeq(cp.Rune.upperCase) == @[cp.Rune]
 
 test "Test upperCase":
   check toSeq('a'.ord.Rune.upperCase) == @['A'.ord.Rune]
@@ -624,6 +651,19 @@ test "Test upperCase Ascii":
     inc i
   check i == letters.len
 
+test "Test all titleCase":
+  var i = 0
+  for ca in allTitlecase:
+    check toSeq(ca.cp.Rune.titleCase) == ca.cps.toRunes
+    inc i
+  check i == 1409
+  var checked = newSeq[bool](maxCp+1)
+  for ca in allTitlecase:
+    checked[ca.cp] = true
+  for cp in 0 .. maxCp:
+    if not checked[cp]:
+      check toSeq(cp.Rune.titleCase) == @[cp.Rune]
+
 test "Test titleCase":
   check toSeq('a'.ord.Rune.titleCase) == @['A'.ord.Rune]
   check toSeq('z'.ord.Rune.titleCase) == @['Z'.ord.Rune]
@@ -651,3 +691,22 @@ test "Test titleCase Ascii":
     check toSeq(c.Rune.titleCase) == @[letters[i]]
     inc i
   check i == letters.len
+
+test "Test all caseFold":
+  var i = 0
+  for ca in allCaseFold:
+    check toSeq(ca.cp.Rune.caseFold) == ca.cps.toRunes
+    inc i
+  check i == 1487
+  var checked = newSeq[bool](maxCp+1)
+  for ca in allcaseFold:
+    checked[ca.cp] = true
+  for cp in 0 .. maxCp:
+    if not checked[cp]:
+      check toSeq(cp.Rune.caseFold) == @[cp.Rune]
+
+test "Test caseFold":
+  check toSeq(0x0130.Rune.caseFold) == @[0x0069.Rune, 0x0307.Rune]
+  check toSeq(0x0132.Rune.caseFold) == @[0x0133.Rune]
+  check toSeq(0x1E921.Rune.caseFold) == @[0x1E943.Rune]
+  check toSeq(0x1F88.Rune.caseFold) == @[0x1F00.Rune, 0x03B9.Rune]

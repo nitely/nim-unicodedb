@@ -88,6 +88,18 @@ proc parse(simple, special: string): seq[Casing] =
   result = mergeCasings(simpleCasings, specialCasings)
 
 type
+  Folding = seq[int]
+
+proc parseFolding(filePath: string): seq[Folding] =
+  let rawData = filePath.parseUDDFullCaseFolding
+  result = newSeq[Folding](rawData.len)
+  for cp, props in rawData.pairs:
+    if props.len == 0:
+      continue
+    for c in props[1].strip.split(' '):
+      result[cp].add parseHexInt("0x$#" % c)
+
+type
   CasingTable = object
     cps: seq[int]
     offsets: seq[int]
@@ -118,11 +130,11 @@ func buildCasingTable(casings: seq[Mapping]): CasingTable =
   assert offset == result.cps.len
 
 type
-  MultiStageTable* = object
-    data*: seq[int]
-    stage1*: seq[int]
-    stage2*: seq[int]
-    blockSize*: int
+  MultiStageTable = object
+    data: seq[int]
+    stage1: seq[int]
+    stage2: seq[int]
+    blockSize: int
 
 func buildMultiStageTable(casingTable: CasingTable): MultiStageTable =
   let stageTable = findBestTable(casingTable.offsets)
@@ -154,6 +166,11 @@ func buildLowerCase(casings: seq[Casing]): MultiStageTable =
   for i in 0 .. casings.len-1:
     lowercase[i] = casings[i].lowercase
   result = lowercase
+    .buildCasingTable
+    .buildMultiStageTable
+
+func buildCaseFolding(foldings: seq[Folding]): MultiStageTable =
+  result = foldings
     .buildCasingTable
     .buildMultiStageTable
 
@@ -205,6 +222,17 @@ const
     $#
   ]
   titlecaseBlockSize* = $#
+
+  casefoldOffsets* = [
+    $#
+  ]
+  casefoldIndices* = [
+    $#
+  ]
+  casefoldData* = [
+    $#
+  ]
+  casefoldBlockSize* = $#
 """
 
 when isMainModule:
@@ -214,6 +242,9 @@ when isMainModule:
   let lowerTable = casings.buildLowerCase
   let upperTable = casings.buildUpperCase
   let titleTable = casings.buildTitleCase
+
+  let foldings = parseFolding("./gen/UCD/CaseFolding.txt")
+  let foldingTable = foldings.buildCaseFolding
 
   var f = open("./src/unicodedb/casing_data.nim", fmWrite)
   try:
@@ -229,7 +260,11 @@ when isMainModule:
       prettyTable(titleTable.stage1, 15, "'i8"),
       prettyTable(titleTable.stage2, 15, "'i16"),
       prettyTable(titleTable.data, 15, "'i32"),
-      $titleTable.blockSize
+      $titleTable.blockSize,
+      prettyTable(foldingTable.stage1, 15, "'i8"),
+      prettyTable(foldingTable.stage2, 15, "'i16"),
+      prettyTable(foldingTable.data, 15, "'i32"),
+      $foldingTable.blockSize
     ])
   finally:
     close(f)

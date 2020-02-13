@@ -74,3 +74,15 @@ proc parseDNPExclusion*(filePath: string): seq[int] =
       if p[0] != "Full_Composition_Exclusion":
         continue
       result.add(cp)
+
+proc parseUDDFullCaseFolding*(filePath: string): seq[seq[string]] =
+  # <code>; <status>; <mapping>; # <name>
+  result = newSeq[seq[string]](maxCP + 1)
+  for cp, props in filePath.parseUDD():
+    if props.len == 0:
+      continue
+    for p in props:
+      if p[0] != "C" and p[0] != "F":
+        continue
+      assert result[cp].len == 0
+      result[cp] = p
