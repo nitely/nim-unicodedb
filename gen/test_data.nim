@@ -1,10 +1,12 @@
 import unicode
 import strutils
+import sequtils
 
 import ../src/unicodedb/properties
 import ../src/unicodedb/compositions
 import ../src/unicodedb/decompositions
 import ../src/unicodedb/types
+import ../src/unicodedb/casing
 
 proc write(path: string, s: string) =
   var f = open(path, fmWrite)
@@ -194,6 +196,44 @@ const typesTemplate = """const allTypes* = [
 $#]
 """
 
+type
+  Casing = tuple
+    cp: int
+    cps: seq[int]
+
+template casingData(conversion): untyped {.dirty.} =
+  for cp in 0 .. maxCP:
+    let cps = toSeq(conversion(cp.Rune))
+    if cps.len > 1:
+      result.add((
+        cp: cp,
+        cps: map(cps, proc (x: Rune): int = x.int)
+      ))
+    elif cps.len == 1 and cps[0] != cp.Rune:
+      result.add((cp: cp, cps: @[cps[0].int]))
+
+proc lowercaseData(): seq[Casing] =
+  casingData(lowerCase)
+
+proc uppercaseData(): seq[Casing] =
+  casingData(upperCase)
+
+proc titlecaseData(): seq[Casing] =
+  casingData(titleCase)
+
+proc casefoldData(): seq[Casing] =
+  casingData(caseFold)
+
+const casingTemplate = """const allLowercase* = [
+$#]
+const allUppercase* = [
+$#]
+const allTitlecase* = [
+$#]
+const allCasefold* = [
+$#]
+"""
+
 proc `$`(uctg: UnicodeCategory): string =
   $uctg.int
 
@@ -252,3 +292,35 @@ when isMainModule:
     ts.add(',')
     ts.add('\L')
   write("./tests/types_test_data.nim", typesTemplate % ts)
+  echo "Generating casing data"
+  var lowercaseTpl = ""
+  for ca in lowercaseData():
+    lowercaseTpl.add(' ')
+    lowercaseTpl.add(' ')
+    lowercaseTpl.add($ca)
+    lowercaseTpl.add(',')
+    lowercaseTpl.add('\L')
+  var uppercaseTpl = ""
+  for ca in uppercaseData():
+    uppercaseTpl.add(' ')
+    uppercaseTpl.add(' ')
+    uppercaseTpl.add($ca)
+    uppercaseTpl.add(',')
+    uppercaseTpl.add('\L')
+  var titlecaseTpl = ""
+  for ca in titlecaseData():
+    titlecaseTpl.add(' ')
+    titlecaseTpl.add(' ')
+    titlecaseTpl.add($ca)
+    titlecaseTpl.add(',')
+    titlecaseTpl.add('\L')
+  var casefoldTpl = ""
+  for ca in casefoldData():
+    casefoldTpl.add(' ')
+    casefoldTpl.add(' ')
+    casefoldTpl.add($ca)
+    casefoldTpl.add(',')
+    casefoldTpl.add('\L')
+  write(
+    "./tests/casing_test_data.nim", casingTemplate % [
+      lowercaseTpl, uppercaseTpl, titlecaseTpl, casefoldTpl])

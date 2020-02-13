@@ -1,6 +1,6 @@
 # Package
 
-version = "0.7.3"
+version = "0.8.0"
 author = "Esteban Castro Borsani (@nitely)"
 description = "Unicode Character Database (UCD) access for Nim"
 license = "MIT"
@@ -16,6 +16,7 @@ task test, "Test":
   exec "nim c -r tests/tests"
 
 task docs, "Docs":
+  exec "nim doc2 -o:./docs/unicodedb --project ./src/unicodedb/casing.nim"
   exec "nim doc2 -o:./docs/unicodedb --project ./src/unicodedb/scripts.nim"
   exec "nim doc2 -o:./docs/unicodedb --project ./src/unicodedb/widths.nim"
   exec "nim doc2 -o:./docs --project ./src/unicodedb.nim"
@@ -23,6 +24,7 @@ task docs, "Docs":
   exec "rm -fr ./docs/*/*_data.html"
 
 task gen, "Gen data":
+  exec "nim c -r gen/casing.nim"
   exec "nim c -r gen/scripts.nim"
   exec "nim c -r gen/widths.nim"
   exec "nim c -r gen/types.nim"

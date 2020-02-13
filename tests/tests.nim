@@ -1,8 +1,12 @@
-import unittest, strutils, unicode
+import unittest
+import strutils
+import unicode
+import sequtils
 
 import unicodedb
 import unicodedb/widths
 import unicodedb/scripts
+import unicodedb/casing
 from unicodedb/compositions_data import compsValues
 from compositions_test_data import allComps
 from decompositions_test_data import allDecomps
@@ -10,6 +14,7 @@ from category_test_data import allCats
 from bidi_test_data import allBidis
 from combining_test_data import allCombining
 from types_test_data import allTypes
+import casing_test_data
 
 const maxCP = 0x10FFFF
 
@@ -569,3 +574,142 @@ test "Test Script":
   check Rune(125184).unicodeScript == sptAdlam
   check Rune(0x10FFFF).unicodeScript == UnicodeScript(0)
   check "諸".runeAt(0).unicodeScript() == sptHan
+
+test "Test all lowerCase":
+  var i = 0
+  for ca in allLowercase:
+    check toSeq(ca.cp.Rune.lowerCase) == ca.cps.toRunes
+    inc i
+  check i == 1390
+  var checked = newSeq[bool](maxCp+1)
+  for ca in allLowercase:
+    checked[ca.cp] = true
+  for cp in 0 .. maxCp:
+    if not checked[cp]:
+      check toSeq(cp.Rune.lowerCase) == @[cp.Rune]
+
+test "Test lowerCase":
+  check toSeq('A'.ord.Rune.lowerCase) == @['a'.ord.Rune]
+  check toSeq('Z'.ord.Rune.lowerCase) == @['z'.ord.Rune]
+  check toSeq(0x24BD.Rune.lowerCase) == @[0x24D7.Rune]
+  check toSeq("Ⓗ".runeAt(0).lowerCase) == @["ⓗ".runeAt(0)]
+  check toSeq('a'.ord.Rune.lowerCase) == @['a'.ord.Rune]
+  check toSeq('z'.ord.Rune.lowerCase) == @['z'.ord.Rune]
+  check toSeq('0'.ord.Rune.lowerCase) == @['0'.ord.Rune]
+  check toSeq('9'.ord.Rune.lowerCase) == @['9'.ord.Rune]
+  check toSeq("諸".runeAt(0).lowerCase) == @["諸".runeAt(0)]
+  check toSeq(0x0130.Rune.lowerCase) == @[0x0069.Rune, 0x0307.Rune]
+  check toSeq(0x0049.Rune.lowerCase) == @['i'.ord.Rune]
+
+test "Test lowerCase Ascii":
+  var letters = newSeq[Rune]()
+  for c in 'a'.ord .. 'z'.ord:
+    letters.add(c.Rune)
+  var i = 0
+  for c in 'A'.ord .. 'Z'.ord:
+    check toSeq(c.Rune.lowerCase) == @[letters[i]]
+    inc i
+  check i == letters.len
+
+test "Test all upperCase":
+  var i = 0
+  for ca in allUppercase:
+    check toSeq(ca.cp.Rune.upperCase) == ca.cps.toRunes
+    inc i
+  check i == 1482
+  var checked = newSeq[bool](maxCp+1)
+  for ca in allUppercase:
+    checked[ca.cp] = true
+  for cp in 0 .. maxCp:
+    if not checked[cp]:
+      check toSeq(cp.Rune.upperCase) == @[cp.Rune]
+
+test "Test upperCase":
+  check toSeq('a'.ord.Rune.upperCase) == @['A'.ord.Rune]
+  check toSeq('z'.ord.Rune.upperCase) == @['Z'.ord.Rune]
+  check toSeq(0x24D7.Rune.upperCase) == @[0x24BD.Rune]
+  check toSeq("ⓗ".runeAt(0).upperCase) == @["Ⓗ".runeAt(0)]
+  check toSeq('A'.ord.Rune.upperCase) == @['A'.ord.Rune]
+  check toSeq('Z'.ord.Rune.upperCase) == @['Z'.ord.Rune]
+  check toSeq('0'.ord.Rune.upperCase) == @['0'.ord.Rune]
+  check toSeq('9'.ord.Rune.upperCase) == @['9'.ord.Rune]
+  check toSeq("諸".runeAt(0).upperCase) == @["諸".runeAt(0)]
+  check toSeq('i'.ord.Rune.upperCase) == @['I'.ord.Rune]
+  check toSeq(0x00DF.Rune.upperCase) == @[0x0053.Rune, 0x0053.Rune]
+  check toSeq(0x0130.Rune.upperCase) == @[0x0130.Rune]
+  check toSeq(0xFB00.Rune.upperCase) == @[0x0046.Rune, 0x0046.Rune]
+  check toSeq("ﬃ".runeAt(0).upperCase) == @['F'.ord.Rune, 'F'.ord.Rune, 'I'.ord.Rune]
+  check toSeq(0xFB03.Rune.upperCase) == @[0x0046.Rune, 0x0046.Rune, 0x0049.Rune]
+  check toSeq(0x1FF6.Rune.upperCase) == @[0x03A9.Rune, 0x0342.Rune]
+
+test "Test upperCase Ascii":
+  var letters = newSeq[Rune]()
+  for c in 'A'.ord .. 'Z'.ord:
+    letters.add(c.Rune)
+  var i = 0
+  for c in 'a'.ord .. 'z'.ord:
+    check toSeq(c.Rune.upperCase) == @[letters[i]]
+    inc i
+  check i == letters.len
+
+test "Test all titleCase":
+  var i = 0
+  for ca in allTitlecase:
+    check toSeq(ca.cp.Rune.titleCase) == ca.cps.toRunes
+    inc i
+  check i == 1409
+  var checked = newSeq[bool](maxCp+1)
+  for ca in allTitlecase:
+    checked[ca.cp] = true
+  for cp in 0 .. maxCp:
+    if not checked[cp]:
+      check toSeq(cp.Rune.titleCase) == @[cp.Rune]
+
+test "Test titleCase":
+  check toSeq('a'.ord.Rune.titleCase) == @['A'.ord.Rune]
+  check toSeq('z'.ord.Rune.titleCase) == @['Z'.ord.Rune]
+  check toSeq(0x24D7.Rune.titleCase) == @[0x24BD.Rune]
+  check toSeq("ⓗ".runeAt(0).titleCase) == @["Ⓗ".runeAt(0)]
+  check toSeq('A'.ord.Rune.titleCase) == @['A'.ord.Rune]
+  check toSeq('Z'.ord.Rune.titleCase) == @['Z'.ord.Rune]
+  check toSeq('0'.ord.Rune.titleCase) == @['0'.ord.Rune]
+  check toSeq('9'.ord.Rune.titleCase) == @['9'.ord.Rune]
+  check toSeq("諸".runeAt(0).titleCase) == @["諸".runeAt(0)]
+  check toSeq('i'.ord.Rune.titleCase) == @['I'.ord.Rune]
+  # differs from upperCase
+  check toSeq("ß".runeAt(0).titleCase) == @['S'.ord.Rune, 's'.ord.Rune]
+  check toSeq(0x00DF.Rune.titleCase) == @[0x0053.Rune, 0x0073.Rune]
+  check toSeq(0x0130.Rune.titleCase) == @[0x0130.Rune]
+  check toSeq(0xFB00.Rune.titleCase) == @[0x0046.Rune, 0x0066.Rune]
+  check toSeq(0xFB03.Rune.titleCase) == @[0x0046.Rune, 0x0066.Rune, 0x0069.Rune]
+  check toSeq(0x1FF6.Rune.titleCase) == @[0x03A9.Rune, 0x0342.Rune]
+
+test "Test titleCase Ascii":
+  var letters = newSeq[Rune]()
+  for c in 'A'.ord .. 'Z'.ord:
+    letters.add(c.Rune)
+  var i = 0
+  for c in 'a'.ord .. 'z'.ord:
+    check toSeq(c.Rune.titleCase) == @[letters[i]]
+    inc i
+  check i == letters.len
+
+test "Test all caseFold":
+  var i = 0
+  for ca in allCaseFold:
+    check toSeq(ca.cp.Rune.caseFold) == ca.cps.toRunes
+    inc i
+  check i == 1487
+  var checked = newSeq[bool](maxCp+1)
+  for ca in allcaseFold:
+    checked[ca.cp] = true
+  for cp in 0 .. maxCp:
+    if not checked[cp]:
+      check toSeq(cp.Rune.caseFold) == @[cp.Rune]
+
+test "Test caseFold":
+  check toSeq(0x0130.Rune.caseFold) == @[0x0069.Rune, 0x0307.Rune]
+  check toSeq(0x0132.Rune.caseFold) == @[0x0133.Rune]
+  check toSeq(0x1E921.Rune.caseFold) == @[0x1E943.Rune]
+  check toSeq(0x1F88.Rune.caseFold) == @[0x1F00.Rune, 0x03B9.Rune]
+  check toSeq("ᾈ".runeAt(0).caseFold) == @["ἀ".runeAt(0), "ι".runeAt(0)]

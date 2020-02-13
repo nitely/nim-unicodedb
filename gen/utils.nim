@@ -1,17 +1,18 @@
 import math
 import strutils
 
-proc prettyTable*(
-    s: seq[int],
-    cols: int,
-    suffix = ""): string =
+proc prettyTable*[T: int or uint32](
+  s: seq[T],
+  cols: int,
+  suffix = ""
+): string =
   ## Pretty print table. Rows are
   ## splitted by the number of ``cols``.
   ## The first item is suffixed
   ## with ``suffix``
   var
     rows = newSeq[string](int(ceil(s.len / cols)))
-    row = newSeq[int](cols)
+    row = newSeq[T](cols)
   for i in 0 ..< rows.len:
     for j in 0 ..< cols:
       let idx = i * cols + j

@@ -1,3 +1,8 @@
+v0.8.0
+==================
+
+* Add full casing and folding data
+
 v0.7.2
 ==================
 
