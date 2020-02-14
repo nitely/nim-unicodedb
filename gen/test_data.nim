@@ -7,6 +7,7 @@ import ../src/unicodedb/compositions
 import ../src/unicodedb/decompositions
 import ../src/unicodedb/types
 import ../src/unicodedb/casing
+import ../src/unicodedb/segmentation
 
 proc write(path: string, s: string) =
   var f = open(path, fmWrite)
@@ -234,6 +235,28 @@ const allCasefold* = [
 $#]
 """
 
+type
+  WordBreak = tuple
+    cpFirst: int
+    cpLast: int
+    prop: int
+
+proc wordBreakData(): seq[WordBreak] =
+  result = @[]
+  var lastData = 0.Rune.wordBreakProp.int
+  var lastCP = 0
+  for cp in 0 .. maxCP:
+    let data = cp.Rune.wordBreakProp.int
+    if data != lastData:
+      result.add((cpFirst: lastCP, cpLast: cp-1, prop: lastData))
+      lastData = data
+      lastCP = cp
+  result.add((cpFirst: lastCP, cpLast: maxCP, prop: lastData))
+
+const wordBreakTemplate = """const allWordBreak* = [
+$#]
+"""
+
 proc `$`(uctg: UnicodeCategory): string =
   $uctg.int
 
@@ -324,3 +347,12 @@ when isMainModule:
   write(
     "./tests/casing_test_data.nim", casingTemplate % [
       lowercaseTpl, uppercaseTpl, titlecaseTpl, casefoldTpl])
+  var wordBreakTpl = ""
+  for wb in wordBreakData():
+    wordBreakTpl.add(' ')
+    wordBreakTpl.add(' ')
+    wordBreakTpl.add($wb)
+    wordBreakTpl.add(',')
+    wordBreakTpl.add('\L')
+  write(
+    "./tests/word_break_test_data.nim", wordBreakTemplate % wordBreakTpl)

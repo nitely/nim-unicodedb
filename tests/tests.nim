@@ -7,6 +7,7 @@ import unicodedb
 import unicodedb/widths
 import unicodedb/scripts
 import unicodedb/casing
+import unicodedb/segmentation
 from unicodedb/compositions_data import compsValues
 from compositions_test_data import allComps
 from decompositions_test_data import allDecomps
@@ -15,6 +16,7 @@ from bidi_test_data import allBidis
 from combining_test_data import allCombining
 from types_test_data import allTypes
 import casing_test_data
+import word_break_test_data
 
 const maxCP = 0x10FFFF
 
@@ -713,3 +715,42 @@ test "Test caseFold":
   check toSeq(0x1E921.Rune.caseFold) == @[0x1E943.Rune]
   check toSeq(0x1F88.Rune.caseFold) == @[0x1F00.Rune, 0x03B9.Rune]
   check toSeq("ᾈ".runeAt(0).caseFold) == @["ἀ".runeAt(0), "ι".runeAt(0)]
+
+test "Test work-break data":
+  var i = 0
+  for wb in allWordBreak:
+    for cp in wb.cpFirst .. wb.cpLast:
+      check cp.Rune.wordBreakProp == wb.prop.SgWord
+      inc i
+  check i == maxCP+1
+
+test "Test wordBreakProp":
+  check 0x10FFFF.Rune.wordBreakProp == sgwOther
+  check 0x0022.Rune.wordBreakProp == sgwDoubleQuote
+  check 0x0027.Rune.wordBreakProp == sgwSingleQuote
+  check 0x05D0.Rune.wordBreakProp == sgwHebrewLetter
+  check 0x05D1.Rune.wordBreakProp == sgwHebrewLetter
+  check 0x05EA.Rune.wordBreakProp == sgwHebrewLetter
+  check 0x000D.Rune.wordBreakProp == sgwCr
+  check 0x000A.Rune.wordBreakProp == sgwLf
+  check 0x000B.Rune.wordBreakProp == sgwNewline
+  check 0x000C.Rune.wordBreakProp == sgwNewline
+  check 0x000C.Rune.wordBreakProp == sgwNewline
+  check 0x2029.Rune.wordBreakProp == sgwNewline
+  check 0x2028.Rune.wordBreakProp == sgwNewline
+  check 0x0085.Rune.wordBreakProp == sgwNewline
+  check 0x0300.Rune.wordBreakProp == sgwExtend
+  check 0x036F.Rune.wordBreakProp == sgwExtend
+  check 0x11A97.Rune.wordBreakProp == sgwExtend
+  check 0x1F1E6.Rune.wordBreakProp == sgwRegionalIndicator
+  check 0x1F1FF.Rune.wordBreakProp == sgwRegionalIndicator
+  check 0x00AD.Rune.wordBreakProp == sgwFormat
+  check 0xFF6F.Rune.wordBreakProp == sgwKatakana
+  check 0x038C.Rune.wordBreakProp == sgwAletter
+  check 0x003A.Rune.wordBreakProp == sgwMidLetter
+  check 0x037E.Rune.wordBreakProp == sgwMidNum
+  check 0x2024.Rune.wordBreakProp == sgwMidNumLet
+  check 0x09EF.Rune.wordBreakProp == sgwNumeric
+  check 0x203F.Rune.wordBreakProp == sgwExtendNumLet
+  check 0x200D.Rune.wordBreakProp == sgwZwj
+  check 0x205F.Rune.wordBreakProp == sgwWsegSpace

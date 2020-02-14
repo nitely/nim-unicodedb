@@ -136,6 +136,16 @@ assert toSeq("ᾈ".runeAt(0).caseFold) == @["ἀ".runeAt(0), "ι".runeAt(0)]
 ```
 [docs](https://nitely.github.io/nim-unicodedb/unicodedb/casing.html)
 
+### Segmentation
+
+```nim
+import unicode
+import unicodedb/segmentation
+
+assert 0x000B.Rune.wordBreakProp == sgwNewline
+```
+[docs](https://nitely.github.io/nim-unicodedb/unicodedb/segmentation.html)
+
 ## Related libraries
 
 * [nim-unicodeplus](https://github.com/nitely/nim-unicodeplus)

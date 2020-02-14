@@ -12,6 +12,7 @@ gen/UnifontMedium.sfd
 gen/test_data
 gen/scripts
 gen/casing
+gen/segmentation
 
 src/unicodedb/compositions
 src/unicodedb/decompositions
@@ -22,6 +23,7 @@ src/unicodedb/widths
 src/unicodedb/widths_legacy
 src/unicodedb/scripts
 src/unicodedb/casing
+src/unicodedb/segmentation
 
 gen/UCD/*
 !gen/UCD/UnicodeData.txt
@@ -37,3 +39,7 @@ gen/UCD/*
 gen/UCD/extracted/*
 !gen/UCD/extracted/DerivedBidiClass.txt
 !gen/UCD/extracted/DerivedNumericType.txt
+
+!gen/UCD/auxiliary
+gen/UCD/auxiliary/*
+!gen/UCD/auxiliary/WordBreakProperty.txt
