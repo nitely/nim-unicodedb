@@ -2,6 +2,7 @@ v0.8.0
 ==================
 
 * Add full casing and folding data
+* Add word-break segmentation data
 
 v0.7.2
 ==================
