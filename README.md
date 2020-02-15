@@ -6,6 +6,8 @@
 This library aims to bring the unicode database to Nim. Main goal is
 having O(1) access for every API and be lightweight in size.
 
+> Note: this library doesn't provide Unicode Common Locale Data (UCLD / CLDR data)
+
 ## Install
 
 ```

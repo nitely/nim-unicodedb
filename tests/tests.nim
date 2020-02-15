@@ -716,7 +716,7 @@ test "Test caseFold":
   check toSeq(0x1F88.Rune.caseFold) == @[0x1F00.Rune, 0x03B9.Rune]
   check toSeq("ᾈ".runeAt(0).caseFold) == @["ἀ".runeAt(0), "ι".runeAt(0)]
 
-test "Test work-break data":
+test "Test word-break data":
   var i = 0
   for wb in allWordBreak:
     for cp in wb.cpFirst .. wb.cpLast:
@@ -754,3 +754,6 @@ test "Test wordBreakProp":
   check 0x203F.Rune.wordBreakProp == sgwExtendNumLet
   check 0x200D.Rune.wordBreakProp == sgwZwj
   check 0x205F.Rune.wordBreakProp == sgwWsegSpace
+  check 0x1F61C.Rune.wordBreakProp == sgwExtendedPictographic
+  check 0x1F61E.Rune.wordBreakProp == sgwExtendedPictographic
+  check 0x1F6CC.Rune.wordBreakProp == sgwExtendedPictographic

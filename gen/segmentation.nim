@@ -26,6 +26,7 @@ const
   sgwExtendNumLet = 16
   sgwZwj = 17
   sgwWsegSpace = 18
+  sgwExtendedPictographic = 19
 
 func wordMap(s: string): int =
   result = case s:
@@ -71,10 +72,17 @@ func wordMap(s: string): int =
       assert false
       -99
 
+func emojiMap(s: string): int =
+  result = case s
+    of "Extended_Pictographic":
+      sgwExtendedPictographic
+    else:
+      -1
+
 type
   WordProps = seq[int]
 
-proc parseWordBreak(filePath: string): WordProps =
+proc parseWordBreak(filePath, filePathEmoji: string): WordProps =
   let rawData = filePath.parseUDDNoDups
   result = newSeq[int](rawData.len)
   for i in 0 .. result.len-1:
@@ -83,6 +91,13 @@ proc parseWordBreak(filePath: string): WordProps =
     if data.len == 0:
       continue
     result[cp] = data[0].wordMap
+  let rawDataEmoji = filePathEmoji.parseUDDEmoji
+  for cp, data in rawDataEmoji.pairs:
+    if data.len == 0:
+      continue
+    if data[0].emojiMap == -1:
+      continue
+    result[cp] = data[0].emojiMap
 
 func buildWordBreak(wordProps: WordProps): Stages[int] =
   buildTwoStageTable(wordProps)
@@ -112,6 +127,7 @@ const
   sgwExtendNumLet* = $#.SgWord
   sgwZwj* = $#.SgWord
   sgwWsegSpace* = $#.SgWord
+  sgwExtendedPictographic* = $#.SgWord
 
 const
   wordBreakIndices* = [
@@ -125,7 +141,8 @@ const
 
 when isMainModule:
   let wordProps = parseWordBreak(
-    "./gen/UCD/auxiliary/WordBreakProperty.txt")
+    "./gen/UCD/auxiliary/WordBreakProperty.txt",
+    "./gen/emoji/emoji-data.txt")
   let wordPropsTable = wordProps.buildWordBreak
 
   var f = open("./src/unicodedb/segmentation_data.nim", fmWrite)
@@ -150,6 +167,7 @@ when isMainModule:
       $sgwExtendNumLet,
       $sgwZwj,
       $sgwWsegSpace,
+      $sgwExtendedPictographic,
       prettyTable(wordPropsTable.stage1, 15, "'i16"),
       prettyTable(wordPropsTable.stage2, 15, "'i8"),
       $wordPropsTable.blockSize

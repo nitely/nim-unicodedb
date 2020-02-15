@@ -25,7 +25,8 @@ export
   sgwNumeric,
   sgwExtendNumLet,
   sgwZwj,
-  sgwWsegSpace
+  sgwWsegSpace,
+  sgwExtendedPictographic
 
 proc `==`*(a, b: SgWord): bool {.borrow.}
 
