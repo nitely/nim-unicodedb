@@ -152,6 +152,7 @@ assert 0x000B.Rune.wordBreakProp == sgwNewline
 
 * [nim-unicodeplus](https://github.com/nitely/nim-unicodeplus)
 * [nim-graphemes](https://github.com/nitely/nim-graphemes)
+* [nim-segmentation](https://github.com/nitely/nim-segmentation)
 * [nim-normalize](https://github.com/nitely/nim-normalize)
 
 ## Storage
