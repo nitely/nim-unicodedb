@@ -1,5 +1,4 @@
 import unittest
-import strutils
 import unicode
 import sequtils
 
@@ -18,7 +17,7 @@ from types_test_data import allTypes
 import casing_test_data
 import word_break_test_data
 
-const maxCP = 0x10FFFF
+const maxCp = 0x10FFFF
 
 proc toRunes(runes: seq[int]): seq[Rune] =
   result = @[]
@@ -52,7 +51,7 @@ test "Test decompositions":
     check decomposition(decomp.cp.Rune) == decomp.dcp.toRunes
 
 test "Test non-decompositions":
-  var decomposableCps = newSeq[bool](maxCP)
+  var decomposableCps = newSeq[bool](maxCp)
   for decomp in allDecomps:
     decomposableCps[decomp.cp] = true
   var i = 0
@@ -77,7 +76,7 @@ test "Test canonical decompositions":
       check canonicalDecomposition(decomp.cp.Rune) == decomp.dcp.toRunes
 
 test "Test non-canonical decompositions":
-  var decomposableCps = newSeq[bool](maxCP)
+  var decomposableCps = newSeq[bool](maxCp)
   for decomp in allDecomps:
     if decomp.isCanonical:
       decomposableCps[decomp.cp] = true
@@ -722,7 +721,7 @@ test "Test word-break data":
     for cp in wb.cpFirst .. wb.cpLast:
       check cp.Rune.wordBreakProp == wb.prop.SgWord
       inc i
-  check i == maxCP+1
+  check i == maxCp+1
 
 test "Test wordBreakProp":
   check 0x10FFFF.Rune.wordBreakProp == sgwOther

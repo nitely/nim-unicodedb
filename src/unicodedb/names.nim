@@ -7,12 +7,12 @@ import strutils
 import names_data
 
 const
-  SBase = 0xAC00
-  LCount = 19
-  VCount = 21
-  TCount = 28
-  NCount = VCount * TCount  # 588
-  SCount = LCount * NCount  # 1117
+  sBase = 0xAC00
+  lCount = 19
+  vCount = 21
+  tCount = 28
+  nCount = vCount * tCount  # 588
+  sCount = lCount * nCount  # 1117
   jamoLTable = [
     "G", "GG", "N", "D", "DD", "R", "M", "B", "BB",
     "S", "SS", "", "J", "JJ", "C", "K", "T", "P", "H"
@@ -31,16 +31,16 @@ const
 proc hangulName(r: Rune): string {.inline, raises: [].} =
   ## Hangul name generator. Implementation based on
   ## Unicode standard 10 - Chapter 3
-  let SIndex = r.int - SBase
-  assert(not (0 > SIndex or SIndex >= SCount))  # Is hangul
+  let sIndex = r.int - sBase
+  assert(not (0 > sIndex or sIndex >= sCount))  # Is hangul
   let
-    LIndex = SIndex div NCount
-    VIndex = (SIndex mod NCount) div TCount
-    TIndex = SIndex mod TCount
+    lIndex = sIndex div nCount
+    vIndex = (sIndex mod nCount) div tCount
+    tIndex = sIndex mod tCount
   result = "HANGUL SYLLABLE "
-  result.add(jamoLTable[LIndex])
-  result.add(jamoVTable[VIndex])
-  result.add(jamoTTable[TIndex])
+  result.add(jamoLTable[lIndex])
+  result.add(jamoVTable[vIndex])
+  result.add(jamoTTable[tIndex])
 
 type
   EPrefixNames {.pure.} = enum

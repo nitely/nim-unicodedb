@@ -31,7 +31,7 @@ iterator lowerCase*(r: Rune): Rune {.inline.} =
     lowercaseOffsets,
     lowercaseIndices,
     lowercaseData,
-    lowercaseblockSize)
+    lowercaseBlockSize)
 
 iterator upperCase*(r: Rune): Rune {.inline.} =
   ## Return upper case mapping of `r` if
@@ -41,7 +41,7 @@ iterator upperCase*(r: Rune): Rune {.inline.} =
     uppercaseOffsets,
     uppercaseIndices,
     uppercaseData,
-    uppercaseblockSize)
+    uppercaseBlockSize)
 
 iterator titleCase*(r: Rune): Rune {.inline.} =
   ## Return title case mapping of `r` if
@@ -51,7 +51,7 @@ iterator titleCase*(r: Rune): Rune {.inline.} =
     titlecaseOffsets,
     titlecaseIndices,
     titlecaseData,
-    titlecaseblockSize)
+    titlecaseBlockSize)
 
 iterator caseFold*(r: Rune): Rune {.inline.} =
   ## Return full case fold of `r` if
@@ -63,4 +63,4 @@ iterator caseFold*(r: Rune): Rune {.inline.} =
     casefoldOffsets,
     casefoldIndices,
     casefoldData,
-    casefoldblockSize)
+    casefoldBlockSize)
