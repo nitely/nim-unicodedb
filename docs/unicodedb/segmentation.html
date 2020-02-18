@@ -16,7 +16,7 @@
 <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro:400,500,600' rel='stylesheet' type='text/css'/>
 
 <!-- CSS -->
-<title>unicodedb</title>
+<title>segmentation</title>
 <style type="text/css" >
 /*
 Stylesheet for use with Docutils/rst2html.
@@ -804,7 +804,7 @@ function main() {
 <body onload="main()">
 <div class="document" id="documentId">
   <div class="container">
-    <h1 class="title">unicodedb</h1>
+    <h1 class="title">segmentation</h1>
     <div class="row">
   <div class="three columns">
   <div id="global-links">
@@ -830,10 +830,18 @@ function main() {
   </ul>
 </li>
 <li>
-  <a class="reference reference-toplevel" href="#10" id="60">Consts</a>
+  <a class="reference reference-toplevel" href="#12" id="62">Procs</a>
   <ul class="simple simple-toc-section">
-      <li><a class="reference" href="#unicodeVersion"
-    title="unicodeVersion = &quot;12.1.0&quot;"><wbr />unicode<wbr />Version<span class="attachedType"></span></a></li>
+      <li><a class="reference" href="#%3D%3D%2CSgWord%2CSgWord"
+    title="`==`(a, b: SgWord): bool"><wbr />`==`<span class="attachedType"></span></a></li>
+
+  </ul>
+</li>
+<li>
+  <a class="reference reference-toplevel" href="#13" id="63">Funcs</a>
+  <ul class="simple simple-toc-section">
+      <li><a class="reference" href="#wordBreakProp%2CRune"
+    title="wordBreakProp(cp: Rune): SgWord"><wbr />word<wbr />Break<wbr />Prop<span class="attachedType"></span></a></li>
 
   </ul>
 </li>
@@ -850,28 +858,17 @@ function main() {
   <div class="nine columns" id="content">
   <div id="tocRoot"></div>
   
-  <p class="module-desc"><p>This module provides support to access the Unicode Character Database</p>
-<p>Usage:</p>
-<pre class="listing"><span class="Keyword">import</span> <span class="Identifier">unicode</span>
-<span class="Keyword">import</span> <span class="Identifier">unicodedb</span>
-<span class="Identifier">assert</span> <span class="Identifier">unicodeCategory</span><span class="Punctuation">(</span><span class="Identifier">Rune</span><span class="Punctuation">(</span><span class="HexNumber">0x860</span><span class="Punctuation">)</span><span class="Punctuation">)</span> <span class="Operator">==</span> <span class="Identifier">ctgLo</span>
-<span class="Identifier">assert</span> <span class="Identifier">bidirectional</span><span class="Punctuation">(</span><span class="Identifier">Rune</span><span class="Punctuation">(</span><span class="HexNumber">0x07F7</span><span class="Punctuation">)</span><span class="Punctuation">)</span> <span class="Operator">==</span> <span class="StringLit">&quot;ON&quot;</span>
-<span class="Identifier">assert</span> <span class="Identifier">combining</span><span class="Punctuation">(</span><span class="Identifier">Rune</span><span class="Punctuation">(</span><span class="HexNumber">0x860</span><span class="Punctuation">)</span><span class="Punctuation">)</span> <span class="Operator">==</span> <span class="DecNumber">0</span>
-<span class="Identifier">assert</span> <span class="Identifier">name</span><span class="Punctuation">(</span><span class="Identifier">Rune</span><span class="Punctuation">(</span><span class="DecNumber">32</span><span class="Punctuation">)</span><span class="Punctuation">)</span> <span class="Operator">==</span> <span class="StringLit">&quot;SPACE&quot;</span>
-<span class="Identifier">assert</span> <span class="Identifier">lookupStrict</span><span class="Punctuation">(</span><span class="StringLit">&quot;SPACE&quot;</span><span class="Punctuation">)</span> <span class="Operator">==</span> <span class="Identifier">Rune</span><span class="Punctuation">(</span><span class="DecNumber">32</span><span class="Punctuation">)</span>
-<span class="Identifier">assert</span> <span class="Identifier">utmUppercase</span> <span class="Keyword">in</span> <span class="Identifier">Rune</span><span class="Punctuation">(</span><span class="HexNumber">0x0041</span><span class="Punctuation">)</span><span class="Operator">.</span><span class="Identifier">unicodeTypes</span><span class="Punctuation">(</span><span class="Punctuation">)</span>
-<span class="Identifier">assert</span> <span class="Identifier">nfcQcNo</span> <span class="Keyword">in</span> <span class="Identifier">Rune</span><span class="Punctuation">(</span><span class="HexNumber">0x0374</span><span class="Punctuation">)</span><span class="Operator">.</span><span class="Identifier">quickCheck</span><span class="Punctuation">(</span><span class="Punctuation">)</span></pre><p>There are more examples inluded within the tests module</p>
-</p>
+  <p class="module-desc">This module provides segmentation data to implement text segmentation tr29</p>
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
 <dl class="item">
-<a class="reference external" href="unicodedb/compositions.html">unicodedb/compositions</a>, <a class="reference external" href="unicodedb/decompositions.html">unicodedb/decompositions</a>, <a class="reference external" href="unicodedb/properties.html">unicodedb/properties</a>, <a class="reference external" href="unicodedb/names.html">unicodedb/names</a>, <a class="reference external" href="unicodedb/types.html">unicodedb/types</a>
+<a class="reference external" href="segmentation_data.html">segmentation_data</a>
 </dl></div>
-<div class="section" id="10">
-<h1><a class="toc-backref" href="#10">Consts</a></h1>
+<div class="section" id="12">
+<h1><a class="toc-backref" href="#12">Procs</a></h1>
 <dl class="item">
-<a id="unicodeVersion"></a>
-<dt><pre><a href="unicodedb.html#unicodeVersion"><span class="Identifier">unicodeVersion</span></a> <span class="Other">=</span> <span class="StringLit">&quot;12.1.0&quot;</span></pre></dt>
+<a id="==,SgWord,SgWord"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#%3D%3D%2CSgWord%2CSgWord"><span class="Identifier">`==`</span></a><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <a href="segmentation_data.html#SgWord"><span class="Identifier">SgWord</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">borrow</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
 
@@ -879,10 +876,22 @@ function main() {
 </dd>
 
 </dl></div>
+<div class="section" id="13">
+<h1><a class="toc-backref" href="#13">Funcs</a></h1>
+<dl class="item">
+<a id="wordBreakProp,Rune"></a>
+<dt><pre><span class="Keyword">func</span> <a href="#wordBreakProp%2CRune"><span class="Identifier">wordBreakProp</span></a><span class="Other">(</span><span class="Identifier">cp</span><span class="Other">:</span> <span class="Identifier">Rune</span><span class="Other">)</span><span class="Other">:</span> <a href="segmentation_data.html#SgWord"><span class="Identifier">SgWord</span></a> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
+<dd>
+
+Return the word-break property of <tt class="docutils literal"><span class="pre">cp</span></tt>
+
+</dd>
+
+</dl></div>
 <div class="section" id="19">
 <h1><a class="toc-backref" href="#19">Exports</a></h1>
 <dl class="item">
-<a class="reference external" href="unicodedb/compositions.html">unicodedb/compositions</a>, <a href="unicodedb/compositions.html#composition"><span class="Identifier">composition</span></a>, <a href="unicodedb/compositions.html#composition"><span class="Identifier">composition</span></a>, <a href="unicodedb/decompositions.html#canonicalDecomposition"><span class="Identifier">canonicalDecomposition</span></a>, <a href="unicodedb/decompositions.html#decomposition"><span class="Identifier">decomposition</span></a>, <a href="unicodedb/decompositions.html#canonicalDecomposition"><span class="Identifier">canonicalDecomposition</span></a>, <a href="unicodedb/decompositions.html#decomposition"><span class="Identifier">decomposition</span></a>, <a class="reference external" href="unicodedb/decompositions.html">unicodedb/decompositions</a>, <a href="unicodedb/properties.html#quickCheck"><span class="Identifier">quickCheck</span></a>, <a href="unicodedb/properties_data.html#ctgSc"><span class="Identifier">ctgSc</span></a>, <a href="unicodedb/properties_data.html#ctgPe"><span class="Identifier">ctgPe</span></a>, <a href="unicodedb/properties.html#combining"><span class="Identifier">combining</span></a>, <a href="unicodedb/properties_data.html#ctgPd"><span class="Identifier">ctgPd</span></a>, <a href="unicodedb/properties_data.html#ctgLo"><span class="Identifier">ctgLo</span></a>, <a href="unicodedb/properties.html#quickCheck"><span class="Identifier">quickCheck</span></a>, <a href="unicodedb/properties.html#=="><span class="Identifier">==</span></a>, <a href="unicodedb/properties_data.html#ctgNo"><span class="Identifier">ctgNo</span></a>, <a href="unicodedb/properties_data.html#UnicodeCategory"><span class="Identifier">UnicodeCategory</span></a>, <a href="unicodedb/properties.html#+"><span class="Identifier">+</span></a>, <a href="unicodedb/properties_data.html#ctgSm"><span class="Identifier">ctgSm</span></a>, <a href="unicodedb/properties.html#combining"><span class="Identifier">combining</span></a>, <a href="unicodedb/properties_data.html#ctgPs"><span class="Identifier">ctgPs</span></a>, <a href="unicodedb/properties.html#contains"><span class="Identifier">contains</span></a>, <a href="unicodedb/properties_data.html#NfMask"><span class="Identifier">NfMask</span></a>, <a href="unicodedb/properties_data.html#ctgLt"><span class="Identifier">ctgLt</span></a>, <a href="unicodedb/properties.html#UnicodeCategorySet"><span class="Identifier">UnicodeCategorySet</span></a>, <a href="unicodedb/properties_data.html#ctgLm"><span class="Identifier">ctgLm</span></a>, <a href="unicodedb/properties_data.html#ctgMe"><span class="Identifier">ctgMe</span></a>, <a href="unicodedb/properties.html#ctgN"><span class="Identifier">ctgN</span></a>, <a href="unicodedb/properties_data.html#ctgCs"><span class="Identifier">ctgCs</span></a>, <a href="unicodedb/properties_data.html#ctgZs"><span class="Identifier">ctgZs</span></a>, <a href="unicodedb/properties.html#+"><span class="Identifier">+</span></a>, <a href="unicodedb/properties.html#ctgC"><span class="Identifier">ctgC</span></a>, <a href="unicodedb/properties.html#bidirectional"><span class="Identifier">bidirectional</span></a>, <a href="unicodedb/properties.html#upropCcc"><span class="Identifier">upropCcc</span></a>, <a href="unicodedb/properties_data.html#ctgNd"><span class="Identifier">ctgNd</span></a>, <a href="unicodedb/properties_data.html#ctgPi"><span class="Identifier">ctgPi</span></a>, <a href="unicodedb/properties_data.html#ctgCo"><span class="Identifier">ctgCo</span></a>, <a href="unicodedb/properties_data.html#ctgZp"><span class="Identifier">ctgZp</span></a>, <a href="unicodedb/properties.html#ctgM"><span class="Identifier">ctgM</span></a>, <a href="unicodedb/properties_data.html#ctgNl"><span class="Identifier">ctgNl</span></a>, <a href="unicodedb/properties.html#contains"><span class="Identifier">contains</span></a>, <a href="unicodedb/properties_data.html#ctgZl"><span class="Identifier">ctgZl</span></a>, <a href="unicodedb/properties.html#upropQc"><span class="Identifier">upropQc</span></a>, <a href="unicodedb/properties_data.html#ctgLu"><span class="Identifier">ctgLu</span></a>, <a href="unicodedb/properties_data.html#ctgCc"><span class="Identifier">ctgCc</span></a>, <a href="unicodedb/properties.html#ctgS"><span class="Identifier">ctgS</span></a>, <a href="unicodedb/properties.html#properties"><span class="Identifier">properties</span></a>, <a href="unicodedb/properties_data.html#ctgSo"><span class="Identifier">ctgSo</span></a>, <a class="reference external" href="unicodedb/properties.html">unicodedb/properties</a>, <a href="unicodedb/properties.html#bidirectional"><span class="Identifier">bidirectional</span></a>, <a href="unicodedb/properties.html#UnicodeProp"><span class="Identifier">UnicodeProp</span></a>, <a href="unicodedb/properties_data.html#ctgPc"><span class="Identifier">ctgPc</span></a>, <a href="unicodedb/properties.html#categoryMap"><span class="Identifier">categoryMap</span></a>, <a href="unicodedb/properties_data.html#ctgPo"><span class="Identifier">ctgPo</span></a>, <a href="unicodedb/properties_data.html#ctgMc"><span class="Identifier">ctgMc</span></a>, <a href="unicodedb/properties.html#UnicodeProps"><span class="Identifier">UnicodeProps</span></a>, <a href="unicodedb/properties.html#upropCat"><span class="Identifier">upropCat</span></a>, <a href="unicodedb/properties.html#+"><span class="Identifier">+</span></a>, <a href="unicodedb/properties.html#unicodeCategory"><span class="Identifier">unicodeCategory</span></a>, <a href="unicodedb/properties.html#ctgL"><span class="Identifier">ctgL</span></a>, <a href="unicodedb/properties_data.html#ctgCf"><span class="Identifier">ctgCf</span></a>, <a href="unicodedb/properties.html#upropBi"><span class="Identifier">upropBi</span></a>, <a href="unicodedb/properties_data.html#ctgMn"><span class="Identifier">ctgMn</span></a>, <a href="unicodedb/properties.html#ctgP"><span class="Identifier">ctgP</span></a>, <a href="unicodedb/properties.html#ctgZ"><span class="Identifier">ctgZ</span></a>, <a href="unicodedb/properties_data.html#ctgCn"><span class="Identifier">ctgCn</span></a>, <a href="unicodedb/properties_data.html#ctgPf"><span class="Identifier">ctgPf</span></a>, <a href="unicodedb/properties.html#categorySetMap"><span class="Identifier">categorySetMap</span></a>, <a href="unicodedb/properties_data.html#ctgLl"><span class="Identifier">ctgLl</span></a>, <a href="unicodedb/properties_data.html#ctgSk"><span class="Identifier">ctgSk</span></a>, <a href="unicodedb/properties.html#+"><span class="Identifier">+</span></a>, <a href="unicodedb/properties.html#unicodeCategory"><span class="Identifier">unicodeCategory</span></a>, <a class="reference external" href="unicodedb/names.html">unicodedb/names</a>, <a href="unicodedb/names.html#name"><span class="Identifier">name</span></a>, <a href="unicodedb/names.html#lookupStrict"><span class="Identifier">lookupStrict</span></a>, <a href="unicodedb/types_data.html#utmWhiteSpace"><span class="Identifier">utmWhiteSpace</span></a>, <a href="unicodedb/types.html#unicodeTypes"><span class="Identifier">unicodeTypes</span></a>, <a href="unicodedb/types.html#contains"><span class="Identifier">contains</span></a>, <a class="reference external" href="unicodedb/types.html">unicodedb/types</a>, <a href="unicodedb/types_data.html#utmDigit"><span class="Identifier">utmDigit</span></a>, <a href="unicodedb/types_data.html#utmDecimal"><span class="Identifier">utmDecimal</span></a>, <a href="unicodedb/types_data.html#utmUppercase"><span class="Identifier">utmUppercase</span></a>, <a href="unicodedb/types_data.html#UnicodeTypeMask"><span class="Identifier">UnicodeTypeMask</span></a>, <a href="unicodedb/types_data.html#utmNumeric"><span class="Identifier">utmNumeric</span></a>, <a href="unicodedb/types.html#+"><span class="Identifier">+</span></a>, <a href="unicodedb/types_data.html#utmCased"><span class="Identifier">utmCased</span></a>, <a href="unicodedb/types_data.html#utmLowercase"><span class="Identifier">utmLowercase</span></a>, <a href="unicodedb/types_data.html#utmWord"><span class="Identifier">utmWord</span></a>
+<a href="segmentation_data.html#SgWord"><span class="Identifier">SgWord</span></a>, <a href="segmentation_data.html#sgwOther"><span class="Identifier">sgwOther</span></a>, <a href="segmentation_data.html#sgwDoubleQuote"><span class="Identifier">sgwDoubleQuote</span></a>, <a href="segmentation_data.html#sgwSingleQuote"><span class="Identifier">sgwSingleQuote</span></a>, <a href="segmentation_data.html#sgwHebrewLetter"><span class="Identifier">sgwHebrewLetter</span></a>, <a href="segmentation_data.html#sgwCr"><span class="Identifier">sgwCr</span></a>, <a href="segmentation_data.html#sgwLf"><span class="Identifier">sgwLf</span></a>, <a href="segmentation_data.html#sgwNewline"><span class="Identifier">sgwNewline</span></a>, <a href="segmentation_data.html#sgwExtend"><span class="Identifier">sgwExtend</span></a>, <a href="segmentation_data.html#sgwRegionalIndicator"><span class="Identifier">sgwRegionalIndicator</span></a>, <a href="segmentation_data.html#sgwFormat"><span class="Identifier">sgwFormat</span></a>, <a href="segmentation_data.html#sgwKatakana"><span class="Identifier">sgwKatakana</span></a>, <a href="segmentation_data.html#sgwAletter"><span class="Identifier">sgwAletter</span></a>, <a href="segmentation_data.html#sgwMidLetter"><span class="Identifier">sgwMidLetter</span></a>, <a href="segmentation_data.html#sgwMidNum"><span class="Identifier">sgwMidNum</span></a>, <a href="segmentation_data.html#sgwMidNumLet"><span class="Identifier">sgwMidNumLet</span></a>, <a href="segmentation_data.html#sgwNumeric"><span class="Identifier">sgwNumeric</span></a>, <a href="segmentation_data.html#sgwExtendNumLet"><span class="Identifier">sgwExtendNumLet</span></a>, <a href="segmentation_data.html#sgwZwj"><span class="Identifier">sgwZwj</span></a>, <a href="segmentation_data.html#sgwWsegSpace"><span class="Identifier">sgwWsegSpace</span></a>, <a href="segmentation_data.html#sgwExtendedPictographic"><span class="Identifier">sgwExtendedPictographic</span></a>
 </dl></div>
 
   </div>
@@ -892,7 +901,7 @@ function main() {
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small>Made with Nim. Generated: 2020-02-18 12:45:49 UTC</small>
+        <small>Made with Nim. Generated: 2020-02-18 12:45:44 UTC</small>
       </div>
     </div>
   </div>

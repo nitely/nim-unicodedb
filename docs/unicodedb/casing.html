@@ -16,7 +16,7 @@
 <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro:400,500,600' rel='stylesheet' type='text/css'/>
 
 <!-- CSS -->
-<title>unicodedb</title>
+<title>casing</title>
 <style type="text/css" >
 /*
 Stylesheet for use with Docutils/rst2html.
@@ -804,7 +804,7 @@ function main() {
 <body onload="main()">
 <div class="document" id="documentId">
   <div class="container">
-    <h1 class="title">unicodedb</h1>
+    <h1 class="title">casing</h1>
     <div class="row">
   <div class="three columns">
   <div id="global-links">
@@ -830,17 +830,17 @@ function main() {
   </ul>
 </li>
 <li>
-  <a class="reference reference-toplevel" href="#10" id="60">Consts</a>
+  <a class="reference reference-toplevel" href="#15" id="65">Iterators</a>
   <ul class="simple simple-toc-section">
-      <li><a class="reference" href="#unicodeVersion"
-    title="unicodeVersion = &quot;12.1.0&quot;"><wbr />unicode<wbr />Version<span class="attachedType"></span></a></li>
+      <li><a class="reference" href="#lowerCase.i%2CRune"
+    title="lowerCase(r: Rune): Rune"><wbr />lower<wbr />Case<span class="attachedType"></span></a></li>
+  <li><a class="reference" href="#upperCase.i%2CRune"
+    title="upperCase(r: Rune): Rune"><wbr />upper<wbr />Case<span class="attachedType"></span></a></li>
+  <li><a class="reference" href="#titleCase.i%2CRune"
+    title="titleCase(r: Rune): Rune"><wbr />title<wbr />Case<span class="attachedType"></span></a></li>
+  <li><a class="reference" href="#caseFold.i%2CRune"
+    title="caseFold(r: Rune): Rune"><wbr />case<wbr />Fold<span class="attachedType"></span></a></li>
 
-  </ul>
-</li>
-<li>
-  <a class="reference reference-toplevel" href="#19" id="69">Exports</a>
-  <ul class="simple simple-toc-section">
-    
   </ul>
 </li>
 
@@ -850,39 +850,44 @@ function main() {
   <div class="nine columns" id="content">
   <div id="tocRoot"></div>
   
-  <p class="module-desc"><p>This module provides support to access the Unicode Character Database</p>
-<p>Usage:</p>
-<pre class="listing"><span class="Keyword">import</span> <span class="Identifier">unicode</span>
-<span class="Keyword">import</span> <span class="Identifier">unicodedb</span>
-<span class="Identifier">assert</span> <span class="Identifier">unicodeCategory</span><span class="Punctuation">(</span><span class="Identifier">Rune</span><span class="Punctuation">(</span><span class="HexNumber">0x860</span><span class="Punctuation">)</span><span class="Punctuation">)</span> <span class="Operator">==</span> <span class="Identifier">ctgLo</span>
-<span class="Identifier">assert</span> <span class="Identifier">bidirectional</span><span class="Punctuation">(</span><span class="Identifier">Rune</span><span class="Punctuation">(</span><span class="HexNumber">0x07F7</span><span class="Punctuation">)</span><span class="Punctuation">)</span> <span class="Operator">==</span> <span class="StringLit">&quot;ON&quot;</span>
-<span class="Identifier">assert</span> <span class="Identifier">combining</span><span class="Punctuation">(</span><span class="Identifier">Rune</span><span class="Punctuation">(</span><span class="HexNumber">0x860</span><span class="Punctuation">)</span><span class="Punctuation">)</span> <span class="Operator">==</span> <span class="DecNumber">0</span>
-<span class="Identifier">assert</span> <span class="Identifier">name</span><span class="Punctuation">(</span><span class="Identifier">Rune</span><span class="Punctuation">(</span><span class="DecNumber">32</span><span class="Punctuation">)</span><span class="Punctuation">)</span> <span class="Operator">==</span> <span class="StringLit">&quot;SPACE&quot;</span>
-<span class="Identifier">assert</span> <span class="Identifier">lookupStrict</span><span class="Punctuation">(</span><span class="StringLit">&quot;SPACE&quot;</span><span class="Punctuation">)</span> <span class="Operator">==</span> <span class="Identifier">Rune</span><span class="Punctuation">(</span><span class="DecNumber">32</span><span class="Punctuation">)</span>
-<span class="Identifier">assert</span> <span class="Identifier">utmUppercase</span> <span class="Keyword">in</span> <span class="Identifier">Rune</span><span class="Punctuation">(</span><span class="HexNumber">0x0041</span><span class="Punctuation">)</span><span class="Operator">.</span><span class="Identifier">unicodeTypes</span><span class="Punctuation">(</span><span class="Punctuation">)</span>
-<span class="Identifier">assert</span> <span class="Identifier">nfcQcNo</span> <span class="Keyword">in</span> <span class="Identifier">Rune</span><span class="Punctuation">(</span><span class="HexNumber">0x0374</span><span class="Punctuation">)</span><span class="Operator">.</span><span class="Identifier">quickCheck</span><span class="Punctuation">(</span><span class="Punctuation">)</span></pre><p>There are more examples inluded within the tests module</p>
-</p>
+  <p class="module-desc">This module provides casing mappings. Beware some mappings are one to many characters.</p>
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
 <dl class="item">
-<a class="reference external" href="unicodedb/compositions.html">unicodedb/compositions</a>, <a class="reference external" href="unicodedb/decompositions.html">unicodedb/decompositions</a>, <a class="reference external" href="unicodedb/properties.html">unicodedb/properties</a>, <a class="reference external" href="unicodedb/names.html">unicodedb/names</a>, <a class="reference external" href="unicodedb/types.html">unicodedb/types</a>
+<a class="reference external" href="casing_data.html">casing_data</a>
 </dl></div>
-<div class="section" id="10">
-<h1><a class="toc-backref" href="#10">Consts</a></h1>
+<div class="section" id="15">
+<h1><a class="toc-backref" href="#15">Iterators</a></h1>
 <dl class="item">
-<a id="unicodeVersion"></a>
-<dt><pre><a href="unicodedb.html#unicodeVersion"><span class="Identifier">unicodeVersion</span></a> <span class="Other">=</span> <span class="StringLit">&quot;12.1.0&quot;</span></pre></dt>
+<a id="lowerCase.i,Rune"></a>
+<dt><pre><span class="Keyword">iterator</span> <a href="#lowerCase.i%2CRune"><span class="Identifier">lowerCase</span></a><span class="Other">(</span><span class="Identifier">r</span><span class="Other">:</span> <span class="Identifier">Rune</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Rune</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
+Return lower case mapping of <tt class="docutils literal"><span class="pre">r</span></tt> if there is such mapping. Return <tt class="docutils literal"><span class="pre">r</span></tt> otherwise
 
+</dd>
+<a id="upperCase.i,Rune"></a>
+<dt><pre><span class="Keyword">iterator</span> <a href="#upperCase.i%2CRune"><span class="Identifier">upperCase</span></a><span class="Other">(</span><span class="Identifier">r</span><span class="Other">:</span> <span class="Identifier">Rune</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Rune</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
+<dd>
+
+Return upper case mapping of <tt class="docutils literal"><span class="pre">r</span></tt> if there is such mapping. Return <tt class="docutils literal"><span class="pre">r</span></tt> otherwise
+
+</dd>
+<a id="titleCase.i,Rune"></a>
+<dt><pre><span class="Keyword">iterator</span> <a href="#titleCase.i%2CRune"><span class="Identifier">titleCase</span></a><span class="Other">(</span><span class="Identifier">r</span><span class="Other">:</span> <span class="Identifier">Rune</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Rune</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
+<dd>
+
+Return title case mapping of <tt class="docutils literal"><span class="pre">r</span></tt> if there is such mapping. Return <tt class="docutils literal"><span class="pre">r</span></tt> otherwise
+
+</dd>
+<a id="caseFold.i,Rune"></a>
+<dt><pre><span class="Keyword">iterator</span> <a href="#caseFold.i%2CRune"><span class="Identifier">caseFold</span></a><span class="Other">(</span><span class="Identifier">r</span><span class="Other">:</span> <span class="Identifier">Rune</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Rune</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span><span class="Other">,</span> <span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span><span class="Other">.}</span></span></pre></dt>
+<dd>
+
+Return full case fold of <tt class="docutils literal"><span class="pre">r</span></tt> if there is such folding. Return <tt class="docutils literal"><span class="pre">r</span></tt> otherwise. This is meant for internal usage such as caseless text comparison
 
 </dd>
 
-</dl></div>
-<div class="section" id="19">
-<h1><a class="toc-backref" href="#19">Exports</a></h1>
-<dl class="item">
-<a class="reference external" href="unicodedb/compositions.html">unicodedb/compositions</a>, <a href="unicodedb/compositions.html#composition"><span class="Identifier">composition</span></a>, <a href="unicodedb/compositions.html#composition"><span class="Identifier">composition</span></a>, <a href="unicodedb/decompositions.html#canonicalDecomposition"><span class="Identifier">canonicalDecomposition</span></a>, <a href="unicodedb/decompositions.html#decomposition"><span class="Identifier">decomposition</span></a>, <a href="unicodedb/decompositions.html#canonicalDecomposition"><span class="Identifier">canonicalDecomposition</span></a>, <a href="unicodedb/decompositions.html#decomposition"><span class="Identifier">decomposition</span></a>, <a class="reference external" href="unicodedb/decompositions.html">unicodedb/decompositions</a>, <a href="unicodedb/properties.html#quickCheck"><span class="Identifier">quickCheck</span></a>, <a href="unicodedb/properties_data.html#ctgSc"><span class="Identifier">ctgSc</span></a>, <a href="unicodedb/properties_data.html#ctgPe"><span class="Identifier">ctgPe</span></a>, <a href="unicodedb/properties.html#combining"><span class="Identifier">combining</span></a>, <a href="unicodedb/properties_data.html#ctgPd"><span class="Identifier">ctgPd</span></a>, <a href="unicodedb/properties_data.html#ctgLo"><span class="Identifier">ctgLo</span></a>, <a href="unicodedb/properties.html#quickCheck"><span class="Identifier">quickCheck</span></a>, <a href="unicodedb/properties.html#=="><span class="Identifier">==</span></a>, <a href="unicodedb/properties_data.html#ctgNo"><span class="Identifier">ctgNo</span></a>, <a href="unicodedb/properties_data.html#UnicodeCategory"><span class="Identifier">UnicodeCategory</span></a>, <a href="unicodedb/properties.html#+"><span class="Identifier">+</span></a>, <a href="unicodedb/properties_data.html#ctgSm"><span class="Identifier">ctgSm</span></a>, <a href="unicodedb/properties.html#combining"><span class="Identifier">combining</span></a>, <a href="unicodedb/properties_data.html#ctgPs"><span class="Identifier">ctgPs</span></a>, <a href="unicodedb/properties.html#contains"><span class="Identifier">contains</span></a>, <a href="unicodedb/properties_data.html#NfMask"><span class="Identifier">NfMask</span></a>, <a href="unicodedb/properties_data.html#ctgLt"><span class="Identifier">ctgLt</span></a>, <a href="unicodedb/properties.html#UnicodeCategorySet"><span class="Identifier">UnicodeCategorySet</span></a>, <a href="unicodedb/properties_data.html#ctgLm"><span class="Identifier">ctgLm</span></a>, <a href="unicodedb/properties_data.html#ctgMe"><span class="Identifier">ctgMe</span></a>, <a href="unicodedb/properties.html#ctgN"><span class="Identifier">ctgN</span></a>, <a href="unicodedb/properties_data.html#ctgCs"><span class="Identifier">ctgCs</span></a>, <a href="unicodedb/properties_data.html#ctgZs"><span class="Identifier">ctgZs</span></a>, <a href="unicodedb/properties.html#+"><span class="Identifier">+</span></a>, <a href="unicodedb/properties.html#ctgC"><span class="Identifier">ctgC</span></a>, <a href="unicodedb/properties.html#bidirectional"><span class="Identifier">bidirectional</span></a>, <a href="unicodedb/properties.html#upropCcc"><span class="Identifier">upropCcc</span></a>, <a href="unicodedb/properties_data.html#ctgNd"><span class="Identifier">ctgNd</span></a>, <a href="unicodedb/properties_data.html#ctgPi"><span class="Identifier">ctgPi</span></a>, <a href="unicodedb/properties_data.html#ctgCo"><span class="Identifier">ctgCo</span></a>, <a href="unicodedb/properties_data.html#ctgZp"><span class="Identifier">ctgZp</span></a>, <a href="unicodedb/properties.html#ctgM"><span class="Identifier">ctgM</span></a>, <a href="unicodedb/properties_data.html#ctgNl"><span class="Identifier">ctgNl</span></a>, <a href="unicodedb/properties.html#contains"><span class="Identifier">contains</span></a>, <a href="unicodedb/properties_data.html#ctgZl"><span class="Identifier">ctgZl</span></a>, <a href="unicodedb/properties.html#upropQc"><span class="Identifier">upropQc</span></a>, <a href="unicodedb/properties_data.html#ctgLu"><span class="Identifier">ctgLu</span></a>, <a href="unicodedb/properties_data.html#ctgCc"><span class="Identifier">ctgCc</span></a>, <a href="unicodedb/properties.html#ctgS"><span class="Identifier">ctgS</span></a>, <a href="unicodedb/properties.html#properties"><span class="Identifier">properties</span></a>, <a href="unicodedb/properties_data.html#ctgSo"><span class="Identifier">ctgSo</span></a>, <a class="reference external" href="unicodedb/properties.html">unicodedb/properties</a>, <a href="unicodedb/properties.html#bidirectional"><span class="Identifier">bidirectional</span></a>, <a href="unicodedb/properties.html#UnicodeProp"><span class="Identifier">UnicodeProp</span></a>, <a href="unicodedb/properties_data.html#ctgPc"><span class="Identifier">ctgPc</span></a>, <a href="unicodedb/properties.html#categoryMap"><span class="Identifier">categoryMap</span></a>, <a href="unicodedb/properties_data.html#ctgPo"><span class="Identifier">ctgPo</span></a>, <a href="unicodedb/properties_data.html#ctgMc"><span class="Identifier">ctgMc</span></a>, <a href="unicodedb/properties.html#UnicodeProps"><span class="Identifier">UnicodeProps</span></a>, <a href="unicodedb/properties.html#upropCat"><span class="Identifier">upropCat</span></a>, <a href="unicodedb/properties.html#+"><span class="Identifier">+</span></a>, <a href="unicodedb/properties.html#unicodeCategory"><span class="Identifier">unicodeCategory</span></a>, <a href="unicodedb/properties.html#ctgL"><span class="Identifier">ctgL</span></a>, <a href="unicodedb/properties_data.html#ctgCf"><span class="Identifier">ctgCf</span></a>, <a href="unicodedb/properties.html#upropBi"><span class="Identifier">upropBi</span></a>, <a href="unicodedb/properties_data.html#ctgMn"><span class="Identifier">ctgMn</span></a>, <a href="unicodedb/properties.html#ctgP"><span class="Identifier">ctgP</span></a>, <a href="unicodedb/properties.html#ctgZ"><span class="Identifier">ctgZ</span></a>, <a href="unicodedb/properties_data.html#ctgCn"><span class="Identifier">ctgCn</span></a>, <a href="unicodedb/properties_data.html#ctgPf"><span class="Identifier">ctgPf</span></a>, <a href="unicodedb/properties.html#categorySetMap"><span class="Identifier">categorySetMap</span></a>, <a href="unicodedb/properties_data.html#ctgLl"><span class="Identifier">ctgLl</span></a>, <a href="unicodedb/properties_data.html#ctgSk"><span class="Identifier">ctgSk</span></a>, <a href="unicodedb/properties.html#+"><span class="Identifier">+</span></a>, <a href="unicodedb/properties.html#unicodeCategory"><span class="Identifier">unicodeCategory</span></a>, <a class="reference external" href="unicodedb/names.html">unicodedb/names</a>, <a href="unicodedb/names.html#name"><span class="Identifier">name</span></a>, <a href="unicodedb/names.html#lookupStrict"><span class="Identifier">lookupStrict</span></a>, <a href="unicodedb/types_data.html#utmWhiteSpace"><span class="Identifier">utmWhiteSpace</span></a>, <a href="unicodedb/types.html#unicodeTypes"><span class="Identifier">unicodeTypes</span></a>, <a href="unicodedb/types.html#contains"><span class="Identifier">contains</span></a>, <a class="reference external" href="unicodedb/types.html">unicodedb/types</a>, <a href="unicodedb/types_data.html#utmDigit"><span class="Identifier">utmDigit</span></a>, <a href="unicodedb/types_data.html#utmDecimal"><span class="Identifier">utmDecimal</span></a>, <a href="unicodedb/types_data.html#utmUppercase"><span class="Identifier">utmUppercase</span></a>, <a href="unicodedb/types_data.html#UnicodeTypeMask"><span class="Identifier">UnicodeTypeMask</span></a>, <a href="unicodedb/types_data.html#utmNumeric"><span class="Identifier">utmNumeric</span></a>, <a href="unicodedb/types.html#+"><span class="Identifier">+</span></a>, <a href="unicodedb/types_data.html#utmCased"><span class="Identifier">utmCased</span></a>, <a href="unicodedb/types_data.html#utmLowercase"><span class="Identifier">utmLowercase</span></a>, <a href="unicodedb/types_data.html#utmWord"><span class="Identifier">utmWord</span></a>
 </dl></div>
 
   </div>
@@ -892,7 +897,7 @@ function main() {
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small>Made with Nim. Generated: 2020-02-18 12:45:49 UTC</small>
+        <small>Made with Nim. Generated: 2020-02-18 12:45:45 UTC</small>
       </div>
     </div>
   </div>
