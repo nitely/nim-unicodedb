@@ -159,6 +159,10 @@ const
   sptNandinagari = 150
   sptNyiakengPuachueHmong = 151
   sptWancho = 152
+  sptYezidi = 153
+  sptChorasmian = 154
+  sptDivesAkuru = 155
+  sptKhitanSmallScript = 156
 
 proc scriptMap(s: string): int =
   case s
@@ -466,7 +470,16 @@ proc scriptMap(s: string): int =
     sptNyiakengPuachueHmong
   of "Wancho":
     sptWancho
+  of "Yezidi":
+    sptYezidi
+  of "Chorasmian":
+    sptChorasmian
+  of "Dives_Akuru":
+    sptDivesAkuru
+  of "Khitan_Small_Script":
+    sptKhitanSmallScript
   else:
+    echo s
     assert false
     -1
 
@@ -663,6 +676,10 @@ const
   sptNandinagari* = $#.UnicodeScript
   sptNyiakengPuachueHmong* = $#.UnicodeScript
   sptWancho* = $#.UnicodeScript
+  sptYezidi* = $#.UnicodeScript
+  sptChorasmian* = $#.UnicodeScript
+  sptDivesAkuru* = $#.UnicodeScript
+  sptKhitanSmallScript* = $#.UnicodeScript
 
 const
   typesIndices* = [
@@ -838,6 +855,10 @@ when isMainModule:
       $sptNandinagari,
       $sptNyiakengPuachueHmong,
       $sptWancho,
+      $sptYezidi,
+      $sptChorasmian,
+      $sptDivesAkuru,
+      $sptKhitanSmallScript,
       prettyTable(stages.stage1, 15, "'i16"),
       prettyTable(stages.stage2, 15, "'u8"),
       $stages.blockSize])

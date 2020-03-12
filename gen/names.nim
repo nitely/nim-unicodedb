@@ -6,19 +6,22 @@ import two_stage_table
 import min_perfect_hash
 import utils
 
-# See http://www.unicode.org/versions/Unicode10.0.0/ch04.pdf
+# See http://www.unicode.org/versions/latest/ch04.pdf
 # Chapter 4.8
 const
   prefixRanges = [
     [0xAC00, 0xD7A3],
-    [0x3400, 0x4DB5],
-    [0x4E00, 0x9FEA],
-    [0x20000, 0x2A6D6],
+    [0x3400, 0x4DBF],
+    [0x4E00, 0x9FFC],
+    [0x20000, 0x2A6DD],
     [0x2A700, 0x2B734],
     [0x2B740, 0x2B81D],
     [0x2B820, 0x2CEA1],
     [0x2CEB0, 0x2EBE0],
-    [0x17000, 0x187EC],
+    [0x30000, 0x3134A],
+    [0x17000, 0x187F7],
+    [0x18D00, 0x18D08],
+    [0x18B00, 0x18CD5],
     [0x1B170, 0x1B2FB],
     [0xF900, 0xFA6D],
     [0xFA70, 0xFAD9],
@@ -46,8 +49,7 @@ proc parseNames(namesRaw: seq[string]): seq[string] =
       continue
     result[cp] = nr
 
-# See http://www.unicode.org/versions/Unicode10.0.0
-# /ch03.pdf#M9.32468.Heading.310.Combining.Jamo.Behavior
+# See http://www.unicode.org/versions/latest/ch03.pdf#M9.32468.Heading.310.Combining.Jamo.Behavior
 const
   SBase = 0xAC00
   LBase = 0x1100
@@ -57,7 +59,7 @@ const
   VCount = 21
   TCount = 28
   NCount = VCount * TCount  # 588
-  SCount = LCount * NCount  # 1117
+  SCount = LCount * NCount  # 11172
 
 const
   jamoLTable = [

@@ -35,6 +35,10 @@ gen/UCD/*
 !gen/UCD/SpecialCasing.txt
 !gen/UCD/CaseFolding.txt
 
+!gen/UCD/emoji
+gen/UCD/emoji/*
+!gen/UCD/emoji/emoji-data.txt
+
 !gen/UCD/extracted
 gen/UCD/extracted/*
 !gen/UCD/extracted/DerivedBidiClass.txt

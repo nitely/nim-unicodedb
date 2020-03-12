@@ -183,7 +183,7 @@ when isMainModule:
       $utmCased.ord,
       $utmWhiteSpace.ord,
       $utmWord.ord,
-      prettyTable(stages.stage1, 15, "'u8"),
+      prettyTable(stages.stage1, 15, "'i16"),
       prettyTable(stages.stage2, 15, "'i8"),
       prettyTable(stages.stage3, 15, "'i16"),
       $stages.blockSize])

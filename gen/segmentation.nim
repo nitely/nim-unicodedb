@@ -142,7 +142,7 @@ const
 when isMainModule:
   let wordProps = parseWordBreak(
     "./gen/UCD/auxiliary/WordBreakProperty.txt",
-    "./gen/emoji/emoji-data.txt")
+    "./gen/UCD/emoji/emoji-data.txt")
   let wordPropsTable = wordProps.buildWordBreak
 
   var f = open("./src/unicodedb/segmentation_data.nim", fmWrite)
