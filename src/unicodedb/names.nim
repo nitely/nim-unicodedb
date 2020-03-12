@@ -47,26 +47,30 @@ type
     ## A type for special character ranges
     ## that must generate their name
     ## based on certain rules.
-    ## Based on Unicode standard 10 - Chapter 4.8
-    Hangul, CJKU, Tangut, Nushu, CJKC
+    ## Based on Unicode standard 13 - Chapter 4.8
+    Hangul, CJKU, Tangut, Nushu, CJKC, Khitan
 const
   prefixNames: array[EPrefixNames, string] = [
     "hangul syllable ".toUpperAscii(),
     "cjk unified ideograph-".toUpperAscii(),
     "tangut ideograph-".toUpperAscii(),
     "nushu character-".toUpperAscii(),
-    "cjk compatibility ideograph-".toUpperAscii()
+    "cjk compatibility ideograph-".toUpperAscii(),
+    "khitan small script character-".toUpperAscii()
   ]
   prefixRanges = [
     (first: 0xAC00, last: 0xD7A3, name: EPrefixNames.Hangul),
-    (first: 0x3400, last: 0x4DB5, name: EPrefixNames.CJKU),
-    (first: 0x4E00, last: 0x9FEA, name: EPrefixNames.CJKU),
-    (first: 0x20000, last: 0x2A6D6, name: EPrefixNames.CJKU),
+    (first: 0x3400, last: 0x4DBF, name: EPrefixNames.CJKU),
+    (first: 0x4E00, last: 0x9FFC, name: EPrefixNames.CJKU),
+    (first: 0x20000, last: 0x2A6DD, name: EPrefixNames.CJKU),
     (first: 0x2A700, last: 0x2B734, name: EPrefixNames.CJKU),
     (first: 0x2B740, last: 0x2B81D, name: EPrefixNames.CJKU),
     (first: 0x2B820, last: 0x2CEA1, name: EPrefixNames.CJKU),
     (first: 0x2CEB0, last: 0x2EBE0, name: EPrefixNames.CJKU),
-    (first: 0x17000, last: 0x187EC, name: EPrefixNames.Tangut),
+    (first: 0x30000, last: 0x3134A, name: EPrefixNames.CJKU),
+    (first: 0x17000, last: 0x187F7, name: EPrefixNames.Tangut),
+    (first: 0x18D00, last: 0x18D08, name: EPrefixNames.Tangut),
+    (first: 0x18B00, last: 0x18CD5, name: EPrefixNames.Khitan),
     (first: 0x1B170, last: 0x1B2FB, name: EPrefixNames.Nushu),
     (first: 0xF900, last: 0xFA6D, name: EPrefixNames.CJKC),
     (first: 0xFA70, last: 0xFAD9, name: EPrefixNames.CJKC),

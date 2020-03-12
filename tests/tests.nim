@@ -35,7 +35,7 @@ test "Test decompose-compose inception":
     check dcp.len == 2
     check composition(dcp[0], dcp[1]) == cps[2].Rune
     inc i
-  check i == 940
+  check i == 941
 
 test "Test some compositions":
   block:
@@ -59,7 +59,7 @@ test "Test non-decompositions":
     if not isDecomposable and decomposition(cp.Rune).len > 0:
       #echo cp.Rune.int
       inc i
-  check i == 2  # new decomposite CPs
+  check i == 12  # new decomposite CPs
 
 test "Test some decompositions":
   check decomposition(0x0F9D.Rune) == @[0x0F9C.Rune, 0x0FB7.Rune]
@@ -81,6 +81,8 @@ test "Test non-canonical decompositions":
     if decomp.isCanonical:
       decomposableCps[decomp.cp] = true
   for cp, isDecomposable in decomposableCps:
+    if cp == 71992:  # Unicode 13
+      continue
     if not isDecomposable:
       check canonicalDecomposition(cp.Rune).len == 0
 
@@ -99,20 +101,11 @@ test "Test categories":
           cpData.cat.UnicodeCategory == ctgCn):
         inc i
         continue
-      if cp == 5741:
-        check unicodeCategory(cp.Rune) == ctgSo
-        continue
-      if cp == 7410 or cp == 7411:
-        check unicodeCategory(cp.Rune) == ctgLo
-        continue
-      if cp == 43453:
-        check unicodeCategory(cp.Rune) == ctgMn
-        continue
       if (unicodeCategory(cp.Rune) != cpData.cat.UnicodeCategory):
         echo $cp
         echo $unicodeCategory(cp.Rune).int
       check unicodeCategory(cp.Rune) == cpData.cat.UnicodeCategory
-  check i == 555  # New code points
+  check i == 5930  # New code points
 
 test "Test categories with props":
   check unicodeCategory(properties(7913.Rune)) == ctgLl
@@ -133,6 +126,9 @@ test "Test some categories":
   check unicodeCategory(0x166D.Rune) == ctgSo
   check unicodeCategory(0x1CF2.Rune) == ctgLo
   check unicodeCategory(0xA9BD.Rune) == ctgMn
+  # New in unicode 13
+  check unicodeCategory(0x1FBF9.Rune) == ctgNd
+  check unicodeCategory(0x1FBB2.Rune) == ctgSo
 
 test "Test some categories at CT":
   static:
@@ -181,7 +177,7 @@ test "Test canonical combining class":
         check combining(cp.Rune) == cpData.ccc
       elif combining(cp.Rune) != cpData.ccc:
         inc i
-  check i == 13
+  check i == 10
 
 test "Test some canonical combining class":
   check combining(0x860.Rune) == 0
@@ -195,6 +191,8 @@ test "Test some canonical combining class":
   check combining(0xEBA.Rune) == 9
   check combining(0x1E2EC.Rune) == 230
   check combining(0x1E2EF.Rune) == 230
+  # unicode 13
+  check combining(0x1F90C.Rune) == 0
 
 test "Test some quick check":
   check nfcQcNo in quickCheck(0x0374.Rune)
@@ -240,7 +238,7 @@ test "Test some name":
   check name(0x17000.Rune) == "TANGUT IDEOGRAPH-17000"
   check name(0x17001.Rune) == "TANGUT IDEOGRAPH-17001"
   check name(0x187EC.Rune) == "TANGUT IDEOGRAPH-187EC"
-  check name(0x187ED.Rune) == ""
+  check name(0x187ED.Rune) == "TANGUT IDEOGRAPH-187ED"  # Unicode 13
   check name(0x1B170.Rune) == "NUSHU CHARACTER-1B170"
   check name(0x1B171.Rune) == "NUSHU CHARACTER-1B171"
   check name(0x1B2FB.Rune) == "NUSHU CHARACTER-1B2FB"
@@ -306,7 +304,7 @@ test "Test types":
       #else:
       check(utmLowercase in unicodeTypes(cp.Rune) == cpData.lo)
       check(utmUppercase in unicodeTypes(cp.Rune) == cpData.up)
-  check i == 555  # new codepoints
+  check i == 5930  # new codepoints
 
 test "Test some types":
   check utmDecimal in unicodeTypes(Rune(0x0030))
@@ -587,6 +585,8 @@ test "Test all lowerCase":
     checked[ca.cp] = true
   for cp in 0 .. maxCp:
     if not checked[cp]:
+      if cp in [42951, 42953, 42997]:
+        continue
       check toSeq(cp.Rune.lowerCase) == @[cp.Rune]
 
 test "Test lowerCase":
@@ -622,6 +622,8 @@ test "Test all upperCase":
   for ca in allUppercase:
     checked[ca.cp] = true
   for cp in 0 .. maxCp:
+    if cp in [42952, 42954, 42998]:
+        continue
     if not checked[cp]:
       check toSeq(cp.Rune.upperCase) == @[cp.Rune]
 
@@ -663,6 +665,8 @@ test "Test all titleCase":
   for ca in allTitlecase:
     checked[ca.cp] = true
   for cp in 0 .. maxCp:
+    if cp in [42954, 42998, 42952]:
+        continue
     if not checked[cp]:
       check toSeq(cp.Rune.titleCase) == @[cp.Rune]
 
@@ -705,6 +709,8 @@ test "Test all caseFold":
   for ca in allcaseFold:
     checked[ca.cp] = true
   for cp in 0 .. maxCp:
+    if cp in [42951, 42953, 42997]:
+        continue
     if not checked[cp]:
       check toSeq(cp.Rune.caseFold) == @[cp.Rune]
 
@@ -716,12 +722,14 @@ test "Test caseFold":
   check toSeq("ᾈ".runeAt(0).caseFold) == @["ἀ".runeAt(0), "ι".runeAt(0)]
 
 test "Test word-break data":
+  var changed = 0
   var i = 0
   for wb in allWordBreak:
     for cp in wb.cpFirst .. wb.cpLast:
-      check cp.Rune.wordBreakProp == wb.prop.SgWord
+      changed += int(cp.Rune.wordBreakProp != wb.prop.SgWord)
       inc i
   check i == maxCp+1
+  check changed == 455
 
 test "Test wordBreakProp":
   check 0x10FFFF.Rune.wordBreakProp == sgwOther
