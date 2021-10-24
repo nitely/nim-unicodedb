@@ -161,6 +161,11 @@ const
   sptChorasmian* = 154.UnicodeScript
   sptDivesAkuru* = 155.UnicodeScript
   sptKhitanSmallScript* = 156.UnicodeScript
+  sptVithkuqi* = 157.UnicodeScript
+  sptOldUyghur* = 158.UnicodeScript
+  sptCyproMinoan* = 159.UnicodeScript
+  sptTangsa* = 160.UnicodeScript
+  sptToto* = 161.UnicodeScript
 
 const
   typesIndices* = [

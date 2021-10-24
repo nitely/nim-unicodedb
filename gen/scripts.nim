@@ -695,6 +695,11 @@ const
   sptChorasmian* = $#.UnicodeScript
   sptDivesAkuru* = $#.UnicodeScript
   sptKhitanSmallScript* = $#.UnicodeScript
+  sptVithkuqi* = $#.UnicodeScript
+  sptOldUyghur* = $#.UnicodeScript
+  sptCyproMinoan* = $#.UnicodeScript
+  sptTangsa* = $#.UnicodeScript
+  sptToto* = $#.UnicodeScript
 
 const
   typesIndices* = [
@@ -874,6 +879,11 @@ when isMainModule:
       $sptChorasmian,
       $sptDivesAkuru,
       $sptKhitanSmallScript,
+      $sptVithkuqi,
+      $sptOldUyghur,
+      $sptCyproMinoan,
+      $sptTangsa,
+      $sptToto,
       prettyTable(stages.stage1, 15, "'i16"),
       prettyTable(stages.stage2, 15, "'u8"),
       $stages.blockSize])

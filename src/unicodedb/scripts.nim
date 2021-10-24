@@ -158,7 +158,16 @@ export
   sptElymaic,
   sptNandinagari,
   sptNyiakengPuachueHmong,
-  sptWancho
+  sptWancho,
+  sptYezidi,
+  sptChorasmian,
+  sptDivesAkuru,
+  sptKhitanSmallScript,
+  sptVithkuqi,
+  sptOldUyghur,
+  sptCyproMinoan,
+  sptTangsa,
+  sptToto
 
 proc unicodeScript*(cp: Rune): UnicodeScript =
   ## Return script for a given code point

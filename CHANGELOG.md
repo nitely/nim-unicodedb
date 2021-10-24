@@ -1,6 +1,7 @@
 v0.11.0
 ==================
 
+* Export unicode 14 scripts
 * Drop Nim < 1.0 support
 
 v0.10.0
