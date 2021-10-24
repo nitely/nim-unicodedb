@@ -163,6 +163,11 @@ const
   sptChorasmian = 154
   sptDivesAkuru = 155
   sptKhitanSmallScript = 156
+  sptVithkuqi = 157
+  sptOldUyghur = 158
+  sptCyproMinoan = 159
+  sptTangsa = 160
+  sptToto = 161
 
 proc scriptMap(s: string): int =
   case s
@@ -478,9 +483,19 @@ proc scriptMap(s: string): int =
     sptDivesAkuru
   of "Khitan_Small_Script":
     sptKhitanSmallScript
+  of "Vithkuqi":
+    sptVithkuqi
+  of "Old_Uyghur":
+    sptOldUyghur
+  of "Cypro_Minoan":
+    sptCyproMinoan
+  of "Tangsa":
+    sptTangsa
+  of "Toto":
+    sptToto
   else:
     echo s
-    assert false
+    doAssert false
     -1
 
 proc parseScripts(propsRaw: seq[seq[string]]): seq[int] =
