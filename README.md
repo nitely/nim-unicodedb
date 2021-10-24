@@ -16,7 +16,7 @@ nimble install unicodedb
 
 ## Compatibility
 
-Nim 0.18.0, +0.19.0, +0.20.0
+Nim +1.0.0
 
 ## Usage
 

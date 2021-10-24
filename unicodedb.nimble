@@ -10,7 +10,7 @@ skipDirs = @["tests", "gen"]
 
 # Dependencies
 
-requires "nim >= 0.18.0"
+requires "nim >= 1.0.0"
 
 task test, "Test":
   exec "nim c -r tests/tests"
