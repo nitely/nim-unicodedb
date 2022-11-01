@@ -371,13 +371,13 @@ test "Test some types at CT":
 
 test "Test WhiteSpace":
   let expected = {
-    0x0009 .. 0x000D, 0x0020, 0x0085, 0x00A0,
+    0x0009'i16 .. 0x000D, 0x0020, 0x0085, 0x00A0,
     0x1680, 0x2000 .. 0x200A, 0x2028, 0x2029,
     0x202F, 0x205F, 0x3000}
   for cp in 0 .. 0x10FFFF:
     if utmWhiteSpace in unicodeTypes(cp.Rune):
-      check cp in expected
-    if cp <= int16.high and cp in expected:
+      check cp.int16 in expected
+    if cp <= int16.high and cp.int16 in expected:
       check utmWhiteSpace in unicodeTypes(cp.Rune)
 
 test "Test Word":
