@@ -392,7 +392,7 @@ test "Test Word":
         unicodeCategory(cp.Rune) in ctgLt+ctgLm+ctgLo+ctgNl or
         unicodeCategory(cp.Rune) in ctgMn+ctgMc+ctgSo or
         # Join_Control
-        cp in {0x200C .. 0x200D})
+        cp in 0x200C .. 0x200D)
     # No idea how to derive Other_Alphanumeric,
     # but this is good enough
     if (unicodeCategory(cp.Rune) in ctgPc+ctgMn+ctgMc+ctgMe or
@@ -403,7 +403,7 @@ test "Test Word":
         unicodeCategory(cp.Rune) in ctgLt+ctgLm+ctgLo+ctgNl or
         #category(cp) in ["Mn", "Mc", "So"] or
         # Join_Control
-        cp in {0x200C .. 0x200D}):
+        cp in 0x200C .. 0x200D):
       check utmWord in unicodeTypes(cp.Rune)
 
 test "Test Width":
