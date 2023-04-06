@@ -198,6 +198,11 @@ something that's missing, please open an issue or PR
 * Run tests. Add checks for missing unicode points back.
   A handful of unicode points may have change its data, check
   the unicode changelog page, make sure they are correct and skip them.
+* Note: starting Unicode 15 they added multiple @missing lines
+  which breaks the assumption of a default prop for missing CPs
+  and these lines need to be parsed (see DerivedBidiClass for example).
+  So if they add this to more files, the data gen need fixing.
+  Look for lines containing `# @missing` with a range other than `0000..10FFFF`. See [https://www.unicode.org/reports/tr44/tr44-30.html#Missing_Conventions](Missing_Conventions)
 
 ## Tests
 
