@@ -1,6 +1,6 @@
 # Package
 
-version = "0.11.2"
+version = "0.12.0"
 author = "Esteban Castro Borsani (@nitely)"
 description = "Unicode Character Database (UCD) access for Nim"
 license = "MIT"
