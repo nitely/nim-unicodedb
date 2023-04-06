@@ -202,7 +202,7 @@ something that's missing, please open an issue or PR
   which breaks the assumption of a default prop for missing CPs
   and these lines need to be parsed (see DerivedBidiClass for example).
   So if they add this to more files, the data gen need fixing.
-  Look for lines containing `# @missing` with a range other than `0000..10FFFF`. See [https://www.unicode.org/reports/tr44/tr44-30.html#Missing_Conventions](Missing_Conventions)
+  Look for lines containing `# @missing` with a range other than `0000..10FFFF`. See [Missing_Conventions](https://www.unicode.org/reports/tr44/tr44-30.html#Missing_Conventions)
 
 ## Tests
 
