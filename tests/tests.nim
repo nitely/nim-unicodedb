@@ -155,7 +155,7 @@ test "Test bidirectional class":
 test "Test some bidirectional class":
   check bidirectional(0x860.Rune) == "AL"
   check bidirectional(0x0924.Rune) == "L"
-  check bidirectional(0x1EEFF.Rune) == "L"
+  check bidirectional(0x1EEFF.Rune) == "AL"
   check bidirectional(0.Rune) == "BN"
   check bidirectional(0x07F7.Rune) == "ON"
   # New in Unicode 11
