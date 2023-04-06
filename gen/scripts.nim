@@ -168,6 +168,8 @@ const
   sptCyproMinoan = 159
   sptTangsa = 160
   sptToto = 161
+  sptKawi = 162
+  sptNagMundari = 163
 
 proc scriptMap(s: string): int =
   case s
@@ -493,6 +495,10 @@ proc scriptMap(s: string): int =
     sptTangsa
   of "Toto":
     sptToto
+  of "Kawi":
+    sptKawi
+  of "Nag_Mundari":
+    sptNagMundari
   else:
     echo s
     doAssert false
@@ -700,6 +706,8 @@ const
   sptCyproMinoan* = $#.UnicodeScript
   sptTangsa* = $#.UnicodeScript
   sptToto* = $#.UnicodeScript
+  sptKawi* = $#.UnicodeScript
+  sptNagMundari* = $#.UnicodeScript
 
 const
   typesIndices* = [
@@ -884,6 +892,8 @@ when isMainModule:
       $sptCyproMinoan,
       $sptTangsa,
       $sptToto,
+      $sptKawi,
+      $sptNagMundari,
       prettyTable(stages.stage1, 15, "'i16"),
       prettyTable(stages.stage2, 15, "'u8"),
       $stages.blockSize])
