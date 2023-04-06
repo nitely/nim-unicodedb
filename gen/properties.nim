@@ -42,12 +42,6 @@ const
   ctgSk = 0x10000000
   ctgSo = 0x20000000
 
-  bidirectionalNames* = [
-    "L", "LRE", "LRO", "R", "AL", "RLE", "RLO",
-    "PDF", "EN", "ES", "ET", "AN", "CS", "NSM", "BN", "B", "S", "WS",
-    "ON", "LRI", "RLI", "FSI", "PDI"
-  ]
-
 proc categoryMap(s: string): int =
   case s
   of "Lm":

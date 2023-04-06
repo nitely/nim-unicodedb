@@ -32,4 +32,4 @@ export
   types
 
 const
-  unicodeVersion* = "13.0.0"
+  unicodeVersion* = "15.0.0"

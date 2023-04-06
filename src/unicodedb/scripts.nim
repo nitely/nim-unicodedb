@@ -167,7 +167,9 @@ export
   sptOldUyghur,
   sptCyproMinoan,
   sptTangsa,
-  sptToto
+  sptToto,
+  sptKawi,
+  sptNagMundari
 
 proc unicodeScript*(cp: Rune): UnicodeScript =
   ## Return script for a given code point
