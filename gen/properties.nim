@@ -10,6 +10,12 @@ type
   Props* {.pure.} = enum
     CAT, CCC, BI, QC
 
+const bidirectionalNames = [
+  "L", "LRE", "LRO", "R", "AL", "RLE", "RLO",
+  "PDF", "EN", "ES", "ET", "AN", "CS", "NSM", "BN", "B", "S", "WS",
+  "ON", "LRI", "RLI", "FSI", "PDI"
+]
+
 const
   ctgLm = 0x01
   ctgLo = 0x02

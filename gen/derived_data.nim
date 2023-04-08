@@ -1,18 +1,11 @@
 import strutils
 import algorithm
+import std/strscans
 
-const
-  maxCP = 0x10FFFF
-  bidirectionalNames* = [
-    "L", "LRE", "LRO", "R", "AL", "RLE", "RLO",
-    "PDF", "EN", "ES", "ET", "AN", "CS", "NSM", "BN", "B", "S", "WS",
-    "ON", "LRI", "RLI", "FSI", "PDI"
-  ]
+const maxCP = 0x10FFFF
 
 # https://www.unicode.org/reports/tr44/tr44-30.html#Bidi_Class_Values
 proc bdcLongToAbbr(s: string): string =
-  if s in bidirectionalNames:  # already abbr
-    return s
   case s:
   of "Left_To_Right":
     "L"
@@ -64,28 +57,30 @@ proc bdcLongToAbbr(s: string): string =
     doAssert false
     ""
 
-proc fixMissingLine(s: string): string =
-  result = s
-  const missingLine = "# @missing:"
-  if result.startsWith(missingLine):
-    result.removePrefix(missingLine)
+proc parseMissingLines(filePath: string): seq[string] =
+  ## https://www.unicode.org/reports/tr44/tr44-30.html#Missing_Conventions
+  result = newSeq[string](maxCP + 1)
+  var cpStart, cpEnd: int
+  var prop: string
+  for line in filePath.lines:
+    if scanf(line, "# @missing: $h..$h; $*", cpStart, cpEnd, prop):
+      # missing lines may have the prop name, instead of following positional format
+      # we probably need special parsing for each case, idk
+      # also the value usually needs to be converted, ie: <none>
+      doAssert ';' notin prop, "not implemented"
+      for cp in cpStart .. cpEnd:
+        result[cp] = prop
+    else:
+      doAssert(not line.startsWith "# @missing")
 
-proc parseUDD*(
-  filePath: string,
-  processMissingLines = false
-): seq[seq[seq[string]]] =
+proc parseUDD*(filePath: string): seq[seq[seq[string]]] =
   ## generic parsing. Supports duplicated CPs.
   ## Parses data with format:
   ## # optional comment
   ## cp; prop1 ; propN # optional comment
   ## cp1..cp2 ; prop1 ; propN # optional comment
   result = newSeq[seq[seq[string]]](maxCP + 1)
-  for rawLine in filePath.lines():
-    # processing @missing lines end up with multi props, pick last one
-    let line = if processMissingLines:
-        rawLine.fixMissingLine
-      else:
-        rawLine
+  for line in filePath.lines():
     if line.startsWith('#'):
       continue
     if line.strip().len == 0:
@@ -118,11 +113,13 @@ proc parseUDDNoDups*(filePath: string): seq[seq[string]] =
 
 proc parseDBC*(filePath: string): seq[string] =
   result = newSeq[string](maxCP + 1)
-  var i = 0
-  for cp, props in filePath.parseUDD(processMissingLines = true):
-    result[cp] = props[^1][0].bdcLongToAbbr
-    inc i
-  doAssert i == maxCP + 1
+  let defaults = filePath.parseMissingLines()
+  for cp, props in filePath.parseUDDNoDups():
+    if props.len == 0:
+      doAssert defaults[cp].len > 0
+      result[cp] = defaults[cp].bdcLongToAbbr
+    else:
+      result[cp] = props[0]
 
 proc parseDNPQC*(filePath: string): seq[seq[string]] =
   result = newSeq[seq[string]](maxCP + 1)
