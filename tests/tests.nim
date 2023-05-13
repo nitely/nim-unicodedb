@@ -7,6 +7,7 @@ import unicodedb/widths
 import unicodedb/scripts
 import unicodedb/casing
 import unicodedb/segmentation
+import unicodedb/collation
 from unicodedb/compositions_data import compsValues
 from compositions_test_data import allComps
 from decompositions_test_data import allDecomps
@@ -770,3 +771,12 @@ test "Test wordBreakProp":
   check 0x1F61C.Rune.wordBreakProp == sgwExtendedPictographic
   check 0x1F61E.Rune.wordBreakProp == sgwExtendedPictographic
   check 0x1F6CC.Rune.wordBreakProp == sgwExtendedPictographic
+
+test "Test collation - elementArray":
+  # for later: https://github.com/unicode-org/icu/tree/main/icu4c/source/test
+  let collationArray = 0x24A6.Rune.elementArray # PARENTHESIZED LATIN SMALL LETTER K
+  check collationArray.len == 3
+  check collationArray[0].level1 == 0x0334.uint16
+  check collationArray[1].level1 == 0x219C.uint16
+  check collationArray[2].level3 == 0x0004.uint16
+  check collationArray[2].shifted == true
