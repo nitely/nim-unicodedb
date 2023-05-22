@@ -13,6 +13,7 @@ gen/test_data
 gen/scripts
 gen/casing
 gen/segmentation
+gen/collation
 
 src/unicodedb/compositions
 src/unicodedb/decompositions
@@ -24,6 +25,7 @@ src/unicodedb/widths_legacy
 src/unicodedb/scripts
 src/unicodedb/casing
 src/unicodedb/segmentation
+src/unicodedb/collation
 
 gen/UCD/*
 !gen/UCD/UnicodeData.txt

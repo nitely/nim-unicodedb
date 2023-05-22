@@ -7,6 +7,7 @@ import unicodedb/widths
 import unicodedb/scripts
 import unicodedb/casing
 import unicodedb/segmentation
+import unicodedb/collation
 from unicodedb/compositions_data import compsValues
 from compositions_test_data import allComps
 from decompositions_test_data import allDecomps
@@ -770,3 +771,29 @@ test "Test wordBreakProp":
   check 0x1F61C.Rune.wordBreakProp == sgwExtendedPictographic
   check 0x1F61E.Rune.wordBreakProp == sgwExtendedPictographic
   check 0x1F6CC.Rune.wordBreakProp == sgwExtendedPictographic
+
+test "Test collationElements":
+  check [0x07F6.Rune].collationElements == @[
+    CollationElement(
+      level1: 0x0594'u16,
+      level2: 0x0020'u16,
+      level3: 0x0002'u16,
+      shifted: true)]
+  check [0x1FC1.Rune].collationElements == @[
+    CollationElement(
+      level1: 0x04E7'u16,
+      level2: 0x0020'u16,
+      level3: 0x0002'u16,
+      shifted: true),
+    CollationElement(
+      level1: 0x0000'u16,
+      level2: 0x002A'u16,
+      level3: 0x0002'u16,
+      shifted: false)]
+
+when nimvm:
+  discard
+else:
+  test "Test collationElements sanity check":
+    for cp in 0 .. maxCp:
+      check collationElements([cp.Rune]).len > 0
