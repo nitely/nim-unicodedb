@@ -146,3 +146,14 @@ when isMainModule:
       level2: 0x0020'u16,
       level3: 0x0002'u16,
       shifted: false)]
+  doAssert [0x0E40.Rune, 0x0E2D.Rune].collationElements == @[
+    CollationElement(
+      level1: 0x33AC'u16,
+      level2: 0x0020'u16,
+      level3: 0x0002'u16,
+      shifted: false),
+    CollationElement(
+      level1: 0x33BA'u16,
+      level2: 0x0020'u16,
+      level3: 0x0002'u16,
+      shifted: false)]
