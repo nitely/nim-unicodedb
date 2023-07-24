@@ -791,9 +791,10 @@ test "Test collationElements":
       level3: 0x0002'u16,
       shifted: false)]
 
-when nimvm:
+when nimvm:  # works, but it's too slow to test this way
   discard
 else:
   test "Test collationElements sanity check":
     for cp in 0 .. maxCp:
       check collationElements([cp.Rune]).len > 0
+      check collationElements([cp.Rune]).len < 20

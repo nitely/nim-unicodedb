@@ -2,6 +2,7 @@ import std/bitops
 import std/unicode
 
 import ./collation_data
+import ./collation_mk_data
 
 type
   CollationElement* = object
@@ -9,6 +10,29 @@ type
     level2*: uint16
     level3*: uint16
     shifted*: bool
+
+proc fnv32a(key: openarray[Rune], seed: uint32): uint32 =
+  result = 18652614'u32  # -> 2166136261 mod int32.high
+  if seed > 0'u32:
+    result = seed
+  for s in key:
+    result = result xor uint32(s)
+    result = result * 16777619'u32
+
+proc mphLookup(key: openarray[Rune]): array[2, uint16] =
+  let d = collationMkHashes[int(fnv32a(key, 0'u32) mod collationMkHashes.len.uint32)]
+  result = collationMkValues[int(fnv32a(key, d.uint32) mod collationMkValues.len.uint32)]
+
+proc mkCollationElementsIndex(key: openarray[Rune]): int =
+  let mkValue = mphLookup(key)
+  let cpLen = mkValue[0].int
+  let offset = mkValue[1].int
+  if key.len != cpLen:
+    return -1
+  for i, cp in key.pairs:
+    if cp.uint32 != collationMkData[offset+i]:
+      return -1
+  return cpLen+offset
 
 # XXX: use https://www.unicode.org/Public/UCD/latest/ucd/Blocks.txt
 #      instead of harcoded ranges
@@ -43,19 +67,28 @@ proc implicitWeights(cp: Rune): array[2, uint32] =
   result[0].setBit(continuationBit)
 
 iterator collationElements*(cps: openArray[Rune]): CollationElement {.inline, raises: [].} =
-  # if cps.len > 1:
-  # get from hash map
-  # else
-  doAssert cps.len == 1
-  let cp = cps[0]
-  doAssert cp.int <= 0x10FFFF
-  let defaultData = cp.implicitWeights()
-  let blockOffset = (collationOffsets[cp.int div blockSize]).int * blockSize
-  var idx = collationIndices[blockOffset + cp.int mod blockSize].int
+  doAssert cps.len > 0
+  for cp in cps:
+    doAssert cp.int <= 0x10FFFF
+  var defaultData = [0'u32, 0]
+  var idx = 0
+  if cps.len > 1:
+    idx = mkCollationElementsIndex(cps)
+  else:
+    let cp = cps[0]
+    let blockOffset = (collationOffsets[cp.int div blockSize]).int * blockSize
+    idx = collationIndices[blockOffset + cp.int mod blockSize].int
+    if idx == 0:
+      defaultData = cp.implicitWeights()
   let hasCollationData = idx > 0
+  let isMkCollation = cps.len > 1
   var elm = 0'u32
   while true:
-    if hasCollationData:
+    if idx == -1:
+      break
+    if isMkCollation:
+      elm = collationMkData[idx]
+    elif hasCollationData:
       elm = collationData[idx]
     else:
       elm = defaultData[idx]
@@ -72,3 +105,44 @@ iterator collationElements*(cps: openArray[Rune]): CollationElement {.inline, ra
 proc collationElements*(cps: openArray[Rune]): seq[CollationElement] =
   for ce in cps.collationElements:
     result.add ce
+
+when isMainModule:
+  # nim c -r src/unicodedb/collation.nim
+  const maxCp = 0x10FFFF
+  for cp in 0 .. maxCp:
+    doAssert collationElements([cp.Rune]).len > 0
+    doAssert collationElements([cp.Rune]).len < 20
+  doAssert [0x07F6.Rune].collationElements == @[
+    CollationElement(
+      level1: 0x0594'u16,
+      level2: 0x0020'u16,
+      level3: 0x0002'u16,
+      shifted: true)]
+  doAssert [0x1FC1.Rune].collationElements == @[
+    CollationElement(
+      level1: 0x04E7'u16,
+      level2: 0x0020'u16,
+      level3: 0x0002'u16,
+      shifted: true),
+    CollationElement(
+      level1: 0x0000'u16,
+      level2: 0x002A'u16,
+      level3: 0x0002'u16,
+      shifted: false)]
+  doAssert [0x17000.Rune].collationElements == @[
+     CollationElement(
+      level1: 64256'u16,
+      level2: 32'u16,
+      level3: 2'u16,
+      shifted: false),
+    CollationElement(
+      level1: 32768'u16,
+      level2: 0'u16,
+      level3: 0'u16,
+      shifted: false)]
+  doAssert [0x0D46.Rune, 0x0D3E.Rune].collationElements == @[
+    CollationElement(
+      level1: 0x2DA3'u16,
+      level2: 0x0020'u16,
+      level3: 0x0002'u16,
+      shifted: false)]
