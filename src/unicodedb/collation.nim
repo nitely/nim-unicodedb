@@ -3,6 +3,7 @@ import std/unicode
 
 import ./collation_data
 import ./collation_mk_data
+import ./blocks
 
 type
   CollationElement* = object
@@ -34,22 +35,17 @@ proc mkCollationElementsIndex(key: openarray[Rune]): int =
       return -1
   return cpLen+offset
 
-# XXX: use https://www.unicode.org/Public/UCD/latest/ucd/Blocks.txt
-#      instead of harcoded ranges
 proc implicitWeights(cp: Rune): array[2, uint32] =
   ## https://unicode.org/reports/tr10/#Implicit_Weights
-  # Tangut
-  if cp.int in 0x17000..0x18AFF or cp.int in 0x18D00..0x18D8F:
+  if cp in blockTangut:
     result = [
       (0xFB00'u32 shl 16) + (0x0020'u32 shl 8) + 0x0002'u32,
       ((cp.uint32 - 0x17000'u32) or 0x8000'u32) shl 16]
-  # Nushu
-  elif cp.int in 0x1B170..0x1B2FF:
+  elif cp in blockNushu:
     result = [
       (0xFB01'u32 shl 16) + (0x0020'u32 shl 8) + 0x0002'u32,
       ((cp.uint32 - 0x1B170'u32) or 0x8000'u32) shl 16]
-  # Khitan
-  elif cp.int in 0x18B00..0x18CFF:
+  elif cp in blockKhitan:
     result = [
       (0xFB02'u32 shl 16) + (0x0020'u32 shl 8) + 0x0002'u32,
       ((cp.uint32 - 0x18B00'u32) or 0x8000'u32) shl 16]
@@ -67,6 +63,7 @@ proc implicitWeights(cp: Rune): array[2, uint32] =
   result[0].setBit(continuationBit)
 
 iterator collationElements*(cps: openArray[Rune]): CollationElement {.inline, raises: [].} =
+  ## Returns nothing if given multiple CPs (multi key) and no mapping is found.
   doAssert cps.len > 0
   for cp in cps:
     doAssert cp.int <= 0x10FFFF
@@ -157,3 +154,9 @@ when isMainModule:
       level2: 0x0020'u16,
       level3: 0x0002'u16,
       shifted: false)]
+  doAssert [0x07F6.Rune, 0x07F6.Rune].collationElements.len == 0
+  doAssert [0x07F6.Rune, 0x07F6.Rune, 0x07F6.Rune].collationElements.len == 0
+  doAssert [maxCp.Rune, maxCp.Rune].collationElements.len == 0
+  doAssert [0.Rune, 0.Rune].collationElements.len == 0
+  doAssert [0.Rune, maxCp.Rune].collationElements.len == 0
+  doAssert [maxCp.Rune, 0.Rune].collationElements.len == 0

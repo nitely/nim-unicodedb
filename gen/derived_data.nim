@@ -63,7 +63,7 @@ proc parseMissingLines(filePath: string): seq[string] =
   var cpStart, cpEnd: int
   var prop: string
   for line in filePath.lines:
-    if scanf(line, "# @missing: $h..$h; *$", cpStart, cpEnd, prop):
+    if scanf(line, "# @missing: $h..$h; $*", cpStart, cpEnd, prop):
       # missing lines may have the prop name, instead of following positional format
       # we probably need special parsing for each case, idk
       # also the value usually needs to be converted, ie: <none>

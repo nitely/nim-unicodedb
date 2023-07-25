@@ -8,6 +8,7 @@ import unicodedb/scripts
 import unicodedb/casing
 import unicodedb/segmentation
 import unicodedb/collation
+import unicodedb/blocks
 from unicodedb/compositions_data import compsValues
 from compositions_test_data import allComps
 from decompositions_test_data import allDecomps
@@ -815,3 +816,15 @@ else:
     for cp in 0 .. maxCp:
       check collationElements([cp.Rune]).len > 0
       check collationElements([cp.Rune]).len < 20
+
+test "Test blocks":
+  check blockTangut.len == 3
+  check blockNushu.len == 1
+  check blockKhitan.len == 1
+  check blockHanUnif.len == 9
+  check 0x17000.Rune in blockTangut
+  check 0x187FF.Rune in blockTangut
+  check 'A'.ord.Rune notin blockTangut
+  check 0x3400.Rune in blockHanUnif
+  check 0x4DBF.Rune in blockHanUnif
+  check 'A'.ord.Rune notin blockHanUnif

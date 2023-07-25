@@ -14,6 +14,7 @@ gen/scripts
 gen/casing
 gen/segmentation
 gen/collation
+gen/blocks
 
 src/unicodedb/compositions
 src/unicodedb/decompositions
@@ -26,6 +27,7 @@ src/unicodedb/scripts
 src/unicodedb/casing
 src/unicodedb/segmentation
 src/unicodedb/collation
+src/unicodedb/blocks
 
 gen/UCD/*
 !gen/UCD/UnicodeData.txt
@@ -36,6 +38,7 @@ gen/UCD/*
 !gen/UCD/Scripts.txt
 !gen/UCD/SpecialCasing.txt
 !gen/UCD/CaseFolding.txt
+!gen/UCD/Blocks.txt
 
 !gen/UCD/emoji
 gen/UCD/emoji/*
