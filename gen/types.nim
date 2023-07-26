@@ -16,6 +16,7 @@ type
     utmCased = 0x20
     utmWhiteSpace = 0x40
     utmWord = 0x80
+    utmUnifiedIdeograph = 0x100
 
 proc numTypeMap(numType: string): int =
   ## for derived numericType
@@ -67,6 +68,8 @@ proc propListTypeMap(propType: string): int =
     utmWhiteSpace.ord
   of "Join_Control":
     utmWord.ord
+  of "Unified_Ideograph":
+    utmUnifiedIdeograph.ord
   else:
     0
 
@@ -144,6 +147,7 @@ const
   utmCased* = $#.UnicodeTypeMask
   utmWhiteSpace* = $#.UnicodeTypeMask
   utmWord* = $#.UnicodeTypeMask
+  utmUnifiedIdeograph* = $#.UnicodeTypeMask
 
 const
   typesOffsets* = [
@@ -183,6 +187,7 @@ when isMainModule:
       $utmCased.ord,
       $utmWhiteSpace.ord,
       $utmWord.ord,
+      $utmUnifiedIdeograph.ord,
       prettyTable(stages.stage1, 15, "'i16"),
       prettyTable(stages.stage2, 15, "'i8"),
       prettyTable(stages.stage3, 15, "'i16"),

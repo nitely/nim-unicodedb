@@ -7,6 +7,8 @@ import unicodedb/widths
 import unicodedb/scripts
 import unicodedb/casing
 import unicodedb/segmentation
+import unicodedb/collation
+import unicodedb/blocks
 from unicodedb/compositions_data import compsValues
 from compositions_test_data import allComps
 from decompositions_test_data import allDecomps
@@ -337,6 +339,9 @@ test "Test some types":
   check utmWhiteSpace notin unicodeTypes(Rune('$'.ord))
 
   check(utmLowercase in unicodeTypes(Rune(0x10D0)))
+
+  check utmUnifiedIdeograph in unicodeTypes(Rune(0x3400))
+  check utmUnifiedIdeograph notin unicodeTypes(Rune('$'.ord))
 
   check utmDecimal + utmWhiteSpace in 0x0030.Rune.unicodeTypes
   check utmDecimal + utmWhiteSpace in 0x0009.Rune.unicodeTypes
@@ -770,3 +775,134 @@ test "Test wordBreakProp":
   check 0x1F61C.Rune.wordBreakProp == sgwExtendedPictographic
   check 0x1F61E.Rune.wordBreakProp == sgwExtendedPictographic
   check 0x1F6CC.Rune.wordBreakProp == sgwExtendedPictographic
+
+test "Test collationElements":
+  check [0x07F6.Rune].collationElements == @[
+    CollationElement(
+      level1: 0x0594'u16,
+      level2: 0x0020'u16,
+      level3: 0x0002'u16,
+      shifted: true)]
+  check [0x1FC1.Rune].collationElements == @[
+    CollationElement(
+      level1: 0x04E7'u16,
+      level2: 0x0020'u16,
+      level3: 0x0002'u16,
+      shifted: true),
+    CollationElement(
+      level1: 0x0000'u16,
+      level2: 0x002A'u16,
+      level3: 0x0002'u16,
+      shifted: false)]
+  check [0x0D46.Rune, 0x0D3E.Rune].collationElements == @[
+    CollationElement(
+      level1: 0x2DA3'u16,
+      level2: 0x0020'u16,
+      level3: 0x0002'u16,
+      shifted: false)]
+  check [0x0E40.Rune, 0x0E2D.Rune].collationElements == @[
+    CollationElement(
+      level1: 0x33AC'u16,
+      level2: 0x0020'u16,
+      level3: 0x0002'u16,
+      shifted: false),
+    CollationElement(
+      level1: 0x33BA'u16,
+      level2: 0x0020'u16,
+      level3: 0x0002'u16,
+      shifted: false)]
+  # Tangut
+  check [0x17000.Rune].collationElements == @[
+    CollationElement(
+      level1: 0xfb00'u16,
+      level2: 0x0020'u16,
+      level3: 0x0002'u16,
+      shifted: false),
+    CollationElement(
+      level1: 0x8000'u16,
+      level2: 0'u16,
+      level3: 0'u16,
+      shifted: false)]
+  # Nushu
+  check [0x1B170.Rune].collationElements == @[
+    CollationElement(
+      level1: 0xfb01'u16,
+      level2: 0x0020'u16,
+      level3: 0x0002'u16,
+      shifted: false),
+    CollationElement(
+      level1: 0x8000'u16,
+      level2: 0'u16,
+      level3: 0'u16,
+      shifted: false)]
+  # Khitan
+  check [0x18B00.Rune].collationElements == @[
+    CollationElement(
+      level1: 0xfb02'u16,
+      level2: 0x0020'u16,
+      level3: 0x0002'u16,
+      shifted: false),
+    CollationElement(
+      level1: 0x8000'u16,
+      level2: 0'u16,
+      level3: 0'u16,
+      shifted: false)]
+  # CJK Unified Ideograph
+  check [0x4E00.Rune].collationElements == @[
+    CollationElement(
+      level1: 0xfb40'u16,
+      level2: 0x0020'u16,
+      level3: 0x0002'u16,
+      shifted: false),
+    CollationElement(
+      level1: 0xce00'u16,
+      level2: 0'u16,
+      level3: 0'u16,
+      shifted: false)]
+  # CJK Compatibility Ideograph
+  check [0xF900.Rune].collationElements == @[
+    CollationElement(
+      level1: 0xfb41'u16,
+      level2: 0x0020'u16,
+      level3: 0x0002'u16,
+      shifted: false),
+    CollationElement(
+      level1: 0x8c48'u16,
+      level2: 0'u16,
+      level3: 0'u16,
+      shifted: false)]
+  # Unassigned/Private usage
+  check [0xE000.Rune].collationElements == @[
+    CollationElement(
+      level1: 0xfbc1'u16,
+      level2: 0x0020'u16,
+      level3: 0x0002'u16,
+      shifted: false),
+    CollationElement(
+      level1: 0xe000'u16,
+      level2: 0'u16,
+      level3: 0'u16,
+      shifted: false)]
+
+when nimvm:  # works, but it's too slow to test this way
+  discard
+else:
+  test "Test collationElements sanity check":
+    for cp in 0 .. maxCp:
+      check collationElements([cp.Rune]).len > 0
+      check collationElements([cp.Rune]).len < 20
+
+test "Test collation":
+  check collationMaxKeyLen == 3
+
+test "Test blocks":
+  check blockTangut.len == 3
+  check blockNushu.len == 1
+  check blockKhitan.len == 1
+  check blockHanUnif.len == 9
+  check 0x17000.Rune in blockTangut
+  check 0x187FF.Rune in blockTangut
+  check 'A'.ord.Rune notin blockTangut
+  check 0x3400.Rune in blockHanUnif
+  check 0x4DBF.Rune in blockHanUnif
+  check 'A'.ord.Rune notin blockHanUnif
