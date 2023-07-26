@@ -3,6 +3,7 @@ import std/unicode
 
 import ./collation_mk_data
 import ./blocks
+import ./types
 
 type
   CollationElement* = object
@@ -48,10 +49,16 @@ proc implicitWeights(cp: Rune): array[2, uint32] =
     result = [
       (0xFB02'u32 shl 16) + (0x0020'u32 shl 8) + 0x0002'u32,
       ((cp.uint32 - 0x18B00'u32) or 0x8000'u32) shl 16]
-  # XXX: CJK ranges, Unified_Ideograph=True
-  # [((0xFB40 + (cp shr 15)) shl 16) + (0x0020 shl 8) + 0x0002, ((cp and 0x7FFF) or 0x8000) shl 16]
-  # XXX: Unified_Ideograph=True
-  # [((0xFB80 + (cp shr 15)) shl 16) + (0x0020 shl 8) + 0x0002, ((cp and 0x7FFF) or 0x8000) shl 16]
+  elif utmUnifiedIdeograph in cp.unicodeTypes() and
+      (cp in blockHanUnif or cp in blockHanCompat):
+    result = [
+      ((0xFB40'u32 + (cp.uint32 shr 15)) shl 16) + (0x0020'u32 shl 8) + 0x0002'u32,
+      ((cp.uint32 and 0x7FFF'u32) or 0x8000'u32) shl 16]
+  elif utmUnifiedIdeograph in cp.unicodeTypes() and not
+      (cp in blockHanUnif or cp in blockHanCompat):
+    result = [
+      ((0xFB80'u32 + (cp.uint32 shr 15)) shl 16) + (0x0020'u32 shl 8) + 0x0002'u32,
+      ((cp.uint32 and 0x7FFF'u32) or 0x8000'u32) shl 16]
   else:
     result = [
       ((0xFBC0'u32 + (cp.uint32 shr 15)) shl 16) + (0x0020'u32 shl 8) + 0x0002'u32,
@@ -59,6 +66,7 @@ proc implicitWeights(cp: Rune): array[2, uint32] =
   doAssert(not result[0].testBit(shiftBit))
   doAssert(not result[1].testBit(shiftBit))
   doAssert(not result[0].testBit(continuationBit))
+  doAssert(not result[1].testBit(continuationBit))
   result[0].setBit(continuationBit)
 
 iterator collationElements*(cps: openArray[Rune]): CollationElement {.inline, raises: [].} =
@@ -153,3 +161,70 @@ when isMainModule:
   doAssert [0.Rune, 0.Rune].collationElements.len == 0
   doAssert [0.Rune, maxCp.Rune].collationElements.len == 0
   doAssert [maxCp.Rune, 0.Rune].collationElements.len == 0
+  # Implicit weight
+  doAssert [0x17000.Rune].collationElements == @[
+    CollationElement(
+      level1: 0xfb00'u16,
+      level2: 0x0020'u16,
+      level3: 0x0002'u16,
+      shifted: false),
+    CollationElement(
+      level1: 0x8000'u16,
+      level2: 0'u16,
+      level3: 0'u16,
+      shifted: false)]
+  doAssert [0x1B170.Rune].collationElements == @[
+    CollationElement(
+      level1: 0xfb01'u16,
+      level2: 0x0020'u16,
+      level3: 0x0002'u16,
+      shifted: false),
+    CollationElement(
+      level1: 0x8000'u16,
+      level2: 0'u16,
+      level3: 0'u16,
+      shifted: false)]
+  doAssert [0x18B00.Rune].collationElements == @[
+    CollationElement(
+      level1: 0xfb02'u16,
+      level2: 0x0020'u16,
+      level3: 0x0002'u16,
+      shifted: false),
+    CollationElement(
+      level1: 0x8000'u16,
+      level2: 0'u16,
+      level3: 0'u16,
+      shifted: false)]
+  doAssert [0x4E00.Rune].collationElements == @[
+    CollationElement(
+      level1: 0xfb40'u16,
+      level2: 0x0020'u16,
+      level3: 0x0002'u16,
+      shifted: false),
+    CollationElement(
+      level1: 0xce00'u16,
+      level2: 0'u16,
+      level3: 0'u16,
+      shifted: false)]
+  doAssert [0xF900.Rune].collationElements == @[
+    CollationElement(
+      level1: 0xfb41'u16,
+      level2: 0x0020'u16,
+      level3: 0x0002'u16,
+      shifted: false),
+    CollationElement(
+      level1: 0x8c48'u16,
+      level2: 0'u16,
+      level3: 0'u16,
+      shifted: false)]
+  doAssert [0xE000.Rune].collationElements == @[
+    CollationElement(
+      level1: 0xfbc1'u16,
+      level2: 0x0020'u16,
+      level3: 0x0002'u16,
+      shifted: false),
+    CollationElement(
+      level1: 0xe000'u16,
+      level2: 0'u16,
+      level3: 0'u16,
+      shifted: false)]

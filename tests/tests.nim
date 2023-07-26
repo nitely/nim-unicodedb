@@ -340,6 +340,9 @@ test "Test some types":
 
   check(utmLowercase in unicodeTypes(Rune(0x10D0)))
 
+  check utmUnifiedIdeograph in unicodeTypes(Rune(0x3400))
+  check utmUnifiedIdeograph notin unicodeTypes(Rune('$'.ord))
+
   check utmDecimal + utmWhiteSpace in 0x0030.Rune.unicodeTypes
   check utmDecimal + utmWhiteSpace in 0x0009.Rune.unicodeTypes
   check utmUppercase + utmLowercase in 0x0041.Rune.unicodeTypes
@@ -807,6 +810,78 @@ test "Test collationElements":
       level1: 0x33BA'u16,
       level2: 0x0020'u16,
       level3: 0x0002'u16,
+      shifted: false)]
+  # Tangut
+  check [0x17000.Rune].collationElements == @[
+    CollationElement(
+      level1: 0xfb00'u16,
+      level2: 0x0020'u16,
+      level3: 0x0002'u16,
+      shifted: false),
+    CollationElement(
+      level1: 0x8000'u16,
+      level2: 0'u16,
+      level3: 0'u16,
+      shifted: false)]
+  # Nushu
+  check [0x1B170.Rune].collationElements == @[
+    CollationElement(
+      level1: 0xfb01'u16,
+      level2: 0x0020'u16,
+      level3: 0x0002'u16,
+      shifted: false),
+    CollationElement(
+      level1: 0x8000'u16,
+      level2: 0'u16,
+      level3: 0'u16,
+      shifted: false)]
+  # Khitan
+  check [0x18B00.Rune].collationElements == @[
+    CollationElement(
+      level1: 0xfb02'u16,
+      level2: 0x0020'u16,
+      level3: 0x0002'u16,
+      shifted: false),
+    CollationElement(
+      level1: 0x8000'u16,
+      level2: 0'u16,
+      level3: 0'u16,
+      shifted: false)]
+  # CJK Unified Ideograph
+  check [0x4E00.Rune].collationElements == @[
+    CollationElement(
+      level1: 0xfb40'u16,
+      level2: 0x0020'u16,
+      level3: 0x0002'u16,
+      shifted: false),
+    CollationElement(
+      level1: 0xce00'u16,
+      level2: 0'u16,
+      level3: 0'u16,
+      shifted: false)]
+  # CJK Compatibility Ideograph
+  check [0xF900.Rune].collationElements == @[
+    CollationElement(
+      level1: 0xfb41'u16,
+      level2: 0x0020'u16,
+      level3: 0x0002'u16,
+      shifted: false),
+    CollationElement(
+      level1: 0x8c48'u16,
+      level2: 0'u16,
+      level3: 0'u16,
+      shifted: false)]
+  # Unassigned/Private usage
+  check [0xE000.Rune].collationElements == @[
+    CollationElement(
+      level1: 0xfbc1'u16,
+      level2: 0x0020'u16,
+      level3: 0x0002'u16,
+      shifted: false),
+    CollationElement(
+      level1: 0xe000'u16,
+      level2: 0'u16,
+      level3: 0'u16,
       shifted: false)]
 
 when nimvm:  # works, but it's too slow to test this way

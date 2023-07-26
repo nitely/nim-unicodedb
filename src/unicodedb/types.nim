@@ -15,7 +15,8 @@ export
   utmUppercase,
   utmCased,
   utmWhiteSpace,
-  utmWord
+  utmWord,
+  utmUnifiedIdeograph
 
 proc unicodeTypes*(cp: Rune): int =
   ## Return types for a given code point.

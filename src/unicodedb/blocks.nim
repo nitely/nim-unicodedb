@@ -25,6 +25,7 @@ const
   blockNushu* = rangesForTpl("Nushu")
   blockKhitan* = rangesForTpl("Khitan Small Script")
   blockHanUnif* = rangesForTpl("CJK Unified Ideographs")
+  blockHanCompat* = rangesForTpl("CJK Compatibility Ideographs")
 
 proc contains(a: UnicodeDbBlock; item: int): bool {.borrow.}
 

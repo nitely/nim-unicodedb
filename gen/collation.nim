@@ -3,7 +3,6 @@ import std/algorithm
 import std/strscans
 import std/bitops
 
-import ./two_stage_table
 import ./utils
 import ./min_perfect_hash
 
