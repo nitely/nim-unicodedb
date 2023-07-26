@@ -5,6 +5,12 @@ import ./collation_mk_data
 import ./blocks
 import ./types
 
+when (NimMajor, NimMinor) < (1, 3):
+  func bitsliced[T: SomeInteger](v: T; slice: Slice[int]): T =
+    let
+      upmost = sizeof(T) * 8 - 1
+    (v shl (upmost - slice.b) shr (upmost - slice.b + slice.a)).T
+
 type
   CollationElement* = object
     level1*: uint16
