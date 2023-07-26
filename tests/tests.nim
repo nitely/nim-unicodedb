@@ -892,6 +892,9 @@ else:
       check collationElements([cp.Rune]).len > 0
       check collationElements([cp.Rune]).len < 20
 
+test "Test collation":
+  check collationMaxKeyLen == 3
+
 test "Test blocks":
   check blockTangut.len == 3
   check blockNushu.len == 1

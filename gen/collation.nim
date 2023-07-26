@@ -65,11 +65,11 @@ proc parseDucetAll(filePath: string): seq[CollationItem] =
   doAssert result.len > 0
 
 type
-  mkCollationDataSet = object
+  MkCollationDataSet = object
     mphDataSet: seq[Record[seq[int]]]
     values: CollationElms
 
-proc parseMultiKey(filePath: string): mkCollationDataSet =
+proc parseMultiKey(filePath: string): MkCollationDataSet =
   result.mphDataSet = newSeq[Record[seq[int]]]()
   result.values = newSeq[uint32]()
   var sanityCheck = false
@@ -84,6 +84,11 @@ proc parseMultiKey(filePath: string): mkCollationDataSet =
       doAssert elm.elms == @[0x33ac2082'u32, 0x33ba2002'u32]
       sanityCheck = true
   doAssert sanityCheck
+
+proc maxKeyLen(ds: MkCollationDataSet): int =
+  result = 0
+  for v in ds.mphDataSet:
+    result = max(result, v.value[0])
 
 const mkTempl = """## This is auto-generated. Do not modify it
 
@@ -100,6 +105,7 @@ const
 
   shiftBit* = $#
   continuationBit* = $#
+  collationMaxKeyLen* = $#
 """
 
 when isMainModule:
@@ -113,6 +119,7 @@ when isMainModule:
     if (i+1) mod 15 == 0 or i == mphTables.v.len-1:
       mphValues.add join(mphvTmp, ", ")
       mphvTmp.setLen 0
+  let collationMaxKeyLen = maxKeyLen(mkDataSet)
   let f = open("./src/unicodedb/collation_mk_data.nim", fmWrite)
   try:
     f.write(mkTempl % [
@@ -120,6 +127,7 @@ when isMainModule:
       join(mphValues, ",\L    "),
       prettyTable(mkDataSet.values, 15, "'u32", suffixAll = true),
       $shiftBit,
-      $continuationBit])
+      $continuationBit,
+      $collationMaxKeyLen])
   finally:
     close(f)

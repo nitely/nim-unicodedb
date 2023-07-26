@@ -9598,3 +9598,4 @@ const
 
   shiftBit* = 6
   continuationBit* = 7
+  collationMaxKeyLen* = 3
