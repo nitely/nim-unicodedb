@@ -32,3 +32,5 @@ proc prettyTable*[T: int or uint32](
     else:
       rows[i] = join(row, sep & " ")
   result = join(rows, sep & "\L    ")
+  if suffixAll:
+    result &= suffix

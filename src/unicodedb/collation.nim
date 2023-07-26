@@ -1,7 +1,6 @@
 import std/bitops
 import std/unicode
 
-import ./collation_data
 import ./collation_mk_data
 import ./blocks
 
@@ -20,7 +19,7 @@ proc fnv32a(key: openarray[Rune], seed: uint32): uint32 =
     result = result xor uint32(s)
     result = result * 16777619'u32
 
-proc mphLookup(key: openarray[Rune]): array[2, uint16] =
+proc mphLookup(key: openarray[Rune]): array[2, uint32] =
   let d = collationMkHashes[int(fnv32a(key, 0'u32) mod collationMkHashes.len.uint32)]
   result = collationMkValues[int(fnv32a(key, d.uint32) mod collationMkValues.len.uint32)]
 
@@ -67,26 +66,18 @@ iterator collationElements*(cps: openArray[Rune]): CollationElement {.inline, ra
   doAssert cps.len > 0
   for cp in cps:
     doAssert cp.int <= 0x10FFFF
+  var idx = mkCollationElementsIndex(cps)
+  let isMkCollation = idx != -1
   var defaultData = [0'u32, 0]
-  var idx = 0
-  if cps.len > 1:
-    idx = mkCollationElementsIndex(cps)
-  else:
-    let cp = cps[0]
-    let blockOffset = (collationOffsets[cp.int div blockSize]).int * blockSize
-    idx = collationIndices[blockOffset + cp.int mod blockSize].int
-    if idx == 0:
-      defaultData = cp.implicitWeights()
-  let hasCollationData = idx > 0
-  let isMkCollation = cps.len > 1
+  if idx == -1 and cps.len == 1:
+    defaultData = cps[0].implicitWeights()
+    idx = 0
   var elm = 0'u32
   while true:
     if idx == -1:
       break
     if isMkCollation:
       elm = collationMkData[idx]
-    elif hasCollationData:
-      elm = collationData[idx]
     else:
       elm = defaultData[idx]
     # keep single yield
@@ -105,6 +96,8 @@ proc collationElements*(cps: openArray[Rune]): seq[CollationElement] =
 
 when isMainModule:
   # nim c -r src/unicodedb/collation.nim
+  echo(sizeof(collationMkHashes) div 1024)
+  echo(sizeof(collation_mk_data.collationMkData) div 1024)
   const maxCp = 0x10FFFF
   for cp in 0 .. maxCp:
     doAssert collationElements([cp.Rune]).len > 0
