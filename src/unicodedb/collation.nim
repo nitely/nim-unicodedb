@@ -28,14 +28,14 @@ proc fnv32a(key: openarray[Rune], seed: uint32): uint32 =
     result = result xor uint32(s)
     result = result * 16777619'u32
 
-proc mphLookup(key: openarray[Rune]): array[2, uint32] =
+proc mphLookup(key: openarray[Rune]): uint32 =
   let d = collationMkHashes[int(fnv32a(key, 0'u32) mod collationMkHashes.len.uint32)]
   result = collationMkValues[int(fnv32a(key, d.uint32) mod collationMkValues.len.uint32)]
 
 proc mkCollationElementsIndex(key: openarray[Rune]): int =
   let mkValue = mphLookup(key)
-  let cpLen = mkValue[0].int
-  let offset = mkValue[1].int
+  let cpLen = mkValue.bitsliced(mphKeyLenBits).int
+  let offset = mkValue.clearMasked(mphKeyLenBits).int
   if key.len != cpLen:
     return -1
   for i, cp in key.pairs:
@@ -57,16 +57,15 @@ proc implicitWeights(cp: Rune): array[2, uint32] =
     result = [
       (0xFB02'u32 shl 16) + (0x0020'u32 shl 8) + 0x0002'u32,
       ((cp.uint32 - 0x18B00'u32) or 0x8000'u32) shl 16]
-  elif utmUnifiedIdeograph in cp.unicodeTypes() and
-      (cp in blockHanUnif or cp in blockHanCompat):
-    result = [
-      ((0xFB40'u32 + (cp.uint32 shr 15)) shl 16) + (0x0020'u32 shl 8) + 0x0002'u32,
-      ((cp.uint32 and 0x7FFF'u32) or 0x8000'u32) shl 16]
-  elif utmUnifiedIdeograph in cp.unicodeTypes() and not
-      (cp in blockHanUnif or cp in blockHanCompat):
-    result = [
-      ((0xFB80'u32 + (cp.uint32 shr 15)) shl 16) + (0x0020'u32 shl 8) + 0x0002'u32,
-      ((cp.uint32 and 0x7FFF'u32) or 0x8000'u32) shl 16]
+  elif utmUnifiedIdeograph in cp.unicodeTypes():
+    if cp in blockHanUnif or cp in blockHanCompat:
+      result = [
+        ((0xFB40'u32 + (cp.uint32 shr 15)) shl 16) + (0x0020'u32 shl 8) + 0x0002'u32,
+        ((cp.uint32 and 0x7FFF'u32) or 0x8000'u32) shl 16]
+    else:
+      result = [
+        ((0xFB80'u32 + (cp.uint32 shr 15)) shl 16) + (0x0020'u32 shl 8) + 0x0002'u32,
+        ((cp.uint32 and 0x7FFF'u32) or 0x8000'u32) shl 16]
   else:
     result = [
       ((0xFBC0'u32 + (cp.uint32 shr 15)) shl 16) + (0x0020'u32 shl 8) + 0x0002'u32,

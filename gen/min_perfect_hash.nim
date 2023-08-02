@@ -13,7 +13,7 @@ proc fnv32a*(key: openarray[int], seed: uint32): uint32 =
     result = result * 16777619'u32  # unsigned will wrap around
 
 type
-  MphValueType = int or seq[int]
+  MphValueType = int or seq[int] or uint32
 
 proc mphLookup*[T: MphValueType](
       hashes: openarray[int],

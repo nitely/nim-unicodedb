@@ -12,6 +12,7 @@ const
   maxCP = 0x10FFFF
   shiftBit = 6
   continuationBit = 7
+  mphKeyLenBits = 28 .. 31  # 4 MSB
 
 proc spaces(input: string; start: int; seps: set[char] = {' '}): int =
   result = 0
@@ -66,16 +67,23 @@ proc parseDucetAll(filePath: string): seq[CollationItem] =
 
 type
   MkCollationDataSet = object
-    mphDataSet: seq[Record[seq[int]]]
+    mphDataSet: seq[Record[uint32]]
     values: CollationElms
 
 proc parseMultiKey(filePath: string): MkCollationDataSet =
-  result.mphDataSet = newSeq[Record[seq[int]]]()
+  result.mphDataSet = newSeq[Record[uint32]]()
   result.values = newSeq[uint32]()
   var sanityCheck = false
   for elm in filePath.parseDucetAll:
-    let offset = result.values.len
-    result.mphDataSet.add (key: elm.cps, value: @[elm.cps.len, offset])
+    # Use hash map value as CPs len + offset,
+    # len is stored in most significant bits
+    # Note we could also store collation elements len
+    # instead of using a continuation bit (but too late for that)
+    let keyLen = elm.cps.len.uint32 shl mphKeyLenBits.a
+    doAssert keyLen.bitsliced(mphKeyLenBits) == elm.cps.len.uint32
+    doAssert result.values.len.bitsliced(mphKeyLenBits) == 0, "cannot longer use these bits as mphKeyLenBits"
+    let offset = result.values.len.uint32 + keyLen
+    result.mphDataSet.add (key: elm.cps, value: offset)
     for cp in elm.cps:
       result.values.add cp.uint32
     result.values.add elm.elms
@@ -88,7 +96,7 @@ proc parseMultiKey(filePath: string): MkCollationDataSet =
 proc maxKeyLen(ds: MkCollationDataSet): int =
   result = 0
   for v in ds.mphDataSet:
-    result = max(result, v.value[0])
+    result = max(result, v.value.bitsliced(mphKeyLenBits).int)
 
 const mkTempl = """## This is auto-generated. Do not modify it
 
@@ -105,29 +113,23 @@ const
 
   shiftBit* = $#
   continuationBit* = $#
+  mphKeyLenBits* = $#
   collationMaxKeyLen* = $#
 """
 
 when isMainModule:
   let mkDataSet = parseMultiKey("./gen/DUCET.txt")
   let mphTables = mph(mkDataSet.mphDataSet)
-  var mphValues = newSeq[string]()
-  var mphvTmp = newSeq[string]()
-  for i, v in mphTables.v.pairs:
-    doAssert v.len == 2
-    mphvTmp.add "[$#]" % join(v, "'u32, ")
-    if (i+1) mod 15 == 0 or i == mphTables.v.len-1:
-      mphValues.add join(mphvTmp, ", ")
-      mphvTmp.setLen 0
   let collationMaxKeyLen = maxKeyLen(mkDataSet)
   let f = open("./src/unicodedb/collation_mk_data.nim", fmWrite)
   try:
     f.write(mkTempl % [
       prettyTable(mphTables.h, 15, "'u32"),
-      join(mphValues, ",\L    "),
+      prettyTable(mphTables.v, 15, "'u32"),
       prettyTable(mkDataSet.values, 15, "'u32", suffixAll = true),
       $shiftBit,
       $continuationBit,
+      $mphKeyLenBits,
       $collationMaxKeyLen])
   finally:
     close(f)
