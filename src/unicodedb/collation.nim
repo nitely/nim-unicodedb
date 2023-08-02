@@ -9,9 +9,22 @@ export
   collationMaxKeyLen
 
 when (NimMajor, NimMinor) < (1, 3):
-  func bitsliced[T: SomeInteger](v: T; slice: Slice[int]): T =
+  # Ported from Nim's stdlib
+  func bitsliced[T: SomeUnsignedInt](v: T; slice: Slice[int]): T =
     let upmost = sizeof(T) * 8 - 1
     (v shl (upmost - slice.b) shr (upmost - slice.b + slice.a)).T
+  template typeMasked[T: SomeUnsignedInt](x: T): T =
+    when defined(js):
+      x and ((0xffffffff_ffffffff'u shr (64 - sizeof(T) * 8)))
+    else:
+      x
+  func toMask[T: SomeUnsignedInt](slice: Slice[int]): T =
+    let
+      upmost = sizeof(T) * 8 - 1
+      bitmask = bitnot(0.T)
+    ((bitmask shl (upmost - slice.b + slice.a)).typeMasked shr (upmost - slice.b)).T
+  func clearMasked[T: SomeUnsignedInt](v: T; slice: Slice[int]): T =
+    bitand(v, bitnot(toMask[T](slice)))
 
 type
   CollationElement* = object
