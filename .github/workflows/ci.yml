@@ -18,4 +18,4 @@ jobs:
     - name: Run Tests
       run: |
         docker pull nimlang/nim:${{ matrix.nim }}
-        docker run --rm -v `pwd`:/usr/src/app -w /usr/src/app nimlang/nim:${{ matrix.nim }} /bin/bash -c "nimble install -y; nimble test"
+        docker run --rm -v `pwd`:/usr/src/app -w /usr/src/app nimlang/nim:${{ matrix.nim }} /bin/bash -c "git config --global --add safe.directory /usr/src/app && nimble install -y && nimble test"
