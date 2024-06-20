@@ -22,10 +22,12 @@ proc unicodeTypes*(cp: Rune): int =
   ## Return types for a given code point.
   ## Use `contains` to retrieve a single type
   assert cp.int <= 0x10FFFF
-  when (NimMajor, NimMinor) >= (1, 1):
+  template impl =
     let blockOffset = (typesOffsets[cp.int div blockSize]).int * blockSize
     let idx = typesIndices[blockOffset + cp.int mod blockSize]
     result = typesData[idx]
+  when (NimMajor, NimMinor) >= (1, 1):
+    impl()
   else:
     when nimvm:
       # ugly workaround for https://github.com/nitely/nim-regex/issues/4
@@ -70,10 +72,7 @@ proc unicodeTypes*(cp: Rune): int =
       else: assert false
       result = typesData[idx]
     else:
-      block:
-        let blockOffset = (typesOffsets[cp.int div blockSize]).int * blockSize
-        let idx = typesIndices[blockOffset + cp.int mod blockSize]
-        result = typesData[idx]
+      impl()
 
 proc contains*(ut: int, utm: UnicodeTypeMask): bool {.inline.} =
   ## Check if the given type mask is
