@@ -16,8 +16,8 @@ proc parse(filePath: string): seq[Block] =
       result.add Block(name: name, bounds: first..last)
     else:
       doAssert line.startsWith("#") or line.len == 0
-  result.sort do (x, y: Block) -> int:
-    result = cmp(x.a, y.a)
+  #result.sort do (x, y: Block) -> int:
+  #  result = cmp(x.a, y.a)
 
 const templ = """## This is auto-generated. Do not modify it
 

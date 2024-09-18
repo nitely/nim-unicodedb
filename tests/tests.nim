@@ -61,7 +61,7 @@ test "Test non-decompositions":
     if not isDecomposable and decomposition(cp.Rune).len > 0:
       #echo cp.Rune.int
       inc i
-  check i == 62  # new decomposite CPs
+  check i == 0  # new decomposite CPs
 
 test "Test some decompositions":
   check decomposition(0x0F9D.Rune) == @[0x0F9C.Rune, 0x0FB7.Rune]
@@ -105,7 +105,7 @@ test "Test categories":
         echo $cp
         echo $unicodeCategory(cp.Rune).int
       check unicodeCategory(cp.Rune) == cpData.cat.UnicodeCategory
-  check i == 4489  # New code points
+  check i == 0  # New code points
 
 test "Test categories with props":
   check unicodeCategory(properties(7913.Rune)) == ctgLl
@@ -174,7 +174,7 @@ test "Test canonical combining class":
         check combining(cp.Rune) == cpData.ccc
       elif combining(cp.Rune) != cpData.ccc:
         inc i
-  check i == 10
+  check i == 0
 
 test "Test some canonical combining class":
   check combining(0x860.Rune) == 0
@@ -299,7 +299,7 @@ test "Test types":
         continue
       check(utmLowercase in unicodeTypes(cp.Rune) == cpData.lo)
       check(utmUppercase in unicodeTypes(cp.Rune) == cpData.up)
-  check i == 4489  # new codepoints
+  check i == 0  # new codepoints
 
 test "Test some types":
   check utmDecimal in unicodeTypes(Rune(0x0030))
@@ -740,7 +740,7 @@ test "Test word-break data":
       changed += int(cp.Rune.wordBreakProp != wb.prop.SgWord)
       inc i
   check i == maxCp+1
-  check changed == 223
+  check changed == 0
 
 test "Test wordBreakProp":
   check 0x10FFFF.Rune.wordBreakProp == sgwOther

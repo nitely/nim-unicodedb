@@ -189,7 +189,7 @@ something that's missing, please open an issue or PR
 * Run `nimble gen_tests` to update all test data to current
   unicode version. The tests for a new unicode version run
   against the previous unicode version.
-* Run tests and fix all failing tests. This should
+* Run `nimble test` and fix all failing tests. This should
   require just temporarily commenting out
   all checks for missing unicode points.
 * Overwrite `./gen/UCD` data with
