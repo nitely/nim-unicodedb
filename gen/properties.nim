@@ -111,7 +111,7 @@ proc categoryMap(s: string): int =
   of "So":
     ctgSo
   else:
-    assert false
+    doAssert false
     -1
 
 proc parseProps(propsRaw: seq[seq[string]]): seq[seq[int]] =
@@ -124,13 +124,13 @@ proc parseProps(propsRaw: seq[seq[string]]): seq[seq[int]] =
       continue
     result[cp][Props.CAT.ord] = props[0].categoryMap()
     result[cp][Props.CCC.ord] = parseInt(props[1])
-    assert result[cp][Props.CAT.ord] >= 0
+    doAssert result[cp][Props.CAT.ord] >= 0
 
 proc parseBi(biRaw: seq[string]): seq[int] =
   result = newSeq[int](biRaw.len)
   for cp, bi in biRaw:
     result[cp] = bidirectionalNames.find(bi)
-    assert result[cp] >= 0
+    doAssert result[cp] >= 0
 
 const
   # Default is YES when no NO and no MAYBE
@@ -156,7 +156,7 @@ proc nfMap(qcTV: string): int =
   of "NFKD_QC_N":
     NfkdQcNoMask
   else:
-    assert false
+    doAssert false
     -1
 
 proc parseQC(qcsRaw: seq[seq[string]]): seq[int] =
@@ -273,7 +273,7 @@ when isMainModule:
 
   var propsGen = newSeq[string](stages.stage3.len)
   for i, p in stages.stage3:
-    assert len(p) == propsLen
+    doAssert len(p) == propsLen
     propsGen[i] = "[$#]" % join(p, "'i32, ")
   var bidirectionalNamesGen = newSeq[string](len(bidirectionalNames))
   for i, bi in bidirectionalNames:

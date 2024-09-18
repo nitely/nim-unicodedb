@@ -9,11 +9,11 @@
 # TODO: wcwidth returns -1 for everything but ascii on my system (RHEL)
 # TODO: remove?
 
-import algorithm
-import strutils
+import std/algorithm
+import std/strutils
 
-import two_stage_table
-import utils
+import ./two_stage_table
+import ./utils
 
 const maxCP = 0x10FFFF'i32
 

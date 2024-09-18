@@ -18,11 +18,11 @@
 ## within the tests module
 
 import
-  unicodedb/compositions,
-  unicodedb/decompositions,
-  unicodedb/properties,
-  unicodedb/names,
-  unicodedb/types
+  ./unicodedb/compositions,
+  ./unicodedb/decompositions,
+  ./unicodedb/properties,
+  ./unicodedb/names,
+  ./unicodedb/types
 
 export
   compositions,
@@ -32,4 +32,4 @@ export
   types
 
 const
-  unicodeVersion* = "15.0.0"
+  unicodeVersion* = "16.0.0"

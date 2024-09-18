@@ -124,8 +124,8 @@ proc collationElements*(cps: openArray[Rune]): seq[CollationElement] =
 
 when isMainModule:
   # nim c -r src/unicodedb/collation.nim
-  echo(sizeof(collationMkHashes) div 1024)
-  echo(sizeof(collation_mk_data.collationMkData) div 1024)
+  #echo(sizeof(collationMkHashes) div 1024)
+  #echo(sizeof(collation_mk_data.collationMkData) div 1024)
   const maxCp = 0x10FFFF
   for cp in 0 .. maxCp:
     doAssert collationElements([cp.Rune]).len > 0
@@ -248,3 +248,5 @@ when isMainModule:
       level2: 0'u16,
       level3: 0'u16,
       shifted: false)]
+
+  echo "ok"

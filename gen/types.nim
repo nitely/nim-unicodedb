@@ -1,10 +1,10 @@
-import strutils
-import algorithm
+import std/strutils
+import std/algorithm
 
-import unicode_data
-import derived_data
-import two_stage_table
-import utils
+import ./unicode_data
+import ./derived_data
+import ./two_stage_table
+import ./utils
 
 type
   UnicodeTypeMask = enum

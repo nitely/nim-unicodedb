@@ -1,5 +1,5 @@
-import math
-import tables
+import std/math
+import std/tables
 
 const
   maxCP = 0x10FFFF

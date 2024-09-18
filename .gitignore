@@ -15,6 +15,7 @@ gen/casing
 gen/segmentation
 gen/collation
 gen/blocks
+gen/UCD.zip
 
 src/unicodedb/compositions
 src/unicodedb/decompositions

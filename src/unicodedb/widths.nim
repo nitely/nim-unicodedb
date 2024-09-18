@@ -1,9 +1,9 @@
 ## This module implements
 ## East Asian Width - tr11 (http://www.unicode.org/reports/tr11/)
 
-import unicode
+import std/unicode
 
-import widths_data
+import ./widths_data
 
 export UnicodeWidth
 
@@ -22,7 +22,7 @@ proc widthMap(w: int): UnicodeWidth {.inline.} =
   of uwdtNeutral.ord:
     uwdtNeutral
   else:
-    assert false
+    doAssert false
     uwdtNeutral
 
 proc unicodeWidth*(r: Rune): UnicodeWidth =
@@ -30,6 +30,6 @@ proc unicodeWidth*(r: Rune): UnicodeWidth =
   ## Return value is one of: ``uwdtAmbiguous``,
   ## ``uwdtFull``, ``uwdtHalf``, ``uwdtNarrow``,
   ## ``uwdtWide`` and ``uwdtNeutral``
-  assert r.int <= 0x10FFFF
+  doAssert r.int <= 0x10FFFF
   let blockOffset = (widthsIndices[r.int div blockSize]).int * blockSize
   result = widthsData[blockOffset + r.int mod blockSize].widthMap

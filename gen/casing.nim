@@ -5,12 +5,12 @@
 # http://www.unicode.org/versions/Unicode12.1.0/ch05.pdf#G21180
 # https://unicode.org/faq/casemap_charprop.html
 
-import strutils
+import std/strutils
 
-import unicode_data
-import derived_data
-import two_stage_table
-import utils
+import ./unicode_data
+import ./derived_data
+import ./two_stage_table
+import ./utils
 
 type
   Mapping = seq[int]

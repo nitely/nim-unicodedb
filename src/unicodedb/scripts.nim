@@ -1,9 +1,9 @@
 ## This module provides scripts values:
 ## sptCommon, sptLatin, etc
 
-import unicode
+import std/unicode
 
-import scripts_data
+import ./scripts_data
 
 export
   UnicodeScript,
@@ -169,11 +169,18 @@ export
   sptTangsa,
   sptToto,
   sptKawi,
-  sptNagMundari
+  sptNagMundari,
+  sptTodhri,
+  sptGaray,
+  sptTuluTigalari,
+  sptSunuwar,
+  sptGurungKhema,
+  sptKiratRai,
+  sptOlOnal
 
 proc unicodeScript*(cp: Rune): UnicodeScript =
   ## Return script for a given code point
-  assert cp.int <= 0x10FFFF
+  doAssert cp.int <= 0x10FFFF
   let blockOffset = (typesIndices[cp.int div blockSize]).int * blockSize
   result = typesData[blockOffset + cp.int mod blockSize].UnicodeScript
 
