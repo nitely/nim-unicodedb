@@ -1,5 +1,5 @@
-import math
-import strutils
+import std/math
+import std/strutils
 
 proc prettyTable*[T: int or uint32](
   s: seq[T],

@@ -16,6 +16,7 @@ task test, "Test":
   exec "nim c -r tests/tests"
   when (NimMajor, NimMinor) >= (2, 0):
     exec "nim c -r --mm:refc tests/tests"
+  exec "nim c -r src/unicodedb/collation.nim"
 
 task docs, "Docs":
   exec "nim doc2 -o:./docs/unicodedb --project ./src/unicodedb/segmentation.nim"

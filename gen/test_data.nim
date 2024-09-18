@@ -1,6 +1,6 @@
-import unicode
-import strutils
-import sequtils
+import std/unicode
+import std/strutils
+import std/sequtils
 
 import ../src/unicodedb/properties
 import ../src/unicodedb/compositions
@@ -21,11 +21,7 @@ proc isAssigned(r: Rune): bool =
 
 const maxCP = 0x10FFFF
 
-proc bidiData(): seq[tuple[
-    cpFirst: int,
-    cpLast: int,
-    bi: string,
-    assigned: bool]] =
+proc bidiData(): seq[tuple[cpFirst: int, cpLast: int, bi: string, assigned: bool]] =
   result = @[]
   var lastData = 0.Rune.bidirectional()
   var lastCP = 0

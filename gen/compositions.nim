@@ -1,14 +1,14 @@
-import strutils
+import std/strutils
 
-import unicode_data
-import derived_data
-import min_perfect_hash
-import utils
+import ./unicode_data
+import ./derived_data
+import ./min_perfect_hash
+import ./utils
 
 proc parseComps(
-      decompsRaw: seq[string],
-      exclude: seq[int]  # todo: make it a set
-    ): seq[Record[seq[int]]] =
+  decompsRaw: seq[string],
+  exclude: seq[int]  # todo: make it a set
+): seq[Record[seq[int]]] =
   var maxCompSize = 0
   for dcp in decompsRaw:
     if dcp.len > 0:
@@ -45,7 +45,8 @@ const
 when isMainModule:
   var decomps = parseComps(
     parseUDDecomps("./gen/UCD/UnicodeData.txt"),
-    parseDNPExclusion("./gen/UCD/DerivedNormalizationProps.txt"))
+    parseDNPExclusion("./gen/UCD/DerivedNormalizationProps.txt")
+  )
   var mphTables = mph(decomps)
   echo mphLookup(mphTables.h, mphTables.v, [65, 768])
 
@@ -57,7 +58,8 @@ when isMainModule:
   var f = open("./src/unicodedb/compositions_data.nim", fmWrite)
   try:
     f.write(compsTemplate % [
-      prettyTable(mphTables.h, 15, "'i16"),
-      join(compValues, ",\L    ")])
+      prettyTable(mphTables.h, 15, "'i32"),
+      join(compValues, ",\L    ")
+    ])
   finally:
     close(f)

@@ -2,9 +2,9 @@
 ## Decimal, Digit, Numeric, Lowercase,
 ## Uppercase and Cased
 
-import unicode
+import std/unicode
 
-import types_data
+import ./types_data
 
 export
   UnicodeTypeMask,

@@ -1,14 +1,15 @@
 ## This module provides characters
 ## composition used by the normalization form algorithms
 
-import unicode
+import std/unicode
 
-import compositions_data
+import ./compositions_data
 
 proc fnv32a(
-    cpA: int32,
-    cpB: int32,
-    seed: uint32): uint32 {.inline, raises: [].} =
+  cpA: int32,
+  cpB: int32,
+  seed: uint32
+): uint32 {.inline, raises: [].} =
   ## Calculates a distinct hash function for a given sequence
   ## FNV algorithm from http://isthe.com/chongo/tech/comp/fnv/
   result = 18652614'u32  # -> 2166136261 mod int32.high
@@ -28,9 +29,10 @@ proc mphLookup(cpA: int32, cpB: int32): array[3, int32] {.inline, raises: [].} =
   result = compsValues[(fnv32a(cpA, cpB, d.uint32) mod compsValues.len).int]
 
 proc composition*(
-    r: var Rune,
-    cpA: Rune,
-    cpB: Rune): bool {.raises: [].} =
+  r: var Rune,
+  cpA: Rune,
+  cpB: Rune
+): bool {.raises: [].} =
   ## Assign the primary composition for
   ## a given decomposition to ``r`` param.
   ## This is not a full composition.
@@ -43,8 +45,9 @@ proc composition*(
   r = cps[2].Rune
 
 proc composition*(
-    cpA: Rune,
-    cpB: Rune): Rune {.raises: [ValueError].} =
+  cpA: Rune,
+  cpB: Rune
+): Rune {.raises: [ValueError].} =
   ## Return the primary composition for
   ## a given decomposition. This is not a full composition.
   ## Raises `ValueError` if composition was not found

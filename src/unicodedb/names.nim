@@ -1,10 +1,10 @@
 ## This module provides characters
 ## names lookup and retrieval
 
-import unicode
-import strutils
+import std/unicode
+import std/strutils
 
-import names_data
+import ./names_data
 
 const
   sBase = 0xAC00
@@ -48,7 +48,7 @@ type
     ## that must generate their name
     ## based on certain rules.
     ## Based on Unicode standard 13 - Chapter 4.8
-    Hangul, CJKU, Tangut, Nushu, CJKC, Khitan
+    Hangul, CJKU, Tangut, Nushu, CJKC, Khitan, Egyptian
 const
   prefixNames: array[EPrefixNames, string] = [
     "hangul syllable ".toUpperAscii(),
@@ -56,7 +56,8 @@ const
     "tangut ideograph-".toUpperAscii(),
     "nushu character-".toUpperAscii(),
     "cjk compatibility ideograph-".toUpperAscii(),
-    "khitan small script character-".toUpperAscii()
+    "khitan small script character-".toUpperAscii(),
+    "EGYPTIAN HIEROGLYPH-".toUpperAscii()
   ]
   prefixRanges = [
     (first: 0xAC00, last: 0xD7A3, name: EPrefixNames.Hangul),
@@ -67,8 +68,10 @@ const
     (first: 0x2B740, last: 0x2B81D, name: EPrefixNames.CJKU),
     (first: 0x2B820, last: 0x2CEA1, name: EPrefixNames.CJKU),
     (first: 0x2CEB0, last: 0x2EBE0, name: EPrefixNames.CJKU),
+    (first: 0x2EBF0, last: 0x2EE5D, name: EPrefixNames.CJKU),
     (first: 0x30000, last: 0x3134A, name: EPrefixNames.CJKU),
     (first: 0x31350, last: 0x323AF, name: EPrefixNames.CJKU),
+    (first: 0x13460, last: 0x143FA, name: EPrefixNames.Egyptian),
     (first: 0x17000, last: 0x187F7, name: EPrefixNames.Tangut),
     (first: 0x18D00, last: 0x18D08, name: EPrefixNames.Tangut),
     (first: 0x18B00, last: 0x18CD5, name: EPrefixNames.Khitan),

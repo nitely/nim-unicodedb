@@ -1,6 +1,6 @@
 # https://www.unicode.org/reports/tr44/tr44-24.html
 
-import strutils
+import std/strutils
 
 const maxCP = 0x10FFFF
 

@@ -16,10 +16,10 @@ type
   MphValueType = int or seq[int] or uint32
 
 proc mphLookup*[T: MphValueType](
-      hashes: openarray[int],
-      values: openarray[T],
-      key: openarray[int]
-    ): T =
+  hashes: openarray[int],
+  values: openarray[T],
+  key: openarray[int]
+): T =
   assert hashes.len <= int32.high
   assert values.len <= int32.high
   let d = hashes[int(fnv32a(key, 0'u32) mod hashes.len.uint32)]
@@ -31,8 +31,8 @@ type
     value: T
 
 proc mph*[T: MphValueType](
-      data: openarray[Record[T]]
-    ): tuple[h: seq[int], v: seq[T]] =
+  data: openarray[Record[T]]
+): tuple[h: seq[int], v: seq[T]] =
   let dataSize = len(data)
   result = (
     h: newSeq[int](dataSize),

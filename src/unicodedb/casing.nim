@@ -1,9 +1,9 @@
 ## This module provides casing mappings.
 ## Beware some mappings are one to many characters.
 
-import unicode
+import std/unicode
 
-import casing_data
+import ./casing_data
 
 # This jumps through hoops to
 # contain a single yield
@@ -26,7 +26,7 @@ template casingImpl(
 iterator lowerCase*(r: Rune): Rune {.inline.} =
   ## Return lower case mapping of `r` if
   ## there is such mapping. Return `r` otherwise
-  assert r.int <= 0x10FFFF
+  doAssert r.int <= 0x10FFFF
   casingImpl(
     lowercaseOffsets,
     lowercaseIndices,
@@ -36,7 +36,7 @@ iterator lowerCase*(r: Rune): Rune {.inline.} =
 iterator upperCase*(r: Rune): Rune {.inline.} =
   ## Return upper case mapping of `r` if
   ## there is such mapping. Return `r` otherwise
-  assert r.int <= 0x10FFFF
+  doAssert r.int <= 0x10FFFF
   casingImpl(
     uppercaseOffsets,
     uppercaseIndices,
@@ -46,7 +46,7 @@ iterator upperCase*(r: Rune): Rune {.inline.} =
 iterator titleCase*(r: Rune): Rune {.inline.} =
   ## Return title case mapping of `r` if
   ## there is such mapping. Return `r` otherwise
-  assert r.int <= 0x10FFFF
+  doAssert r.int <= 0x10FFFF
   casingImpl(
     titlecaseOffsets,
     titlecaseIndices,
@@ -58,7 +58,7 @@ iterator caseFold*(r: Rune): Rune {.inline.} =
   ## there is such folding. Return `r` otherwise.
   ## This is meant for internal usage such as caseless
   ## text comparison
-  assert r.int <= 0x10FFFF
+  doAssert r.int <= 0x10FFFF
   casingImpl(
     casefoldOffsets,
     casefoldIndices,

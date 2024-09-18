@@ -1,12 +1,12 @@
 ## East Asian Width - tr11 (http://www.unicode.org/reports/tr11/)
 
-import algorithm
-import strutils
+import std/algorithm
+import std/strutils
 
-import derived_data
-import unicode_data
-import two_stage_table
-import utils
+import ./derived_data
+import ./unicode_data
+import ./two_stage_table
+import ./utils
 
 const maxCP = 0x10FFFF
 

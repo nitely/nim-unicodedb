@@ -18,8 +18,10 @@ const
     [0x2B740, 0x2B81D],
     [0x2B820, 0x2CEA1],
     [0x2CEB0, 0x2EBE0],
+    [0x2EBF0, 0x2EE5D],
     [0x30000, 0x3134A],
     [0x31350, 0x323AF],
+    [0x13460, 0x143FA],
     [0x17000, 0x187F7],
     [0x18D00, 0x18D08],
     [0x18B00, 0x18CD5],
@@ -267,7 +269,7 @@ when isMainModule:
       prettyTable(wtObj.offsets, 10, "'i32"),
       prettyTable(wtObj.words, 15, "'i8"),
       intToStr(stageTable.blockSize),
-      prettyTable(mphTables.h, 15, "'u16"),
+      prettyTable(mphTables.h, 15, "'i32"),
       prettyTable(mphTables.v, 10, "'i32")
     ])
   finally:

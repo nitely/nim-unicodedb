@@ -170,6 +170,13 @@ const
   sptToto = 161
   sptKawi = 162
   sptNagMundari = 163
+  sptTodhri = 164
+  sptGaray = 165
+  sptTuluTigalari = 166
+  sptSunuwar = 167
+  sptGurungKhema = 168
+  sptKiratRai = 169
+  sptOlOnal = 170
 
 proc scriptMap(s: string): int =
   case s
@@ -499,6 +506,20 @@ proc scriptMap(s: string): int =
     sptKawi
   of "Nag_Mundari":
     sptNagMundari
+  of "Todhri":
+    sptTodhri
+  of "Garay":
+    sptGaray
+  of "Tulu_Tigalari":
+    sptTuluTigalari
+  of "Sunuwar":
+    sptSunuwar
+  of "Gurung_Khema":
+    sptGurungKhema
+  of "Kirat_Rai":
+    sptKiratRai
+  of "Ol_Onal":
+    sptOlOnal
   else:
     echo s
     doAssert false
@@ -708,6 +729,13 @@ const
   sptToto* = $#.UnicodeScript
   sptKawi* = $#.UnicodeScript
   sptNagMundari* = $#.UnicodeScript
+  sptTodhri* = $#.UnicodeScript
+  sptGaray* = $#.UnicodeScript
+  sptTuluTigalari* = $#.UnicodeScript
+  sptSunuwar* = $#.UnicodeScript
+  sptGurungKhema* = $#.UnicodeScript
+  sptKiratRai* = $#.UnicodeScript
+  sptOlOnal* = $#.UnicodeScript
 
 const
   typesIndices* = [
@@ -894,6 +922,13 @@ when isMainModule:
       $sptToto,
       $sptKawi,
       $sptNagMundari,
+      $sptTodhri,
+      $sptGaray,
+      $sptTuluTigalari,
+      $sptSunuwar,
+      $sptGurungKhema,
+      $sptKiratRai,
+      $sptOlOnal,
       prettyTable(stages.stage1, 15, "'i16"),
       prettyTable(stages.stage2, 15, "'u8"),
       $stages.blockSize])

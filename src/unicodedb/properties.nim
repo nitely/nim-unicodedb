@@ -2,9 +2,9 @@
 ## properties: category class, canonical
 ## combining class, bidirectional class and quick check (QC)
 
-import unicode
+import std/unicode
 
-import properties_data
+import ./properties_data
 
 export
   NfMask,
