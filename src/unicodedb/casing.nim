@@ -64,3 +64,13 @@ iterator caseFold*(r: Rune): Rune {.inline.} =
     casefoldIndices,
     casefoldData,
     casefoldBlockSize)
+
+func simpleCaseFold*(r: Rune): Rune {.inline.} =
+  ## Return simple case fold of `r` if
+  ## there is such folding. Return `r` otherwise.
+  ## Prefer full case fold which let strings like
+  ## "MASSE" and "Maße" to match.
+  doAssert r.int <= 0x10FFFF
+  let blockOffset = (simpleCasefoldIndices[r.int div simpleCasefoldBlockSize]).int * simpleCasefoldBlockSize
+  let cp = simpleCasefoldData[blockOffset + r.int mod simpleCasefoldBlockSize]
+  result = if cp == -1: r else: Rune(cp)

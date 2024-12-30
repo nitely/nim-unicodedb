@@ -159,6 +159,18 @@ proc parseUDDFullCaseFolding*(filePath: string): seq[seq[string]] =
       assert result[cp].len == 0
       result[cp] = p
 
+proc parseUDDSimpleCaseFolding*(filePath: string): seq[seq[string]] =
+  # <code>; <status>; <mapping>; # <name>
+  result = newSeq[seq[string]](maxCP + 1)
+  for cp, props in filePath.parseUDD():
+    if props.len == 0:
+      continue
+    for p in props:
+      if p[0] != "C" and p[0] != "S":
+        continue
+      assert result[cp].len == 0
+      result[cp] = p
+
 proc parseUDDEmoji*(filePath: string): seq[seq[string]] =
   result = newSeq[seq[string]](maxCP + 1)
   for cp, props in filePath.parseUDD():

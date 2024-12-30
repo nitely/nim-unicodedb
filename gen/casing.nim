@@ -178,6 +178,18 @@ func buildCaseFolding(foldings: seq[Folding]): MultiStageTable =
     .buildCasingTable
     .buildMultiStageTable
 
+proc parseSimpleFolding(filePath: string): seq[int] =
+  let rawData = filePath.parseUDDSimpleCaseFolding
+  result = newSeq[int](rawData.len)
+  for cp, props in rawData.pairs:
+    if props.len == 0:
+      result[cp] = -1
+    else:
+      result[cp] = parseHexInt("0x$#" % props[1].strip)
+
+func build(data: seq[int]): Stages[int] =
+  result = buildTwoStageTable(data)
+
 #[
 func buildLowerCase(casings: seq[Casing]): Stages[int] =
   var data = newSeq[int](casings.len)
@@ -237,6 +249,15 @@ const
     $#
   ]
   casefoldBlockSize* = $#
+
+const
+  simpleCasefoldIndices* = [
+    $#
+  ]
+  simpleCasefoldData* = [
+    $#
+  ]
+  simpleCasefoldBlockSize* = $#
 """
 
 when isMainModule:
@@ -249,6 +270,8 @@ when isMainModule:
 
   let foldings = parseFolding("./gen/UCD/CaseFolding.txt")
   let foldingTable = foldings.buildCaseFolding
+
+  let simpleFoldingTable = "./gen/UCD/CaseFolding.txt".parseSimpleFolding.build
 
   var f = open("./src/unicodedb/casing_data.nim", fmWrite)
   try:
@@ -268,7 +291,10 @@ when isMainModule:
       prettyTable(foldingTable.stage1, 15, "'i8"),
       prettyTable(foldingTable.stage2, 15, "'i16"),
       prettyTable(foldingTable.data, 15, "'u32"),
-      $foldingTable.blockSize
+      $foldingTable.blockSize,
+      prettyTable(simpleFoldingTable.stage1, 15, "'i8"),
+      prettyTable(simpleFoldingTable.stage2, 15, "'i32"),
+      $simpleFoldingTable.blockSize
     ])
   finally:
     close(f)
