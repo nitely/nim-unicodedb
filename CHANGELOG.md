@@ -1,3 +1,9 @@
+v0.13.1
+==================
+
+* Add `simpleCaseFold` API
+* Add `hasCaseFolds` API
+
 v0.13.0
 ==================
 
