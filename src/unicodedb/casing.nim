@@ -65,7 +65,7 @@ iterator caseFold*(r: Rune): Rune {.inline.} =
     casefoldData,
     casefoldBlockSize)
 
-func simpleCaseFold*(r: Rune): Rune {.inline.} =
+func simpleCaseFold*(r: Rune): Rune =
   ## Return simple case fold of `r` if
   ## there is such folding. Return `r` otherwise.
   ## Prefer full case fold which let strings like
@@ -74,3 +74,10 @@ func simpleCaseFold*(r: Rune): Rune {.inline.} =
   let blockOffset = (simpleCasefoldIndices[r.int div simpleCasefoldBlockSize]).int * simpleCasefoldBlockSize
   let cp = simpleCasefoldData[blockOffset + r.int mod simpleCasefoldBlockSize]
   result = if cp == -1: r else: Rune(cp)
+
+func hasCaseFolds*(r: Rune): bool =
+  ## Return true if a code point maps to `r` or
+  ## `r` maps to a code point. Uses simple case folding.
+  doAssert r.int <= 0x10FFFF
+  let blockOffset = (hasCasefoldsIndices[r.int div hasCasefoldsBlockSize]).int * hasCasefoldsBlockSize
+  result = hasCasefoldsData[blockOffset + r.int mod hasCasefoldsBlockSize] == 1

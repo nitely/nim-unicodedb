@@ -6,11 +6,14 @@
 # https://unicode.org/faq/casemap_charprop.html
 
 import std/strutils
+import std/tables
 
 import ./unicode_data
 import ./derived_data
 import ./two_stage_table
 import ./utils
+
+const maxCP = 0x10FFFF
 
 type
   Mapping = seq[int]
@@ -190,6 +193,19 @@ proc parseSimpleFolding(filePath: string): seq[int] =
 func build(data: seq[int]): Stages[int] =
   result = buildTwoStageTable(data)
 
+proc parseHasCaseFolds(filePath: string): seq[int] =
+  result = newSeq[int](maxCP + 1)
+  let foldings = parseSimpleFolding(filePath)
+  var counts = initCountTable[int]()
+  for cpf in foldings:
+    if cpf != -1:
+      counts.inc cpf
+  for cp in 0 .. result.len-1:
+    if cp in counts or foldings[cp] != -1:
+      result[cp] = 1
+    else:
+      result[cp] = 0
+
 #[
 func buildLowerCase(casings: seq[Casing]): Stages[int] =
   var data = newSeq[int](casings.len)
@@ -258,6 +274,14 @@ const
     $#
   ]
   simpleCasefoldBlockSize* = $#
+
+  hasCasefoldsIndices* = [
+    $#
+  ]
+  hasCasefoldsData* = [
+    $#
+  ]
+  hasCasefoldsBlockSize* = $#
 """
 
 when isMainModule:
@@ -272,6 +296,7 @@ when isMainModule:
   let foldingTable = foldings.buildCaseFolding
 
   let simpleFoldingTable = "./gen/UCD/CaseFolding.txt".parseSimpleFolding.build
+  let hasCaseFoldsTable = "./gen/UCD/CaseFolding.txt".parseHasCaseFolds.build
 
   var f = open("./src/unicodedb/casing_data.nim", fmWrite)
   try:
@@ -294,7 +319,10 @@ when isMainModule:
       $foldingTable.blockSize,
       prettyTable(simpleFoldingTable.stage1, 15, "'i8"),
       prettyTable(simpleFoldingTable.stage2, 15, "'i32"),
-      $simpleFoldingTable.blockSize
+      $simpleFoldingTable.blockSize,
+      prettyTable(hasCaseFoldsTable.stage1, 15, "'i8"),
+      prettyTable(hasCaseFoldsTable.stage2, 15, "'i8"),
+      $hasCaseFoldsTable.blockSize,
     ])
   finally:
     close(f)

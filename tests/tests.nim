@@ -777,6 +777,22 @@ test "Test simpleCaseFold":
   check 0x0132.Rune.simpleCaseFold == 0x0133.Rune
   check 0x1E921.Rune.simpleCaseFold == 0x1E943.Rune
 
+test "Test all hasCaseFolds":
+  for cp in 0 .. maxCp:
+    if cp.Rune.simpleCaseFold != cp.Rune:
+      check cp.Rune.hasCaseFolds
+      check cp.Rune.simpleCaseFold.hasCaseFolds
+
+test "Test hasCaseFolds":
+  check 'a'.ord.Rune.hasCaseFolds
+  check 'A'.ord.Rune.hasCaseFolds
+  check 0x0132.Rune.hasCaseFolds
+  check 0x1E921.Rune.hasCaseFolds
+  check not '.'.ord.Rune.hasCaseFolds
+  check not '$'.ord.Rune.hasCaseFolds
+  check not '@'.ord.Rune.hasCaseFolds
+  check not '-'.ord.Rune.hasCaseFolds
+
 test "Test word-break data":
   var changed = 0
   var i = 0
