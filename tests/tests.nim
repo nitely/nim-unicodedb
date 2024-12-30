@@ -745,11 +745,37 @@ test "Test all caseFold":
       check toSeq(cp.Rune.caseFold) == @[cp.Rune]
 
 test "Test caseFold":
+  check toSeq('a'.ord.Rune.caseFold) == @['a'.ord.Rune]
   check toSeq(0x0130.Rune.caseFold) == @[0x0069.Rune, 0x0307.Rune]
   check toSeq(0x0132.Rune.caseFold) == @[0x0133.Rune]
   check toSeq(0x1E921.Rune.caseFold) == @[0x1E943.Rune]
   check toSeq(0x1F88.Rune.caseFold) == @[0x1F00.Rune, 0x03B9.Rune]
   check toSeq("ᾈ".runeAt(0).caseFold) == @["ἀ".runeAt(0), "ι".runeAt(0)]
+
+test "Test all simpleCaseFold":
+  var i = 0
+  for ca in allCaseFold:
+    if ca.cps.len == 1:
+      check ca.cp.Rune.simpleCaseFold == ca.cps[0].Rune
+      inc i
+  check i == 1426
+  var checked = newSeq[bool](maxCp+1)
+  for ca in allcaseFold:
+    checked[ca.cp] = true
+  for cp in 0 .. maxCp:
+    if cp in [7305,42955,42956,42970,42972]:  # unicode 16
+      continue
+    if cp in 68944..68965:  # unicode 16
+      continue
+    if not checked[cp]:
+      if cp.Rune.simpleCaseFold != cp.Rune:
+        echo $cp
+      check cp.Rune.simpleCaseFold == cp.Rune
+
+test "Test simpleCaseFold":
+  check 'a'.ord.Rune.simpleCaseFold == 'a'.ord.Rune
+  check 0x0132.Rune.simpleCaseFold == 0x0133.Rune
+  check 0x1E921.Rune.simpleCaseFold == 0x1E943.Rune
 
 test "Test word-break data":
   var changed = 0
