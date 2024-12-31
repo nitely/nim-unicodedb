@@ -93,7 +93,8 @@ func hasCaseFolds*(r: Rune): bool =
   result = hasCasefoldsData[blockOffset + r.int mod hasCasefoldsBlockSize] == 1
 
 iterator resolveCaseFold*(r: Rune): Rune {.inline.} =
-  ## Return all code points which casefold maps to `r`.
+  ## Return all code points that have the same
+  ## simple case-fold map of `r`. It always includes `r`.
   ## Uses simple case folding.
   doAssert r.int <= 0x10FFFF
   casingImpl(

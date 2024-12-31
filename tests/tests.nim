@@ -778,10 +778,13 @@ test "Test simpleCaseFold":
   check 0x1E921.Rune.simpleCaseFold == 0x1E943.Rune
 
 test "Test all hasCaseFolds":
+  var i = 0
   for cp in 0 .. maxCp:
     if cp.Rune.simpleCaseFold != cp.Rune:
       check cp.Rune.hasCaseFolds
       check cp.Rune.simpleCaseFold.hasCaseFolds
+      inc i
+  check i > 0
 
 test "Test hasCaseFolds":
   check 'a'.ord.Rune.hasCaseFolds
@@ -792,6 +795,16 @@ test "Test hasCaseFolds":
   check not '$'.ord.Rune.hasCaseFolds
   check not '@'.ord.Rune.hasCaseFolds
   check not '-'.ord.Rune.hasCaseFolds
+
+test "Test all resolveCaseFold":
+  var i = 0
+  for cp in 0 .. maxCp:
+    if cp.Rune.hasCaseFolds:
+      let cps = toSeq(cp.Rune.resolveCaseFold)
+      check cp.Rune in cps
+      check cp.Rune.simpleCaseFold in cps
+      inc i
+  check i > 0
 
 test "Test resolveCaseFold":
   check toSeq("ĳ".runeAt(0).resolveCaseFold) == @["ĳ".runeAt(0), "Ĳ".runeAt(0)]
