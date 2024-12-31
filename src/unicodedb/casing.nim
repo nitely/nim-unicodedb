@@ -5,7 +5,7 @@ import std/unicode
 
 import ./casing_data
 
-template ones(n: untyped): uint = (1.uint shl n) - 1
+template ones(n: untyped): uint32 = (1.uint32 shl n) - 1
 
 # This jumps through hoops to
 # contain a single yield
