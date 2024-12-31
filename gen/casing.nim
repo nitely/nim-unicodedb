@@ -125,11 +125,11 @@ func buildCasingTable(casings: seq[Mapping]): CasingTable =
     if ca.len == 0:
       continue
     result.offsets[cp] = offset
-    # Use ca[0] >> 2 to retrieve the first cp
-    # And ca[0] & 0x03 to retrieve the length
-    assert ca.len <= 0x03
-    assert ca[0] == ((ca[0].uint32 shl 2) shr 2).int64
-    result.cps[offset] = (ca[0].uint32 shl 2) + ca.len.uint32
+    # Use ca[0] >> 3 to retrieve the first cp
+    # And ca[0] & ones(3) to retrieve the length
+    doAssert ca.len <= ones(3).int
+    doAssert ca[0] == ((ca[0].uint32 shl 3) shr 3).int
+    result.cps[offset] = (ca[0].uint32 shl 3) + ca.len.uint32
     inc offset
     for i in 1 .. ca.len-1:
       result.cps[offset] = ca[i].uint32
@@ -205,6 +205,22 @@ proc parseHasCaseFolds(filePath: string): seq[int] =
       result[cp] = 1
     else:
       result[cp] = 0
+
+proc parseResolveCaseFold(filePath: string): seq[Folding] =
+  result = newSeq[Folding](maxCP + 1)
+  let foldings = parseSimpleFolding(filePath)
+  doAssert result.len == foldings.len
+  var resolve = initTable[int, Folding]()
+  for cp, cpf in pairs foldings:
+    if cpf == -1:
+      continue
+    if cpf notin resolve:
+      resolve[cpf] = @[cpf]
+    if cp notin resolve[cpf]:
+      resolve[cpf].add cp
+  for cp in 0 .. result.len-1:
+    if cp in resolve:
+      result[cp] = resolve[cp]
 
 #[
 func buildLowerCase(casings: seq[Casing]): Stages[int] =
@@ -282,6 +298,17 @@ const
     $#
   ]
   hasCasefoldsBlockSize* = $#
+
+  resolveCasefoldOffsets* = [
+    $#
+  ]
+  resolveCasefoldIndices* = [
+    $#
+  ]
+  resolveCasefoldData* = [
+    $#
+  ]
+  resolveCasefoldBlockSize* = $#
 """
 
 when isMainModule:
@@ -297,6 +324,7 @@ when isMainModule:
 
   let simpleFoldingTable = "./gen/UCD/CaseFolding.txt".parseSimpleFolding.build
   let hasCaseFoldsTable = "./gen/UCD/CaseFolding.txt".parseHasCaseFolds.build
+  let resolveCaseFoldTable = "./gen/UCD/CaseFolding.txt".parseResolveCaseFold.buildCaseFolding
 
   var f = open("./src/unicodedb/casing_data.nim", fmWrite)
   try:
@@ -323,6 +351,10 @@ when isMainModule:
       prettyTable(hasCaseFoldsTable.stage1, 15, "'i8"),
       prettyTable(hasCaseFoldsTable.stage2, 15, "'i8"),
       $hasCaseFoldsTable.blockSize,
+      prettyTable(resolveCaseFoldTable.stage1, 15, "'i8"),
+      prettyTable(resolveCaseFoldTable.stage2, 15, "'i16"),
+      prettyTable(resolveCaseFoldTable.data, 15, "'u32"),
+      $resolveCaseFoldTable.blockSize,
     ])
   finally:
     close(f)

@@ -793,6 +793,19 @@ test "Test hasCaseFolds":
   check not '@'.ord.Rune.hasCaseFolds
   check not '-'.ord.Rune.hasCaseFolds
 
+test "Test resolveCaseFold":
+  check toSeq("ĳ".runeAt(0).resolveCaseFold) == @["ĳ".runeAt(0), "Ĳ".runeAt(0)]
+  check toSeq("Ĳ".runeAt(0).resolveCaseFold) == @["ĳ".runeAt(0), "Ĳ".runeAt(0)]
+  check toSeq('s'.ord.Rune.resolveCaseFold) == @['s'.ord.Rune, 'S'.ord.Rune, "ſ".runeAt(0)]
+  check toSeq('S'.ord.Rune.resolveCaseFold) == @['s'.ord.Rune, 'S'.ord.Rune, "ſ".runeAt(0)]
+  check toSeq("ſ".runeAt(0).resolveCaseFold) == @['s'.ord.Rune, 'S'.ord.Rune, "ſ".runeAt(0)]
+  check toSeq('a'.ord.Rune.resolveCaseFold) == @['a'.ord.Rune, 'A'.ord.Rune]
+  check toSeq('A'.ord.Rune.resolveCaseFold) == @['a'.ord.Rune, 'A'.ord.Rune]
+  check toSeq('.'.ord.Rune.resolveCaseFold) == @['.'.ord.Rune]
+  check toSeq('$'.ord.Rune.resolveCaseFold) == @['$'.ord.Rune]
+  check toSeq('@'.ord.Rune.resolveCaseFold) == @['@'.ord.Rune]
+  check toSeq('-'.ord.Rune.resolveCaseFold) == @['-'.ord.Rune]
+
 test "Test word-break data":
   var changed = 0
   var i = 0

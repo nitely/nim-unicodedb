@@ -1,6 +1,8 @@
 import std/math
 import std/strutils
 
+template ones*(n: untyped): uint = (1.uint shl n) - 1
+
 proc prettyTable*[T: int or uint32](
   s: seq[T],
   cols: int,
