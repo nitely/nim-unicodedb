@@ -1,5 +1,7 @@
 import std/bitops
 import std/unicode
+when NimMajor >= 2:
+  import std/assertions
 
 import ./collation_mk_data
 import ./blocks

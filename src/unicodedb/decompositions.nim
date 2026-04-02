@@ -2,6 +2,8 @@
 ## decomposition used by the normalization form algorithms
 
 import unicode
+when NimMajor >= 2:
+  import std/assertions
 
 import decompositions_data
 

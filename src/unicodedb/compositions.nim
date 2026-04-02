@@ -2,6 +2,8 @@
 ## composition used by the normalization form algorithms
 
 import std/unicode
+when NimMajor >= 2:
+  import std/assertions
 
 import ./compositions_data
 

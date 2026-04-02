@@ -2,6 +2,8 @@
 ## to implement text segmentation tr29
 
 import std/unicode
+when NimMajor >= 2:
+  import std/assertions
 
 import ./segmentation_data
 
