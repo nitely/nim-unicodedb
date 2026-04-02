@@ -1,6 +1,8 @@
 import std/unittest
 import std/unicode
 import std/sequtils
+when NimMajor >= 2:
+  import std/assertions
 
 import ../src/unicodedb
 import ../src/unicodedb/widths

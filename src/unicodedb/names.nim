@@ -3,6 +3,8 @@
 
 import std/unicode
 import std/strutils
+when NimMajor >= 2:
+  import std/assertions
 
 import ./names_data
 

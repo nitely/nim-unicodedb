@@ -2,6 +2,8 @@
 ## Beware some mappings are one to many characters.
 
 import std/unicode
+when NimMajor >= 2:
+  import std/assertions
 
 import ./casing_data
 
