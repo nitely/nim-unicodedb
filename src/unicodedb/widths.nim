@@ -2,7 +2,7 @@
 ## East Asian Width - tr11 (http://www.unicode.org/reports/tr11/)
 
 import std/unicode
-when NimMajor >= 2:
+when defined(nimPreviewSlimSystem):
   import std/assertions
 
 import ./widths_data

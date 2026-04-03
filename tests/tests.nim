@@ -1,7 +1,7 @@
 import std/unittest
 import std/unicode
 import std/sequtils
-when NimMajor >= 2:
+when defined(nimPreviewSlimSystem):
   import std/assertions
 
 import ../src/unicodedb

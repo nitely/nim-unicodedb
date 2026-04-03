@@ -2,7 +2,7 @@
 ## sptCommon, sptLatin, etc
 
 import std/unicode
-when NimMajor >= 2:
+when defined(nimPreviewSlimSystem):
   import std/assertions
 
 import ./scripts_data
