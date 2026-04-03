@@ -3,7 +3,7 @@
 ## combining class, bidirectional class and quick check (QC)
 
 import std/unicode
-when NimMajor >= 2:
+when defined(nimPreviewSlimSystem):
   import std/assertions
 
 import ./properties_data

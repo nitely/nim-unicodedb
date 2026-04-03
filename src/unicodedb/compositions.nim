@@ -2,7 +2,7 @@
 ## composition used by the normalization form algorithms
 
 import std/unicode
-when NimMajor >= 2:
+when defined(nimPreviewSlimSystem):
   import std/assertions
 
 import ./compositions_data

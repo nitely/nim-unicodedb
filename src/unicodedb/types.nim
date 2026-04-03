@@ -3,7 +3,7 @@
 ## Uppercase and Cased
 
 import std/unicode
-when NimMajor >= 2:
+when defined(nimPreviewSlimSystem):
   import std/assertions
 
 import ./types_data

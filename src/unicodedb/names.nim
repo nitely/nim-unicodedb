@@ -3,7 +3,7 @@
 
 import std/unicode
 import std/strutils
-when NimMajor >= 2:
+when defined(nimPreviewSlimSystem):
   import std/assertions
 
 import ./names_data
