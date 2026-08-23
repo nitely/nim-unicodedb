@@ -8,14 +8,25 @@ on:
 
 jobs:
   test:
-    name: Nim ${{ matrix.nim }}
-    runs-on: ubuntu-latest
+    name: Nim ${{ matrix.nim }} / ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        nim: [1.0.10, 1.2.12, 1.4.8, 1.6.18, 2.0.8]
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        nim: [1.6.x, 2.0.x, 2.2.4, 2.2.x, devel]
+        exclude:
+          - os: windows-latest
+            nim: devel
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v7
+    - uses: jiro4989/setup-nim-action@v2
+      with:
+        nim-version: ${{ matrix.nim }}
+        use-nightlies: true
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Setup
+      run: |
+        nimble install -y --depsOnly
     - name: Run Tests
       run: |
-        docker pull nimlang/nim:${{ matrix.nim }}
-        docker run --rm -v `pwd`:/usr/src/app -w /usr/src/app nimlang/nim:${{ matrix.nim }} /bin/bash -c "git config --global --add safe.directory /usr/src/app && nimble install -y && nimble test"
+        nimble test
