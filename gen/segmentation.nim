@@ -29,55 +29,55 @@ const
   sgwExtendedPictographic = 19
 
 func wordMap(s: string): int =
-  result = case s:
-    of "Other":
-      sgwOther
-    of "Double_Quote":
-      sgwDoubleQuote
-    of "Single_Quote":
-      sgwSingleQuote
-    of "Hebrew_Letter":
-      sgwHebrewLetter
-    of "CR":
-      sgwCr
-    of "LF":
-      sgwLf
-    of "Newline":
-      sgwNewline
-    of "Extend":
-      sgwExtend
-    of "Regional_Indicator":
-      sgwRegionalIndicator
-    of "Format":
-      sgwFormat
-    of "Katakana":
-      sgwKatakana
-    of "ALetter":
-      sgwAletter
-    of "MidLetter":
-      sgwMidLetter
-    of "MidNum":
-      sgwMidNum
-    of "MidNumLet":
-      sgwMidNumLet
-    of "Numeric":
-      sgwNumeric
-    of "ExtendNumLet":
-      sgwExtendNumLet
-    of "ZWJ":
-      sgwZwj
-    of "WSegSpace":
-      sgwWsegSpace
-    else:
-      assert false
-      -99
+  case s:
+  of "Other":
+    sgwOther
+  of "Double_Quote":
+    sgwDoubleQuote
+  of "Single_Quote":
+    sgwSingleQuote
+  of "Hebrew_Letter":
+    sgwHebrewLetter
+  of "CR":
+    sgwCr
+  of "LF":
+    sgwLf
+  of "Newline":
+    sgwNewline
+  of "Extend":
+    sgwExtend
+  of "Regional_Indicator":
+    sgwRegionalIndicator
+  of "Format":
+    sgwFormat
+  of "Katakana":
+    sgwKatakana
+  of "ALetter":
+    sgwAletter
+  of "MidLetter":
+    sgwMidLetter
+  of "MidNum":
+    sgwMidNum
+  of "MidNumLet":
+    sgwMidNumLet
+  of "Numeric":
+    sgwNumeric
+  of "ExtendNumLet":
+    sgwExtendNumLet
+  of "ZWJ":
+    sgwZwj
+  of "WSegSpace":
+    sgwWsegSpace
+  else:
+    doAssert false
+    -99
 
 func emojiMap(s: string): int =
-  result = case s
-    of "Extended_Pictographic":
-      sgwExtendedPictographic
-    else:
-      -1
+  case s
+  of "Extended_Pictographic":
+    sgwExtendedPictographic
+  else:
+    -1
 
 type
   WordProps = seq[int]

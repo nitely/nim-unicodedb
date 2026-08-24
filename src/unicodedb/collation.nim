@@ -60,17 +60,21 @@ proc mkCollationElementsIndex(key: openarray[Rune]): int =
 
 proc implicitWeights(cp: Rune): array[2, uint32] =
   ## https://unicode.org/reports/tr10/#Implicit_Weights
-  if cp in blockTangut:
+  if cp in blockTangut or cp in blockTangutSupplement:
     result = [
       (0xFB00'u32 shl 16) + (0x0020'u32 shl 8) + 0x0002'u32,
       ((cp.uint32 - 0x17000'u32) or 0x8000'u32) shl 16]
-  elif cp in blockNushu:
+  elif cp in blockTangutComponents or cp in blockTangutComponentsSupplement:
     result = [
       (0xFB01'u32 shl 16) + (0x0020'u32 shl 8) + 0x0002'u32,
+      ((cp.uint32 - 0x18800'u32) or 0x8000'u32) shl 16]
+  elif cp in blockNushu:
+    result = [
+      (0xFB02'u32 shl 16) + (0x0020'u32 shl 8) + 0x0002'u32,
       ((cp.uint32 - 0x1B170'u32) or 0x8000'u32) shl 16]
   elif cp in blockKhitan:
     result = [
-      (0xFB02'u32 shl 16) + (0x0020'u32 shl 8) + 0x0002'u32,
+      (0xFB03'u32 shl 16) + (0x0020'u32 shl 8) + 0x0002'u32,
       ((cp.uint32 - 0x18B00'u32) or 0x8000'u32) shl 16]
   elif utmUnifiedIdeograph in cp.unicodeTypes():
     if cp in blockHanUnif or cp in blockHanCompat:
@@ -197,7 +201,7 @@ when isMainModule:
       shifted: false)]
   doAssert [0x1B170.Rune].collationElements == @[
     CollationElement(
-      level1: 0xfb01'u16,
+      level1: 0xFB02'u16,
       level2: 0x0020'u16,
       level3: 0x0002'u16,
       shifted: false),
@@ -208,7 +212,7 @@ when isMainModule:
       shifted: false)]
   doAssert [0x18B00.Rune].collationElements == @[
     CollationElement(
-      level1: 0xfb02'u16,
+      level1: 0xfb03'u16,
       level2: 0x0020'u16,
       level3: 0x0002'u16,
       shifted: false),
