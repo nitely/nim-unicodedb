@@ -177,6 +177,10 @@ const
   sptGurungKhema = 168
   sptKiratRai = 169
   sptOlOnal = 170
+  sptSidetic = 171
+  sptTolongSiki = 172
+  sptBeriaErfe = 173
+  sptTaiYo = 174
 
 proc scriptMap(s: string): int =
   case s
@@ -520,9 +524,16 @@ proc scriptMap(s: string): int =
     sptKiratRai
   of "Ol_Onal":
     sptOlOnal
+  of "Sidetic":
+    sptSidetic
+  of "Tolong_Siki":
+    sptTolongSiki
+  of "Beria_Erfe":
+    sptBeriaErfe
+  of "Tai_Yo":
+    sptTaiYo
   else:
-    echo s
-    doAssert false
+    doAssert false, s
     -1
 
 proc parseScripts(propsRaw: seq[seq[string]]): seq[int] =
@@ -736,6 +747,10 @@ const
   sptGurungKhema* = $#.UnicodeScript
   sptKiratRai* = $#.UnicodeScript
   sptOlOnal* = $#.UnicodeScript
+  sptSidetic* = $#.UnicodeScript
+  sptTolongSiki* = $#.UnicodeScript
+  sptBeriaErfe* = $#.UnicodeScript
+  sptTaiYo* = $#.UnicodeScript
 
 const
   typesIndices* = [
@@ -929,6 +944,10 @@ when isMainModule:
       $sptGurungKhema,
       $sptKiratRai,
       $sptOlOnal,
+      $sptSidetic,
+      $sptTolongSiki,
+      $sptBeriaErfe,
+      $sptTaiYo,
       prettyTable(stages.stage1, 15, "'i16"),
       prettyTable(stages.stage2, 15, "'u8"),
       $stages.blockSize])

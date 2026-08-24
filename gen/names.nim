@@ -6,7 +6,7 @@ import two_stage_table
 import min_perfect_hash
 import utils
 
-# See http://www.unicode.org/versions/latest/ch04.pdf
+# See https://www.unicode.org/versions/latest/core-spec/chapter-4/#G144161
 # Chapter 4.8
 const
   prefixRanges = [
@@ -52,7 +52,7 @@ proc parseNames(namesRaw: seq[string]): seq[string] =
       continue
     result[cp] = nr
 
-# See http://www.unicode.org/versions/latest/ch03.pdf#M9.32468.Heading.310.Combining.Jamo.Behavior
+# https://www.unicode.org/versions/latest/core-spec/chapter-3/#G60469
 const
   SBase = 0xAC00
   LBase = 0x1100
@@ -64,6 +64,7 @@ const
   NCount = VCount * TCount  # 588
   SCount = LCount * NCount  # 11172
 
+# https://www.unicode.org/versions/latest/core-spec/chapter-3/#G57355
 const
   jamoLTable = [
     "G", "GG", "N", "D", "DD", "R", "M", "B", "BB",

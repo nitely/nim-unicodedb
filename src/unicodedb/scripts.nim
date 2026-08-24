@@ -178,7 +178,11 @@ export
   sptSunuwar,
   sptGurungKhema,
   sptKiratRai,
-  sptOlOnal
+  sptOlOnal,
+  sptSidetic,
+  sptTolongSiki,
+  sptBeriaErfe,
+  sptTaiYo
 
 proc unicodeScript*(cp: Rune): UnicodeScript =
   ## Return script for a given code point
