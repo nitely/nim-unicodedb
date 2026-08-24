@@ -2,6 +2,8 @@
 ## properties: category class, canonical
 ## combining class, bidirectional class and quick check (QC)
 
+{.push raises: [], gcsafe.}
+
 import std/unicode
 when defined(nimPreviewSlimSystem):
   import std/assertions
@@ -53,7 +55,7 @@ proc contains*(a: UnicodeCategorySet, b: UnicodeCategory): bool {.inline.} =
   ## .. code-block:: nim
   ##   assert Rune(0x0097).unicodeCategory() in ctgL
   ##
-  result = (b.int and a.int) != 0
+  (b.int and a.int) != 0
 
 template ucPlusImpl(a, b): UnicodeCategorySet =
   UnicodeCategorySet(int32(a) or int32(b))
@@ -84,7 +86,7 @@ const
   ctgP* = ctgPc + ctgPd + ctgPs + ctgPe + ctgPi + ctgPf + ctgPo
   ctgS* = ctgSm + ctgSc + ctgSk + ctgSo
 
-proc categorySetMap*(s: string): UnicodeCategorySet =
+proc categorySetMap*(s: string): UnicodeCategorySet {.raises: [ValueError].} =
   ## Map category string to ``UnicodeCategorySet``.
   ## Raise ``ValueError`` if there's no match
   # todo: result = .. is needed in Nim 0.18 to work at compile time
@@ -106,7 +108,7 @@ proc categorySetMap*(s: string): UnicodeCategorySet =
   else:
     raise newException(ValueError, "Bad category")
 
-proc categoryMap*(s: string): UnicodeCategory =
+proc categoryMap*(s: string): UnicodeCategory {.raises: [ValueError].} =
   ## Map category string to ``UnicodeCategory``.
   ## Raise ``ValueError`` if there's no match
   # todo: result = .. is needed in Nim 0.18 to work at compile time
@@ -197,48 +199,14 @@ proc properties*(cp: Rune): UnicodeProps =
   ## raw data for some of the properties, so one of
   ## the auxiliary procedures must be used in conjuntion.
   assert cp.int <= 0x10FFFF
-  when (NimMajor, NimMinor) >= (1, 1):
-    let
-      blockOffset = (propsOffsets[cp.int div blockSize]).int * blockSize
-      idx = propsIndices[blockOffset + cp.int mod blockSize]
-    result = propsData[idx]
-  else:
-    when nimvm:
-      const N = propsIndices.len
-      const N2 = N div 4
-      const t0 = propsIndices[0 ..< N2]
-      const t1 = propsIndices[N2 ..< 2*N2]
-      const t2 = propsIndices[2*N2 ..< 3*N2]
-      const t3 = propsIndices[3*N2 ..< N]
-
-      proc getTypeIndex(sub: static[int], ind: int): auto =
-        when sub == 0: return t0[ind]
-        elif sub == 1: return t1[ind]
-        elif sub == 2: return t2[ind]
-        else: return t3[ind]
-      let blockOffset = (propsOffsets[cp.int div blockSize]).int * blockSize
-      block:
-        let ind = blockOffset + cp.int mod blockSize
-        let ind2 = ind div N2
-        let j = ind mod N2
-        var idx = 0'u8
-        case ind2
-        of 0: idx = getTypeIndex(0, j)
-        of 1: idx = getTypeIndex(1, j)
-        of 2: idx = getTypeIndex(2, j)
-        of 3: idx = getTypeIndex(3, j)
-        else: assert false
-        result = propsData[idx]
-    else:
-      block:
-        let
-          blockOffset = (propsOffsets[cp.int div blockSize]).int * blockSize
-          idx = propsIndices[blockOffset + cp.int mod blockSize]
-        result = propsData[idx]
+  let
+    blockOffset = (propsOffsets[cp.int div blockSize]).int * blockSize
+    idx = propsIndices[blockOffset + cp.int mod blockSize]
+  propsData[idx]
 
 proc unicodeCategory*(props: UnicodeProps): UnicodeCategory {.inline.} =
   ## Return category for a given `UnicodeProps`
-  result = props[upropCat].UnicodeCategory
+  props[upropCat].UnicodeCategory
 
 proc unicodeCategory*(cp: Rune): UnicodeCategory =
   ## Return category for a given code point
@@ -246,7 +214,7 @@ proc unicodeCategory*(cp: Rune): UnicodeCategory =
 
 proc bidirectional*(props: UnicodeProps): string {.inline.} =
   ## Return bidirectional class name for a given `UnicodeProps`
-  result = bidirectionalNames[props[upropBi]]
+  bidirectionalNames[props[upropBi]]
 
 proc bidirectional*(cp: Rune): string =
   ## Return bidirectional class name for a given code point
@@ -255,7 +223,7 @@ proc bidirectional*(cp: Rune): string =
 proc combining*(props: UnicodeProps): int {.inline.} =
   ## Return canonical combining class property
   ## for a given `Props`
-  result = props[upropCcc]
+  props[upropCcc]
 
 proc combining*(cp: Rune): int =
   ## Return canonical combining class property
@@ -264,7 +232,7 @@ proc combining*(cp: Rune): int =
 
 proc quickCheck*(props: UnicodeProps): int {.inline.} =
   ## Return quick check property for a given `UnicodeProps`
-  result = props[upropQc]
+  props[upropQc]
 
 proc quickCheck*(cp: Rune): int =
   ## Return quick check property
@@ -277,7 +245,7 @@ proc contains*(qc: int, m: NfMask): bool {.inline.} =
   ## .. code-block:: nim
   ##   assert nfcQcNo in Rune(0x0374).quickCheck()
   ##
-  result = (qc and m.ord) != 0
+  (qc and m.ord) != 0
 
 when isMainModule:
   echo(
