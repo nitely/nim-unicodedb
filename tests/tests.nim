@@ -919,29 +919,29 @@ test "Test collationElements":
       level3: 0'u16,
       shifted: false)]
   # Nushu
-  #check [0x1B170.Rune].collationElements == @[
-  #  CollationElement(
-  #    level1: 0xfb01'u16,
-  #    level2: 0x0020'u16,
-  #    level3: 0x0002'u16,
-  #    shifted: false),
-  #  CollationElement(
-  #    level1: 0x8000'u16,
-  #    level2: 0'u16,
-  #    level3: 0'u16,
-  #    shifted: false)]
+  check [0x1B170.Rune].collationElements == @[
+    CollationElement(
+      level1: 0xfb02'u16,
+      level2: 0x0020'u16,
+      level3: 0x0002'u16,
+      shifted: false),
+    CollationElement(
+      level1: 0x8000'u16,
+      level2: 0'u16,
+      level3: 0'u16,
+      shifted: false)]
   # Khitan
-  #check [0x18B00.Rune].collationElements == @[
-  #  CollationElement(
-  #    level1: 0xfb02'u16,
-  #    level2: 0x0020'u16,
-  #    level3: 0x0002'u16,
-  #    shifted: false),
-  #  CollationElement(
-  #    level1: 0x8000'u16,
-  #    level2: 0'u16,
-  #    level3: 0'u16,
-  #    shifted: false)]
+  check [0x18B00.Rune].collationElements == @[
+    CollationElement(
+      level1: 0xfb03'u16,
+      level2: 0x0020'u16,
+      level3: 0x0002'u16,
+      shifted: false),
+    CollationElement(
+      level1: 0x8000'u16,
+      level2: 0'u16,
+      level3: 0'u16,
+      shifted: false)]
   # CJK Unified Ideograph
   check [0x4E00.Rune].collationElements == @[
     CollationElement(
