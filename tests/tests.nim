@@ -839,7 +839,7 @@ test "Test word-break data":
       changed += int(cp.Rune.wordBreakProp != wb.prop.SgWord)
       inc i
   check i == maxCp+1
-  check changed == 923
+  check changed == 929
 
 test "Test wordBreakProp":
   check 0x10FFFF.Rune.wordBreakProp == sgwOther
@@ -874,6 +874,10 @@ test "Test wordBreakProp":
   check 0x1F61C.Rune.wordBreakProp == sgwExtendedPictographic
   check 0x1F61E.Rune.wordBreakProp == sgwExtendedPictographic
   check 0x1F6CC.Rune.wordBreakProp == sgwExtendedPictographic
+  check 0x2139.Rune.wordBreakProp == sgwAletterExtendedPictographic
+  check 0x24C2.Rune.wordBreakProp == sgwAletterExtendedPictographic
+  check 0x1F170.Rune.wordBreakProp == sgwAletterExtendedPictographic
+  check 0x1F17F.Rune.wordBreakProp == sgwAletterExtendedPictographic
 
 test "Test collationElements":
   check [0x07F6.Rune].collationElements == @[

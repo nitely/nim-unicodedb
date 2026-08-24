@@ -27,6 +27,9 @@ const
   sgwZwj = 17
   sgwWsegSpace = 18
   sgwExtendedPictographic = 19
+  # A few code-points are both ALetter and Extended_Pictographic
+  # (ie: ALetter_ExtPict in WordBreakTest)
+  sgwAletterExtendedPictographic = 20
 
 func wordMap(s: string): int =
   case s:
@@ -97,7 +100,12 @@ proc parseWordBreak(filePath, filePathEmoji: string): WordProps =
       continue
     if data[0].emojiMap == -1:
       continue
-    result[cp] = data[0].emojiMap
+    doAssert result[cp] in [sgwOther, sgwAletter],
+      "Extended_Pictographic intersects an unsupported Word_Break value"
+    result[cp] = if result[cp] == sgwAletter:
+      sgwAletterExtendedPictographic
+    else:
+      data[0].emojiMap
 
 func buildWordBreak(wordProps: WordProps): Stages[int] =
   buildTwoStageTable(wordProps)
@@ -128,6 +136,7 @@ const
   sgwZwj* = $#.SgWord
   sgwWsegSpace* = $#.SgWord
   sgwExtendedPictographic* = $#.SgWord
+  sgwAletterExtendedPictographic* = $#.SgWord
 
 const
   wordBreakIndices* = [
@@ -168,6 +177,7 @@ when isMainModule:
       $sgwZwj,
       $sgwWsegSpace,
       $sgwExtendedPictographic,
+      $sgwAletterExtendedPictographic,
       prettyTable(wordPropsTable.stage1, 15, "'i16"),
       prettyTable(wordPropsTable.stage2, 15, "'i8"),
       $wordPropsTable.blockSize
