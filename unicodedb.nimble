@@ -18,6 +18,10 @@ task test, "Test":
     exec "nim c -r --mm:refc tests/tests"
   exec "nim c -r src/unicodedb/collation.nim"
 
+task test_slim, "Test nimPreviewSlimSystem":
+  when (NimMajor, NimMinor) >= (2, 2):
+    exec "nim c -r -d:nimPreviewSlimSystem -d:release tests/tests"
+
 task docs, "Docs":
   exec "nim doc2 -o:./docs/unicodedb --project ./src/unicodedb/segmentation.nim"
   exec "nim doc2 -o:./docs/unicodedb --project ./src/unicodedb/casing.nim"
