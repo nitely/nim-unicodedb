@@ -8,6 +8,7 @@ when defined(nimPreviewSlimSystem):
 
 import ./names_data
 
+# https://www.unicode.org/versions/latest/core-spec/chapter-4/#G144161
 const
   sBase = 0xAC00
   lCount = 19
@@ -44,6 +45,7 @@ proc hangulName(r: Rune): string {.inline, raises: [].} =
   result.add(jamoVTable[vIndex])
   result.add(jamoTTable[tIndex])
 
+# http://www.unicode.org/versions/latest/core-spec/chapter-4/#G144161
 type
   EPrefixNames {.pure.} = enum
     ## A type for special character ranges
