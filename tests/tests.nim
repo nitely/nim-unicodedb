@@ -120,6 +120,10 @@ test "Test categories":
 test "Test categories with props":
   check unicodeCategory(properties(7913.Rune)) == ctgLl
 
+test "Test categories with props at CT":
+  static:
+    doAssert unicodeCategory(properties(7913.Rune)) == ctgLl
+
 test "Test some categories":
   # check an unassiged cp
   check unicodeCategory(64110.Rune) == ctgCn
